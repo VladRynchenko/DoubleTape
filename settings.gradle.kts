@@ -19,5 +19,11 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "MovieDD"
+rootProject.name = "DoubleTape"
 include(":app")
+include(":core:ui")
+include(":core:network")
+include(":core:domain")
+include(":core:data")
+include(":feature:search")
+include(":feature:streaming-availability")
