@@ -1,8 +1,8 @@
 package com.vroff.tmdb.api
 
-import com.vroff.tmdb.BasePagingSource
 import com.vroff.domain.model.streaming_available.NetworkResult
 import com.vroff.tmdb.Endpoint
+import com.vroff.tmdb.entity.Configuration
 import com.vroff.tmdb.entity.PagerResponse
 import com.vroff.tmdb.entity.movie.MovieDetailDTO
 import com.vroff.tmdb.entity.search.SearchResultDTO
@@ -12,6 +12,9 @@ import retrofit2.http.Path
 import retrofit2.http.Query
 
 interface TMDBApi {
+
+    @GET(Endpoint.CONFIGURATION)
+    suspend fun getConfiguration() : NetworkResult<Configuration>
 
     @GET(Endpoint.MOVIE_DETAILS)
     suspend fun getMovieDetails(

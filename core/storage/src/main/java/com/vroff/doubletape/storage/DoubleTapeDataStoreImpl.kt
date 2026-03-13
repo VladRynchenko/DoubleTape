@@ -12,12 +12,12 @@ import javax.inject.Inject
 
 class DoubleTapeDataStoreImpl @Inject constructor(
     private val dataStore: DataStore<Preferences>,
-) : DoubleTapeDataStore {
+) : DoubleTapeDataStore() {
 
     private val json: Json = Json { ignoreUnknownKeys = true }
 
     override suspend fun saveString(
-        key: DoubleTapeDataStore.Keys,
+        key: Keys,
         value: String
     ) {
         dataStore.edit { preferences ->
@@ -25,7 +25,7 @@ class DoubleTapeDataStoreImpl @Inject constructor(
         }
     }
 
-    override fun getString(key: DoubleTapeDataStore.Keys): Flow<String?> {
+    override fun getString(key: Keys): Flow<String?> {
         val preferences = dataStore.data
         return preferences.map { preferences ->
             runCatching { preferences[stringPreferencesKey(key.key)] }.getOrNull()
@@ -33,16 +33,16 @@ class DoubleTapeDataStoreImpl @Inject constructor(
     }
 
     override fun getStringOrDefault(
-        key: DoubleTapeDataStore.Keys,
+        key: Keys,
         defaultValue: String
     ): Flow<String> {
         return getString(key).map { it ?: defaultValue }
     }
 
     override suspend fun <T> saveSerialize(
-        key: DoubleTapeDataStore.Keys,
+        key: Keys,
         value: T,
-        serializer: KSerializer<T>
+        serializer: KSerializer<T>,
     ) {
         dataStore.edit { preferences ->
             preferences[stringPreferencesKey(key.key)] = json.encodeToString(serializer, value)
@@ -50,7 +50,7 @@ class DoubleTapeDataStoreImpl @Inject constructor(
     }
 
     override fun <T> getSerializeOrDefault(
-        key: DoubleTapeDataStore.Keys,
+        key: Keys,
         serializer: KSerializer<T>,
         defaultValue: T
     ): Flow<T> {
@@ -58,7 +58,7 @@ class DoubleTapeDataStoreImpl @Inject constructor(
     }
 
     override fun <T> getSerialize(
-        key: DoubleTapeDataStore.Keys,
+        key: Keys,
         serializer: KSerializer<T>
     ): Flow<T?> {
         return dataStore.data.map { prefs ->

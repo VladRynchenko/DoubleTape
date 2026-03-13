@@ -4,19 +4,39 @@ import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import com.vroff.domain.model.streaming_available.NetworkResult
+import com.vroff.domain.model.tmdb.TMDBConfiguration
 import com.vroff.domain.model.tmdb.movie.MovieDetail
 import com.vroff.domain.model.tmdb.search.SearchResult
 import com.vroff.domain.model.tmdb.series.SeriesDetail
 import com.vroff.domain.repository.TMDBRepository
 import com.vroff.domain.util.safeApiCall
+import com.vroff.domain.util.saveToDataStore
 import com.vroff.doubletape.storage.DoubleTapeDataStore
 import com.vroff.tmdb.api.TMDBApi
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
 class TMDBRepositoryImpl @Inject constructor(
-    private val api: TMDBApi
+    private val api: TMDBApi,
+    private val dataStore: DoubleTapeDataStore
 ) : TMDBRepository {
+
+    override suspend fun getConfiguration(): NetworkResult<TMDBConfiguration> {
+        return dataStore.get<TMDBConfiguration>(DoubleTapeDataStore.Keys.Configuration)
+            .map { configuration ->
+                if (configuration == null) {
+                    api.getConfiguration()
+                        .safeApiCall { it.mapToDomain() }
+                        .saveToDataStore {
+                            dataStore.save(DoubleTapeDataStore.Keys.Configuration, it)
+                        }
+                } else {
+                    NetworkResult.Success(configuration)
+                }
+            }.first()
+    }
 
     override suspend fun getMovieDetails(
         movieId: String,
