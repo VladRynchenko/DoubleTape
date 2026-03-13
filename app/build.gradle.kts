@@ -88,6 +88,7 @@ dependencies {
     implementation(project(":core:domain"))
     implementation(project(":feature:search"))
     implementation(project(":feature:streaming-availability"))
+    implementation(project(":feature:tmdb"))
 
     // --- Testing & Debug ---
     testImplementation(libs.junit)

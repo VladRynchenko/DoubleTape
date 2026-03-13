@@ -2,6 +2,8 @@ package com.vroff.doubletape.di
 
 import com.vroff.doubletape.data.repository.ShowRepositoryImpl
 import com.vroff.domain.repository.ShowRepository
+import com.vroff.domain.repository.TMDBRepository
+import com.vroff.tmdb.TMDBRepositoryImpl
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
@@ -13,4 +15,8 @@ interface RepositoryModule {
 
     @Binds
     fun bindShowsRepository(movieRepositoryImpl: ShowRepositoryImpl): ShowRepository
+
+    @Binds
+    fun bindTMDBRepository(tmdbRepositoryImpl: TMDBRepositoryImpl): TMDBRepository
+
 }

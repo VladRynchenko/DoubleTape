@@ -68,7 +68,7 @@ android{
 
             buildConfigField(
                 "String",
-                "TMDB_API_KEY",
+                "TMDB_API_HOST",
                 KeysApiDebug.TMBD_API_HOST
             )
         }
@@ -84,6 +84,7 @@ dependencies {
 
     //Hilt
     implementation(libs.hilt.android)
+    implementation(libs.androidx.paging.common)
     ksp(libs.hilt.android.compiler)
     implementation(project(":core:domain"))
 

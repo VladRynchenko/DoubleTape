@@ -1,11 +1,12 @@
 package com.vroff.doubletape.data.repository
 
 import android.util.Log
-import com.vroff.domain.models.Show
-import com.vroff.domain.models.ShowType
-import com.vroff.domain.models.StreamingServices
+import com.vroff.domain.model.streaming_available.Show
+import com.vroff.domain.model.streaming_available.ShowType
+import com.vroff.domain.model.streaming_available.StreamingServices
 import com.vroff.domain.repository.ShowRepository
 import com.vroff.domain.util.Resource
+import com.vroff.network.StreamingAvailable
 import com.vroff.streamingmovie.api.StreamingAvailabilityApi
 import com.vroff.streamingmovie.mapper.toShow
 import java.util.Locale

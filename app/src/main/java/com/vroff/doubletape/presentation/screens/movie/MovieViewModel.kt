@@ -2,8 +2,10 @@ package com.vroff.doubletape.presentation.screens.movie
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.vroff.data.usecase.GetShowByIdUseCase
-import com.vroff.domain.models.Show
+import com.vroff.domain.model.streaming_available.NetworkResult
+import com.vroff.streamingmovie.usecase.GetShowByIdUseCase
+import com.vroff.domain.model.streaming_available.Show
+import com.vroff.domain.model.tmdb.movie.MovieDetail
 import com.vroff.domain.util.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -23,10 +25,10 @@ class MovieViewModel @Inject constructor() : ViewModel() {
     var showState = _tmdbIdStateFlow
         .filter { it != "" }
         .map { id ->
-            ScreenState.Loading
             when (val result = getShowByIdUseCase.execute(id)) {
-                is Resource.Error -> ScreenState.Error(result.message)
-                is Resource.Success -> ScreenState.Success(result.data!!)
+                is NetworkResult.Success -> ScreenState.Success(data = result.data)
+                is NetworkResult.Error -> ScreenState.Error(result.message)
+                is NetworkResult.Exception -> ScreenState.Error(result.e.message)
             }
         }.stateIn(
             viewModelScope,
@@ -44,7 +46,7 @@ class MovieViewModel @Inject constructor() : ViewModel() {
 
 
     sealed class ScreenState {
-        data class Success(val data: Show) : ScreenState()
+        data class Success(val data: MovieDetail) : ScreenState()
         data class Error(val e: String?) : ScreenState()
         data object Loading : ScreenState()
     }

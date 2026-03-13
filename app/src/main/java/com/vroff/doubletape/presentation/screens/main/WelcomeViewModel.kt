@@ -6,8 +6,8 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import coil3.ImageLoader
-import com.vroff.data.usecase.GetShowByIdUseCase
-import com.vroff.domain.models.ShowState
+import com.vroff.streamingmovie.usecase.GetShowByIdUseCase
+import com.vroff.domain.model.streaming_available.ShowState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -17,8 +17,8 @@ class WelcomeViewModel @Inject constructor(
     val imageLoader: ImageLoader
 ) : ViewModel() {
 
-    @Inject
-    lateinit var getShowByIdUseCase: GetShowByIdUseCase
+//    @Inject
+//    lateinit var getShowByIdUseCase: GetShowByIdUseCase
 
     var showState by mutableStateOf<ShowState>(
         ShowState.Loading

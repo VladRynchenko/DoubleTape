@@ -1,6 +1,6 @@
 package com.vroff.search
 
-import com.vroff.domain.models.ShowState
+import com.vroff.domain.model.streaming_available.ShowState
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.vroff.data.usecase.SearchMovieUseCase

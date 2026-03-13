@@ -1,0 +1,38 @@
+package com.vroff.tmdb.api
+
+import com.vroff.tmdb.BasePagingSource
+import com.vroff.domain.model.streaming_available.NetworkResult
+import com.vroff.tmdb.Endpoint
+import com.vroff.tmdb.entity.PagerResponse
+import com.vroff.tmdb.entity.movie.MovieDetailDTO
+import com.vroff.tmdb.entity.search.SearchResultDTO
+import com.vroff.tmdb.entity.series.SeriesDetailDTO
+import retrofit2.http.GET
+import retrofit2.http.Path
+import retrofit2.http.Query
+
+interface TMDBApi {
+
+    @GET(Endpoint.MOVIE_DETAILS)
+    suspend fun getMovieDetails(
+        @Path("movie_id") movieId: String,
+        @Query("language") language: String,
+        @Query("append_to_response") appendToResponse: String
+    ): NetworkResult<MovieDetailDTO>
+
+    @GET(Endpoint.SERIES_DETAILS)
+    suspend fun getSerialDetails(
+        @Path("series_id") seriesId: String,
+        @Query("language") language: String = "en-US",
+        @Query("append_to_response") appendToResponse: String
+    ): NetworkResult<SeriesDetailDTO>
+
+    @GET(Endpoint.MULTI_SEARCH)
+    suspend fun multiSearch(
+        @Query("query") query: String,
+        @Query("page") page: Int,
+        @Query("include_adult") includeAdult: Boolean,
+        @Query("language") language: String = "en-US",
+        @Query("region") region: String = "US"
+    ): PagerResponse<SearchResultDTO>
+}

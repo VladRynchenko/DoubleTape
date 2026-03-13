@@ -1,8 +1,8 @@
 package com.vroff.domain.repository
 
-import com.vroff.domain.models.Show
-import com.vroff.domain.models.ShowType
-import com.vroff.domain.models.StreamingServices
+import com.vroff.domain.model.streaming_available.Show
+import com.vroff.domain.model.streaming_available.ShowType
+import com.vroff.domain.model.streaming_available.StreamingServices
 import com.vroff.domain.util.Resource
 
 interface ShowRepository {
