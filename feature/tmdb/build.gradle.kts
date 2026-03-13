@@ -3,7 +3,7 @@ import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.hilt.android)
-    alias (libs.plugins.google.devtools.ksp)
+    alias(libs.plugins.google.devtools.ksp)
 }
 
 android {
@@ -53,8 +53,10 @@ dependencies {
     implementation(libs.converter.gson)
 
 
+
     implementation(project(":core:ui"))
     implementation(project(":core:network"))
     implementation(project(":core:domain"))
     implementation(project(":core:data"))
+    implementation(project(":core:storage"))
 }

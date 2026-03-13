@@ -6,7 +6,6 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import coil3.ImageLoader
-import com.vroff.streamingmovie.usecase.GetShowByIdUseCase
 import com.vroff.domain.model.streaming_available.ShowState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch

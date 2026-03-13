@@ -1,8 +1,12 @@
 import com.vroff.buildsrc.BuildConfigs
+import org.gradle.kotlin.dsl.implementation
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
 plugins {
     alias(libs.plugins.android.library)
+    alias(libs.plugins.hilt.android)
+    alias(libs.plugins.google.devtools.ksp)
+    alias(libs.plugins.kotlin.serialization)
 }
 
 android {
@@ -47,4 +51,23 @@ dependencies {
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
+
+    //Hilt
+    implementation(libs.hilt.android)
+    implementation(libs.androidx.paging.common)
+    ksp(libs.hilt.android.compiler)
+    implementation(project(":core:domain"))
+
+    //Data Store
+    implementation(libs.androidx.datastore.preferences)
+
+    implementation(libs.kotlinx.serialization.core)
+    implementation(libs.kotlinx.serialization.json)
+
+    testImplementation(libs.junit)
+    testImplementation(libs.mockk)
+    testImplementation(libs.kotlinx.coroutines.test)
+    testImplementation(libs.turbine)
+    testImplementation(libs.androidx.datastore.preferences.core)
+    testImplementation(libs.kotlinx.serialization.json)
 }

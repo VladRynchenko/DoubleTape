@@ -36,5 +36,5 @@ android {
     }
 }
 dependencies {
-    implementation(libs.androidx.paging.common.jvm)
+    implementation(libs.androidx.paging.common)
 }
