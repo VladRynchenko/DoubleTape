@@ -7,7 +7,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import coil3.ImageLoader
-import com.vroff.domain.models.Show
+import com.vroff.domain.model.streaming_available.Show
 
 @Composable
 fun MovieList(

@@ -11,7 +11,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
 import coil3.ImageLoader
 import coil3.compose.AsyncImage
-import com.vroff.domain.models.Show
+import com.vroff.domain.model.streaming_available.Show
 
 @Composable
 fun MovieCard(

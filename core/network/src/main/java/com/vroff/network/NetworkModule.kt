@@ -1,5 +1,6 @@
 package com.vroff.network
 
+import com.vroff.network.call_adapter.ResourceCallAdapterFactory
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -13,29 +14,45 @@ import javax.inject.Singleton
 
 @Qualifier
 @Retention(AnnotationRetention.BINARY)
-annotation class BaseUrl
+annotation class TMDB
 
 @Qualifier
 @Retention(AnnotationRetention.BINARY)
-annotation class Client
+annotation class StreamingAvailable
 
 @Module
 @InstallIn(SingletonComponent::class)
 object NetworkModule {
 
-    @Provides
-    @Singleton
-    fun provideRetrofit(
-        @BaseUrl baseUrl: String,
-        @Client client: OkHttpClient
-    ): Retrofit = Retrofit.Builder()
-        .baseUrl(baseUrl)
-        .client(client)
-        .addConverterFactory(GsonConverterFactory.create())
-        .build()
+    private fun createRetrofit(
+        baseUrl: String,
+        client: OkHttpClient
+    ): Retrofit {
+        return Retrofit.Builder()
+            .baseUrl(baseUrl)
+            .client(client)
+            .addConverterFactory(GsonConverterFactory.create())
+            .addCallAdapterFactory(ResourceCallAdapterFactory())
+            .build()
+    }
 
     @Provides
-    @Client
+    @Singleton
+    @TMDB
+    fun provideTMDBRetrofit(
+        @TMDB baseUrl: String,
+        @TMDB client: OkHttpClient
+    ): Retrofit = createRetrofit(baseUrl, client)
+
+    @Provides
+    @Singleton
+    @StreamingAvailable
+    fun provideStreamingAvailabilityRetrofit(
+        @StreamingAvailable baseUrl: String,
+        @StreamingAvailable client: OkHttpClient
+    ): Retrofit = createRetrofit(baseUrl, client)
+
+    @Provides
     fun provideLoggerInterceptor(): HttpLoggingInterceptor {
         return HttpLoggingInterceptor().apply {
             level = if (BuildConfig.DEBUG) {

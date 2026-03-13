@@ -1,10 +1,9 @@
 package com.vroff.streamingmovie.di
 
-import com.vroff.network.BaseUrl
 import com.vroff.network.BuildConfig
 import com.vroff.network.BuildConfig.STREAMING_AVAILABILITY_BASE_URL
-import com.vroff.network.Client
 import com.vroff.network.Constants
+import com.vroff.network.StreamingAvailable
 import com.vroff.streamingmovie.api.StreamingAvailabilityApi
 import dagger.Module
 import dagger.Provides
@@ -20,13 +19,13 @@ import retrofit2.Retrofit
 object StreamingAvailabilityModule {
 
     @Provides
-    @BaseUrl
+    @StreamingAvailable
     fun provideAuthBaseUrl(): String = STREAMING_AVAILABILITY_BASE_URL
 
     @Provides
-    @Client
+    @StreamingAvailable
     fun provideStreamingAvailabilityClient(
-        @Client loggerInterceptor: HttpLoggingInterceptor
+        loggerInterceptor: HttpLoggingInterceptor
     ): OkHttpClient {
         return OkHttpClient.Builder()
             .addInterceptor(loggerInterceptor)
@@ -47,7 +46,7 @@ object StreamingAvailabilityModule {
     }
 
     @Provides
-    fun provideStreamingAvailability(retrofit: Retrofit): StreamingAvailabilityApi {
+    fun provideStreamingAvailability(@StreamingAvailable retrofit: Retrofit): StreamingAvailabilityApi {
         return retrofit.create(StreamingAvailabilityApi::class.java)
     }
 }

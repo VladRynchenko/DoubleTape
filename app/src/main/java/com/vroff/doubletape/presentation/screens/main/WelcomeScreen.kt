@@ -8,7 +8,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.vroff.domain.models.ShowState
+import com.vroff.domain.model.streaming_available.ShowState
 import com.vroff.ui.ui.MovieList
 
 

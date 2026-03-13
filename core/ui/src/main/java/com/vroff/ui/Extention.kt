@@ -4,7 +4,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringResource
 
 @Composable
-fun hoursAndMinutesUsingFormat(totalMinutes: Int?): String {
+fun hoursAndMinutesUsingFormat(totalMinutes: Long?): String {
     if (totalMinutes == null) {
         return ""
     }

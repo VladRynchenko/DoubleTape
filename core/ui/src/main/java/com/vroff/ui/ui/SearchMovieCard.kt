@@ -18,7 +18,7 @@ import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
 import coil3.compose.AsyncImage
-import com.vroff.domain.models.Show
+import com.vroff.domain.model.streaming_available.Show
 
 @Composable
 fun SearchMovieCard(

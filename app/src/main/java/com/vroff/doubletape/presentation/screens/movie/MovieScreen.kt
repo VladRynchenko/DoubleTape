@@ -21,12 +21,12 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil3.compose.AsyncImage
 import coil3.request.ImageRequest
 import coil3.request.crossfade
-import com.vroff.domain.models.ShowType
+import com.vroff.domain.model.streaming_available.ShowType
 import com.vroff.doubletape.R
 import com.vroff.ui.hoursAndMinutesUsingFormat
 import com.vroff.ui.seasonsAndSeriesCountFormat
@@ -76,16 +76,16 @@ private fun ShowDetailsContent(
                 contentPadding = PaddingValues(bottom = padding.calculateBottomPadding())
             ) {
                 item {
-                    AsyncImage(
-                        ImageRequest.Builder(LocalContext.current)
-                            .data(show.imageSet.verticalPoster.w720)
-                            .crossfade(true)
-                            .build(),
-                        contentDescription = "Movie poster",
-                        placeholder = painterResource(R.drawable.placeholder),
-                        contentScale = ContentScale.FillWidth,
-                        modifier = Modifier.fillMaxWidth()
-                    )
+//                    AsyncImage(
+//                        ImageRequest.Builder(LocalContext.current)
+//                            .data(show.imageSet.verticalPoster.w720)
+//                            .crossfade(true)
+//                            .build(),
+//                        contentDescription = "Movie poster",
+//                        placeholder = painterResource(R.drawable.placeholder),
+//                        contentScale = ContentScale.FillWidth,
+//                        modifier = Modifier.fillMaxWidth()
+//                    )
                 }
                 item {
                     Column(
@@ -104,16 +104,16 @@ private fun ShowDetailsContent(
                         ) {
 
 
-                            Text("${show.rating}/100")
+                            Text("${show.voteAverage}/100")
                             Text(
-                                when (show.showType) {
-                                    ShowType.MOVIE -> hoursAndMinutesUsingFormat(show.runtime)
-                                    ShowType.SERIES -> seasonsAndSeriesCountFormat(
-                                        show.seasonCount,
-                                        show.episodeCount
+//                                when (show.showType) {
+//                                    ShowType.MOVIE ->
+                            hoursAndMinutesUsingFormat(show.runtime)
+//                                    ShowType.SERIES -> seasonsAndSeriesCountFormat(
+//                                        show.seasonCount,
+//                                        show.episodeCount
                                     )
-                                }
-                            )
+
                         }
                         Text(
                             "Overview",
@@ -133,49 +133,49 @@ private fun ShowDetailsContent(
                         modifier = Modifier
                             .padding(top = 12.dp, start = 12.dp, end = 12.dp)
                     )
-                    show.cast.forEach { actor ->
+                    show.credits?.cast?.forEach { actor ->
                         Text(
-                            actor,
+                            actor?.name?: "",
                             modifier = Modifier
                                 .padding(top = 12.dp, start = 12.dp, end = 12.dp)
                         )
                     }
                 }
-                item {
-                    if (show.showType == ShowType.SERIES) {
-                        show.seasons?.forEachIndexed { index, season ->
-                            HideableItem(
-                                title = {
-                                    Text(stringResource(R.string.season, index + 1))
-                                },
-                                modifier = Modifier.padding(12.dp)
-                            ) {
-                                Column {
-                                    season.episodes.forEachIndexed { episodeIndex, episode ->
-                                        HideableItem(
-                                            title = {
-                                                Text(
-                                                    "Episode ${episodeIndex + 1} - ${episode.title}"
-                                                )
-                                            },
-                                            modifier = Modifier.padding(horizontal = 12.dp)
-                                        ) {
-                                            Text(
-                                                episode.airYear.toString(),
-                                            )
-                                            if (episode.overview != null) {
-                                                Text(
-                                                    episode.overview.toString()
-                                                )
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-
-                }
+//                item {
+//                    if (show.showType == ShowType.SERIES) {
+//                        show.seasons?.forEachIndexed { index, season ->
+//                            HideableItem(
+//                                title = {
+//                                    Text(stringResource(R.string.season, index + 1))
+//                                },
+//                                modifier = Modifier.padding(12.dp)
+//                            ) {
+//                                Column {
+//                                    season.episodes.forEachIndexed { episodeIndex, episode ->
+//                                        HideableItem(
+//                                            title = {
+//                                                Text(
+//                                                    "Episode ${episodeIndex + 1} - ${episode.title}"
+//                                                )
+//                                            },
+//                                            modifier = Modifier.padding(horizontal = 12.dp)
+//                                        ) {
+//                                            Text(
+//                                                episode.airYear.toString(),
+//                                            )
+//                                            if (episode.overview != null) {
+//                                                Text(
+//                                                    episode.overview.toString()
+//                                                )
+//                                            }
+//                                        }
+//                                    }
+//                                }
+//                            }
+//                        }
+//                    }
+//
+//                }
             }
         }
     }

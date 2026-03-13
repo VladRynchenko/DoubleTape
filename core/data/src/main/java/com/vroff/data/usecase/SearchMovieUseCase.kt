@@ -1,6 +1,6 @@
 package com.vroff.data.usecase
 
-import com.vroff.domain.models.Show
+import com.vroff.domain.model.streaming_available.Show
 import com.vroff.domain.repository.ShowRepository
 import com.vroff.domain.util.Resource
 import javax.inject.Inject

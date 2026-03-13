@@ -41,15 +41,20 @@ dependencies {
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
     implementation(libs.material)
+    implementation(libs.androidx.paging.common)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
 
+    implementation(libs.retrofit)
     implementation(libs.hilt.android)
     ksp(libs.hilt.android.compiler)
+    implementation(libs.logging.interceptor)
+    implementation(libs.converter.gson)
 
 
     implementation(project(":core:ui"))
     implementation(project(":core:network"))
     implementation(project(":core:domain"))
+    implementation(project(":core:data"))
 }

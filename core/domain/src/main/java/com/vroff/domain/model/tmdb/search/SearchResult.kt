@@ -1,0 +1,27 @@
+package com.vroff.domain.model.tmdb.search
+
+data class SearchResult(
+    val adult: Boolean,
+    val backdropPath: String?,
+    val id: Long,
+    val name: String?,
+    val originalName: String?,
+    val overview: String?,
+    val posterPath: String?,
+    val mediaType: String,
+    val originalLanguage: String?,
+    val genreIds: List<Long>?,
+    val popularity: Double,
+    val firstAirDate: String?,
+    val voteAverage: Double?,
+    val voteCount: Long?,
+    val originCountry: List<String>?,
+    val gender: Long?,
+    val knownForDepartment: String?,
+    val profilePath: String?,
+    val knownFor: List<KnownFor>?,
+    val title: String?,
+    val originalTitle: String?,
+    val releaseDate: String?,
+    val video: Boolean?,
+)

@@ -35,3 +35,6 @@ android {
         }
     }
 }
+dependencies {
+    implementation(libs.androidx.paging.common.jvm)
+}

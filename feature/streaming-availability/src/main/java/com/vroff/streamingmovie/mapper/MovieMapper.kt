@@ -1,13 +1,13 @@
 package com.vroff.streamingmovie.mapper
 
-import com.vroff.domain.models.Episode
-import com.vroff.domain.models.Genre
-import com.vroff.domain.models.HorizontalPoster
-import com.vroff.domain.models.ImageSet
-import com.vroff.domain.models.Season
-import com.vroff.domain.models.Show
-import com.vroff.domain.models.ShowType
-import com.vroff.domain.models.VerticalPoster
+import com.vroff.domain.model.streaming_available.Episode
+import com.vroff.domain.model.streaming_available.Genre
+import com.vroff.domain.model.streaming_available.HorizontalPoster
+import com.vroff.domain.model.streaming_available.ImageSet
+import com.vroff.domain.model.streaming_available.Season
+import com.vroff.domain.model.streaming_available.Show
+import com.vroff.domain.model.streaming_available.ShowType
+import com.vroff.domain.model.streaming_available.VerticalPoster
 import com.vroff.streamingmovie.entity.EpisodeDTO
 import com.vroff.streamingmovie.entity.GenreDTO
 import com.vroff.streamingmovie.entity.HorizontalPosterDTO

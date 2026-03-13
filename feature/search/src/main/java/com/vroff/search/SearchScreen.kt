@@ -18,7 +18,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
-import com.vroff.domain.models.ShowState
+import com.vroff.domain.model.streaming_available.ShowState
 import com.vroff.ui.ui.SearchMovieCard
 
 @Composable
@@ -32,7 +32,7 @@ fun SearchScreen(
     LaunchedEffect(searchQuery) {
         viewModel.setSearchQuery(searchQuery)
     }
-    SearchContent(screenState.value, paddings, itemClick)
+    SearchContent(screenState.value as ShowState, paddings, itemClick)
 }
 
 @Composable
