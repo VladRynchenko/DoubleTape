@@ -20,7 +20,6 @@ fun WelcomeScreen() {
         is ShowState.Success -> {
             MovieList(
                 showList = result.showList,
-                imageLoader = viewModel.imageLoader,
                 onItemClick = { id ->
 
                 }

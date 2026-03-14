@@ -10,8 +10,6 @@ import kotlinx.coroutines.flow.Flow
 
 interface TMDBRepository {
 
-    suspend fun getConfiguration(): NetworkResult<TMDBConfiguration>
-
     suspend fun getMovieDetails(
         movieId: String,
         language: String,

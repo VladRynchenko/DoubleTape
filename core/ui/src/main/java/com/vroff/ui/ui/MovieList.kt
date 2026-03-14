@@ -13,7 +13,6 @@ import com.vroff.domain.model.streaming_available.Show
 fun MovieList(
     modifier: Modifier = Modifier,
     showList: List<Show>? = listOf(),
-    imageLoader: ImageLoader,
     onItemClick: (String) -> Unit
 ) {
     LazyRow(
@@ -28,7 +27,6 @@ fun MovieList(
             items(showList) { item ->
                 MovieCard(
                     show = item,
-                    imageLoader = imageLoader,
                     onClick = onItemClick
                 )
             }

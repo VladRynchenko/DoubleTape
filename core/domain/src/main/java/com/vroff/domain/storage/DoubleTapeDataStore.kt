@@ -1,4 +1,4 @@
-package com.vroff.doubletape.storage
+package com.vroff.domain.storage
 
 import kotlinx.coroutines.flow.Flow
 import kotlinx.serialization.KSerializer
@@ -17,11 +17,11 @@ abstract class DoubleTapeDataStore {
     abstract fun <T> getSerialize(key: Keys, serializer: KSerializer<T>): Flow<T?>
 
 
-    suspend inline fun <reified T> save(key: DoubleTapeDataStore.Keys, value: T) {
+    suspend inline fun <reified T> save(key: Keys, value: T) {
         saveSerialize(key, value, serializer<T>())
     }
 
-    inline fun <reified T> get(key: DoubleTapeDataStore.Keys): Flow<T?> {
+    inline fun <reified T> get(key: Keys): Flow<T?> {
         return getSerialize(key, serializer<T>())
     }
 

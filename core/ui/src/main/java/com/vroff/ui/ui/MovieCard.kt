@@ -17,7 +17,6 @@ import com.vroff.domain.model.streaming_available.Show
 fun MovieCard(
     modifier: Modifier = Modifier,
     show: Show? = null,
-    imageLoader: ImageLoader,
     onClick: ((String) -> Unit)
 ) {
     show?.let {
@@ -31,7 +30,6 @@ fun MovieCard(
                 model = show.imageSet.verticalPoster.w360,
                 contentDescription = "Movie poster",
                 contentScale = ContentScale.Crop,
-                imageLoader = imageLoader,
                 modifier = Modifier.fillMaxWidth(),
             )
         }

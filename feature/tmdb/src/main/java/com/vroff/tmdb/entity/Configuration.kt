@@ -12,7 +12,8 @@ data class Configuration(
     fun mapToDomain() =
         TMDBConfiguration(
             changeKeys = changeKeys,
-            images = images?.mapToDomain()
+            images = images?.mapToDomain(),
+            timestampSeconds = System.currentTimeMillis() / 1000
         )
 }
 

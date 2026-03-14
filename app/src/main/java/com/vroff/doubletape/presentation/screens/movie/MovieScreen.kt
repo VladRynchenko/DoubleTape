@@ -1,6 +1,5 @@
 package com.vroff.doubletape.presentation.screens.movie
 
-import android.widget.Toast
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -14,13 +13,11 @@ import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
@@ -28,12 +25,10 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil3.compose.AsyncImage
 import coil3.request.ImageRequest
 import coil3.request.crossfade
-import com.vroff.domain.model.streaming_available.ShowType
+import com.vroff.domain.model.ImagePath
 import com.vroff.doubletape.R
 import com.vroff.ui.hoursAndMinutesUsingFormat
-import com.vroff.ui.seasonsAndSeriesCountFormat
 import com.vroff.ui.ui.ExpandableText
-import com.vroff.ui.ui.HideableItem
 
 @Composable
 fun MovieScreen(
@@ -78,16 +73,16 @@ private fun ShowDetailsContent(
                 contentPadding = PaddingValues(bottom = padding.calculateBottomPadding())
             ) {
                 item {
-//                    AsyncImage(
-//                        ImageRequest.Builder(LocalContext.current)
-//                            .data(show.imageSet.verticalPoster.w720)
-//                            .crossfade(true)
-//                            .build(),
-//                        contentDescription = "Movie poster",
-//                        placeholder = painterResource(R.drawable.placeholder),
-//                        contentScale = ContentScale.FillWidth,
-//                        modifier = Modifier.fillMaxWidth()
-//                    )
+                    AsyncImage(
+                        ImageRequest.Builder(LocalContext.current)
+                            .data(ImagePath(show.posterPath))
+                            .crossfade(true)
+                            .build(),
+                        contentDescription = "Movie poster",
+                        placeholder = painterResource(R.drawable.placeholder),
+                        contentScale = ContentScale.FillWidth,
+                        modifier = Modifier.fillMaxWidth()
+                    )
                 }
                 item {
                     Column(
@@ -110,11 +105,11 @@ private fun ShowDetailsContent(
                             Text(
 //                                when (show.showType) {
 //                                    ShowType.MOVIE ->
-                            hoursAndMinutesUsingFormat(show.runtime)
+                                hoursAndMinutesUsingFormat(show.runtime)
 //                                    ShowType.SERIES -> seasonsAndSeriesCountFormat(
 //                                        show.seasonCount,
 //                                        show.episodeCount
-                                    )
+                            )
 
                         }
                         Text(
@@ -137,7 +132,7 @@ private fun ShowDetailsContent(
                     )
                     show.credits?.cast?.forEach { actor ->
                         Text(
-                            actor?.name?: "",
+                            actor?.name ?: "",
                             modifier = Modifier
                                 .padding(top = 12.dp, start = 12.dp, end = 12.dp)
                         )

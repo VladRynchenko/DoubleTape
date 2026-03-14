@@ -33,7 +33,6 @@ class NetworkResultCall<T>(
         })
     }
 
-    // Делегируем остальные методы базовому объекту
     override fun clone(): Call<NetworkResult<T>> = NetworkResultCall(delegate.clone())
     override fun execute(): Response<NetworkResult<T>> = throw UnsupportedOperationException("NetworkResultCall не поддерживает синхронный вызов")
     override fun isExecuted(): Boolean = delegate.isExecuted
