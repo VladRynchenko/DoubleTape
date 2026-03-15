@@ -1,13 +1,21 @@
 package com.vroff.tmdb.entity.search
 
 import com.google.gson.annotations.SerializedName
+import com.vroff.domain.model.BackdropImage
+import com.vroff.domain.model.Image
+import com.vroff.domain.model.ImageType
+import com.vroff.domain.model.PosterImage
+import com.vroff.domain.model.ProfileImage
+import com.vroff.domain.model.tmdb.search.Gender
+import com.vroff.domain.model.tmdb.search.MediaType
 import com.vroff.domain.model.tmdb.search.SearchResult
+import kotlin.text.orEmpty
 
 data class SearchResultDTO(
     val adult: Boolean,
     @SerializedName("backdrop_path")
     val backdropPath: String?,
-    val id: Long,
+    val id: Int,
     val name: String?,
     @SerializedName("original_name")
     val originalName: String?,
@@ -29,7 +37,7 @@ data class SearchResultDTO(
     val voteCount: Long?,
     @SerializedName("origin_country")
     val originCountry: List<String>?,
-    val gender: Long?,
+    val gender: Int,
     @SerializedName("known_for_department")
     val knownForDepartment: String?,
     @SerializedName("profile_path")
@@ -46,28 +54,28 @@ data class SearchResultDTO(
     fun mapToDomain(): SearchResult {
         return SearchResult(
             adult = adult,
-            backdropPath = backdropPath,
+            backdropImage = backdropPath?.let { BackdropImage(it) },
             id = id,
-            name = name,
-            originalName = originalName,
-            overview = overview,
-            posterPath = posterPath,
-            mediaType = mediaType,
-            originalLanguage = originalLanguage,
-            genreIds = genreIds,
+            name = name.orEmpty(),
+            originalName = originalName.orEmpty(),
+            overview = overview.orEmpty(),
+            posterImage = posterPath?.let { PosterImage(it) },
+            mediaType = MediaType.entries.associateBy { it.type }[mediaType] ?: MediaType.UNKNOWN,
+            originalLanguage = originalLanguage.orEmpty(),
+            genreIds = genreIds.orEmpty(),
             popularity = popularity,
-            firstAirDate = firstAirDate,
-            voteAverage = voteAverage,
-            voteCount = voteCount,
-            originCountry = originCountry,
-            gender = gender,
-            knownForDepartment = knownForDepartment,
-            profilePath = profilePath,
-            knownFor = knownFor?.map { it.mapToDomain() },
-            title = title,
-            originalTitle = originalTitle,
-            releaseDate = releaseDate,
-            video = video,
+            firstAirDate = firstAirDate.orEmpty(),
+            voteAverage = voteAverage ?: 0.0,
+            voteCount = voteCount ?: 0,
+            originCountry = originCountry.orEmpty(),
+            gender = Gender.entries[gender],
+            knownForDepartment = knownForDepartment.orEmpty(),
+            profileImage = profilePath?.let { ProfileImage(it) },
+            knownFor = knownFor?.map { it.mapToDomain() } ?: emptyList(),
+            title = title.orEmpty(),
+            originalTitle = originalTitle.orEmpty(),
+            releaseDate = releaseDate.orEmpty(),
+            video = video ?: false,
         )
     }
 }

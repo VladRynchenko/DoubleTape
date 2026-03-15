@@ -1,9 +1,12 @@
 package com.vroff.tmdb.entity.movie
 
 import com.google.gson.annotations.SerializedName
+import com.vroff.domain.model.BackdropImage
+import com.vroff.domain.model.Image
+import com.vroff.domain.model.ImageType
+import com.vroff.domain.model.PosterImage
 import com.vroff.domain.model.tmdb.movie.MovieDetail
 import com.vroff.domain.model.streaming_available.Genre
-import com.vroff.tmdb.entity.series.AggregateCreditsDTO
 import com.vroff.tmdb.entity.common.ProductionCompanyDTO
 import com.vroff.tmdb.entity.common.ProductionCountryDTO
 import com.vroff.tmdb.entity.common.SpokenLanguageDTO
@@ -11,7 +14,7 @@ import com.vroff.tmdb.entity.common.SpokenLanguageDTO
 data class MovieDetailDTO(
     val adult: Boolean,
     @SerializedName("backdrop_path")
-    val backdropPath: String,
+    val backdropPath: String?,
     @SerializedName("belongs_to_collection")
     val belongsToCollection: Any?,
     val budget: Long,
@@ -27,7 +30,7 @@ data class MovieDetailDTO(
     val overview: String,
     val popularity: Double,
     @SerializedName("poster_path")
-    val posterPath: String,
+    val posterPath: String?,
     @SerializedName("production_companies")
     val productionCompanies: List<ProductionCompanyDTO>,
     @SerializedName("production_countries")
@@ -52,7 +55,7 @@ data class MovieDetailDTO(
     fun mapToDomain(): MovieDetail {
         return MovieDetail(
             adult = adult,
-            backdropPath = backdropPath,
+            backdrop = backdropPath?.let{BackdropImage(it)},
             belongsToCollection = belongsToCollection,
             budget = budget,
             genres = genres,
@@ -63,7 +66,7 @@ data class MovieDetailDTO(
             originalTitle = originalTitle,
             overview = overview,
             popularity = popularity,
-            posterPath = posterPath,
+            poster = posterPath?.let { PosterImage(it) },
             productionCompanies = productionCompanies.map { it.mapToDomain() },
             productionCountries = productionCountries.map { it.mapToDomain() },
             releaseDate = releaseDate,

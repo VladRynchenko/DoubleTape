@@ -1,27 +1,88 @@
 package com.vroff.domain.model.tmdb.search
 
+import com.vroff.domain.model.BackdropImage
+import com.vroff.domain.model.Image
+import com.vroff.domain.model.PosterImage
+import com.vroff.domain.model.ProfileImage
+import com.vroff.domain.model.tmdb.search.typed_result.MovieSearchResult
+import com.vroff.domain.model.tmdb.search.typed_result.PersonSearchResult
+import com.vroff.domain.model.tmdb.search.typed_result.SerialSearchResult
+import com.vroff.domain.model.tmdb.search.typed_result.TypedSearchResult
+
 data class SearchResult(
-    val adult: Boolean,
-    val backdropPath: String?,
-    val id: Long,
-    val name: String?,
-    val originalName: String?,
-    val overview: String?,
-    val posterPath: String?,
-    val mediaType: String,
-    val originalLanguage: String?,
-    val genreIds: List<Long>?,
+    val adult: Boolean = false,
+    val backdropImage: BackdropImage?,
+    val id: Int,
+    val name: String = "",
+    val originalName: String = "",
+    val overview: String = "",
+    val posterImage: PosterImage?,
+    val mediaType: MediaType,
+    val originalLanguage: String = "",
+    val genreIds: List<Long>,
     val popularity: Double,
-    val firstAirDate: String?,
-    val voteAverage: Double?,
-    val voteCount: Long?,
-    val originCountry: List<String>?,
-    val gender: Long?,
-    val knownForDepartment: String?,
-    val profilePath: String?,
-    val knownFor: List<KnownFor>?,
-    val title: String?,
-    val originalTitle: String?,
-    val releaseDate: String?,
-    val video: Boolean?,
-)
+    val firstAirDate: String = "",
+    val voteAverage: Double = 0.0,
+    val voteCount: Long = 0,
+    val originCountry: List<String>,
+    val gender: Gender = Gender.NOT_SET,
+    val knownForDepartment: String = "",
+    val profileImage: ProfileImage?,
+    val knownFor: List<KnownFor>,
+    val title: String = "",
+    val originalTitle: String = "",
+    val releaseDate: String = "",
+    val video: Boolean = false,
+) {
+    fun mapToTypedResult(): TypedSearchResult? {
+        return when (mediaType) {
+            MediaType.PERSON -> PersonSearchResult(
+                adult = adult,
+                id = id,
+                name = name,
+                originalName = originalName,
+                popularity = popularity,
+                gender = gender,
+                knownForDepartment = knownForDepartment,
+                profileImage = profileImage,
+                knownFor = knownFor
+            )
+
+            MediaType.MOVIE -> MovieSearchResult(
+                adult = adult,
+                backdropImage = backdropImage,
+                id = id,
+                title = title,
+                originalTitle = originalTitle,
+                overview = overview,
+                posterImage = posterImage,
+                originalLanguage = originalLanguage,
+                genreIds = genreIds,
+                popularity = popularity,
+                releaseDate = releaseDate,
+                video = video,
+                voteAverage = voteAverage,
+                voteCount = voteCount,
+            )
+
+            MediaType.SERIES -> SerialSearchResult(
+                adult = adult,
+                backdropImage = backdropImage,
+                id = id,
+                name = name,
+                originalName = originalName,
+                overview = overview,
+                posterImage = posterImage,
+                originalLanguage = originalLanguage,
+                genreIds = genreIds,
+                popularity = popularity,
+                firstAirDate = firstAirDate,
+                voteAverage = voteAverage,
+                voteCount = voteCount,
+                originCountry = originCountry,
+            )
+
+            else -> null
+        }
+    }
+}

@@ -8,7 +8,7 @@ import java.util.Locale
 import javax.inject.Inject
 
 class GetShowByIdUseCase @Inject constructor(private val repository: TMDBRepository) {
-    suspend fun execute(id: String): NetworkResult<MovieDetail> {
+    suspend fun execute(id: Int): NetworkResult<MovieDetail> {
         return try {
             repository.getMovieDetails(
                 id,

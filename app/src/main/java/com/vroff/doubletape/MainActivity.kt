@@ -12,14 +12,16 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
+import androidx.navigation.NavDestination.Companion.hasRoute
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
-import androidx.navigation.compose.navigation
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.toRoute
 import com.vroff.doubletape.presentation.screens.Graph
+import kotlinx.serialization.Serializable
 import com.vroff.doubletape.presentation.screens.main.WelcomeScreen
 import com.vroff.doubletape.presentation.screens.movie.MovieScreen
 import com.vroff.search.SearchScreen
@@ -34,85 +36,82 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
-
             val mainViewModel: MainViewModel = hiltViewModel()
             val navController = rememberNavController()
             val context = LocalContext.current
             val navBackStackEntry by navController.currentBackStackEntryAsState()
-            val currentRoute = navBackStackEntry?.destination?.route ?: Graph.Main.route
-            val query = mainViewModel.query.collectAsState()
+            val destination = navBackStackEntry?.destination
+
+            val query by mainViewModel.query.collectAsState()
+
+            val isMain = destination?.hasRoute<Graph.Main>() == true
+            val isSearch = destination?.hasRoute<Graph.Search>() == true
+            val isDetails = destination?.hasRoute<Graph.Details>() == true
 
             MovieDDTheme {
                 Scaffold(
                     topBar = {
                         ShowTopAppBar(
-                            searchQuery = query.value,
+                            searchQuery = query,
                             onSearchQueryChange = mainViewModel::setQuery,
                             onActionIconClick = {
-                                when (currentRoute) {
-                                    Graph.Main.route -> {
-                                        mainViewModel.clearQuery()
-                                        navController.navigate(Graph.Search.route)
-                                    }
-
-                                    else -> NavigationState.More
+                                if (isMain) {
+                                    mainViewModel.clearQuery()
+                                    navController.navigate(Graph.Search)
                                 }
                             },
                             onNavigationIconClick = {
-                                when (navController.currentDestination?.route) {
-                                    Graph.Main.route -> {
-                                        Toast.makeText(context, "MAIN", Toast.LENGTH_SHORT).show()
-                                    }
+                                when {
+                                    isMain -> Toast.makeText(context, "MAIN", Toast.LENGTH_SHORT)
+                                        .show()
 
-                                    Graph.Search.route, Graph.Details.route -> navController.popBackStack()
-                                    else -> NavigationState.More
+                                    isSearch || isDetails -> navController.popBackStack()
                                 }
                             },
-                            state = when (currentRoute) {
-                                Graph.Main.route -> NavigationState.MainScreen
-                                Graph.Details.route -> NavigationState.More
-                                Graph.Search.route -> NavigationState.Search
+                            state = when {
+                                isMain -> NavigationState.MainScreen
+                                isSearch -> NavigationState.Search
                                 else -> NavigationState.More
                             }
                         )
                     },
                     modifier = Modifier.fillMaxSize()
                 ) { innerPadding ->
+
                     NavHost(
                         navController = navController,
-                        startDestination = Graph.route,
+                        startDestination = Graph.Main,
                     ) {
-                        navigation(Graph.Main.route, route = Graph.route) {
-                            composable(Graph.Main.route) { WelcomeScreen() }
-                            composable(Graph.Search.route) {
-                                SearchScreen(
-                                    query.value.text,
-                                    innerPadding,
-                                ) { id ->
-                                    navController.navigate("${Graph.route}/${Graph.Details.route}/$id")
+                        composable<Graph.Main> {
+                            WelcomeScreen()
+                        }
+
+                        composable<Graph.Search> {
+                            SearchScreen(
+                                searchQuery = query.text,
+                                padding = innerPadding,
+                                onItemClick = { id, type ->
+                                    navController.navigate(Graph.Details(id, type))
                                 }
-                            }
-                            composable(
-                                route = Graph.Details.routeWithArgs,
-                                arguments = Graph.Details.arguments,
-                            ) { backStackEntry ->
-                                val id =
-                                    backStackEntry.arguments?.getString(Graph.Details.idTypeArg)
-                                MovieScreen(id, innerPadding)
-                            }
+                            )
+                        }
+
+                        composable<Graph.Details> { backStackEntry ->
+                            val details = backStackEntry.toRoute<Graph.Details>()
+                            MovieScreen(
+                                tmdbId = details.id,
+                                type = details.type,
+                                padding = innerPadding
+                            )
                         }
                     }
-
                 }
-//                    SearchScreen(searchQuery, modifier = Modifier.padding(innerPadding))
-
-
             }
         }
     }
 }
 
-fun NavHostController.navigateSingleTopTo(route: String) =
+fun <T : Any> NavHostController.navigateSingleTopTo(route: T) {
     this.navigate(route) {
         popUpTo(
             this@navigateSingleTopTo.graph.findStartDestination().id
@@ -122,6 +121,4 @@ fun NavHostController.navigateSingleTopTo(route: String) =
         launchSingleTop = true
         restoreState = true
     }
-
-
-
+}

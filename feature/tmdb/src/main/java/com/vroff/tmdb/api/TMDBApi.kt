@@ -18,15 +18,15 @@ interface TMDBApi {
 
     @GET(Endpoint.MOVIE_DETAILS)
     suspend fun getMovieDetails(
-        @Path("movie_id") movieId: String,
+        @Path("movie_id") movieId: Int,
         @Query("language") language: String,
         @Query("append_to_response") appendToResponse: String
     ): NetworkResult<MovieDetailDTO>
 
     @GET(Endpoint.SERIES_DETAILS)
     suspend fun getSerialDetails(
-        @Path("series_id") seriesId: String,
-        @Query("language") language: String = "en-US",
+        @Path("series_id") seriesId: Int,
+        @Query("language") language: String,
         @Query("append_to_response") appendToResponse: String
     ): NetworkResult<SeriesDetailDTO>
 

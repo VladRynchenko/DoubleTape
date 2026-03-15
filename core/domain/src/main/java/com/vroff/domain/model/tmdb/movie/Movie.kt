@@ -1,5 +1,7 @@
 package com.vroff.domain.model.tmdb.movie
 
+import com.vroff.domain.model.BackdropImage
+import com.vroff.domain.model.PosterImage
 import com.vroff.domain.model.streaming_available.Genre
 import com.vroff.domain.model.tmdb.common.ProductionCompany
 import com.vroff.domain.model.tmdb.common.ProductionCountry
@@ -8,7 +10,7 @@ import com.vroff.domain.model.tmdb.common.SpokenLanguage
 
 data class MovieDetail (
     val adult: Boolean,
-    val backdropPath: String,
+    val backdrop: BackdropImage?,
     val belongsToCollection: Any?,
     val budget: Long,
     val genres: List<Genre>,
@@ -19,7 +21,7 @@ data class MovieDetail (
     val originalTitle: String,
     val overview: String,
     val popularity: Double,
-    val posterPath: String,
+    val poster: PosterImage?,
     val productionCompanies: List<ProductionCompany>,
     val productionCountries: List<ProductionCountry>,
     val releaseDate: String,

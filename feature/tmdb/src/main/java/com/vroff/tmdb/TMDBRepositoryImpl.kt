@@ -18,7 +18,7 @@ class TMDBRepositoryImpl @Inject constructor(
 ) : TMDBRepository {
 
     override suspend fun getMovieDetails(
-        movieId: String,
+        movieId: Int,
         language: String,
         appendToResponse: String
     ): NetworkResult<MovieDetail> {
@@ -27,7 +27,7 @@ class TMDBRepositoryImpl @Inject constructor(
     }
 
     override suspend fun getSeriesDetails(
-        seriesId: String,
+        seriesId: Int,
         language: String,
         appendToResponse: String
     ): NetworkResult<SeriesDetail> {
@@ -37,7 +37,6 @@ class TMDBRepositoryImpl @Inject constructor(
 
     override suspend fun multiSearch(
         query: String,
-        page: Int,
         includeAdult: Boolean,
         language: String,
         region: String

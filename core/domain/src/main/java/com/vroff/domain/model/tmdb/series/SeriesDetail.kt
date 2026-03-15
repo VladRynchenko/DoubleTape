@@ -1,5 +1,7 @@
 package com.vroff.domain.model.tmdb.series
 
+import com.vroff.domain.model.BackdropImage
+import com.vroff.domain.model.PosterImage
 import com.vroff.domain.model.tmdb.common.Genre
 import com.vroff.domain.model.tmdb.common.ProductionCompany
 import com.vroff.domain.model.tmdb.common.ProductionCountry
@@ -7,7 +9,7 @@ import com.vroff.domain.model.tmdb.common.SpokenLanguage
 
 data class SeriesDetail(
     val adult: Boolean,
-    val backdropPath: String,
+    val backdropImage: BackdropImage?,
     val createdBy: List<CreatedBy>,
     val episodeRunTime: List<Long>,
     val firstAirDate: String,
@@ -28,7 +30,7 @@ data class SeriesDetail(
     val originalName: String,
     val overview: String,
     val popularity: Double,
-    val posterPath: String,
+    val posterImage: PosterImage?,
     val productionCompanies: List<ProductionCompany>,
     val productionCountries: List<ProductionCountry>,
     val seasons: List<Season>,

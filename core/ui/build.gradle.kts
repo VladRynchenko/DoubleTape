@@ -57,6 +57,7 @@ dependencies{
     implementation(libs.androidx.constraintlayout.compose)
 
 // Compose Navigation + Lifecycle
+    implementation(libs.androidx.navigation.compose)
     implementation(libs.androidx.hilt.navigation.compose)
     implementation(libs.androidx.lifecycle.viewmodel.compose)
     implementation(libs.androidx.compose.activity)

@@ -11,20 +11,19 @@ import kotlinx.coroutines.flow.Flow
 interface TMDBRepository {
 
     suspend fun getMovieDetails(
-        movieId: String,
+        movieId: Int,
         language: String,
         appendToResponse: String
     ): NetworkResult<MovieDetail>
 
     suspend fun getSeriesDetails(
-        seriesId: String,
+        seriesId: Int,
         language: String,
         appendToResponse: String
     ): NetworkResult<SeriesDetail>
 
     suspend fun multiSearch(
         query: String,
-        page: Int,
         includeAdult: Boolean,
         language: String,
         region: String

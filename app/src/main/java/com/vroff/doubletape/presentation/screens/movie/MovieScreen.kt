@@ -25,18 +25,19 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil3.compose.AsyncImage
 import coil3.request.ImageRequest
 import coil3.request.crossfade
-import com.vroff.domain.model.ImagePath
+import com.vroff.domain.model.tmdb.search.MediaType
 import com.vroff.doubletape.R
 import com.vroff.ui.hoursAndMinutesUsingFormat
 import com.vroff.ui.ui.ExpandableText
 
 @Composable
 fun MovieScreen(
-    tmdbId: String?,
+    tmdbId: Int,
+    type: MediaType,
     padding: PaddingValues
 ) {
     val movieViewModel = hiltViewModel<MovieViewModel>()
-    movieViewModel.setTMDBId(tmdbId)
+    movieViewModel.setTMDBId(tmdbId, type)
     val state = movieViewModel.showState.collectAsStateWithLifecycle()
     ShowDetailsContent(state.value, padding)
 }
@@ -75,7 +76,7 @@ private fun ShowDetailsContent(
                 item {
                     AsyncImage(
                         ImageRequest.Builder(LocalContext.current)
-                            .data(ImagePath(show.posterPath))
+                            .data(show.poster)
                             .crossfade(true)
                             .build(),
                         contentDescription = "Movie poster",

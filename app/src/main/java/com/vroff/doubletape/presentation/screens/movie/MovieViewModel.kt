@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.vroff.data.usecase.GetShowByIdUseCase
 import com.vroff.domain.model.streaming_available.NetworkResult
 import com.vroff.domain.model.tmdb.movie.MovieDetail
+import com.vroff.domain.model.tmdb.search.MediaType
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -19,9 +20,9 @@ class MovieViewModel @Inject constructor() : ViewModel() {
     @Inject
     lateinit var getShowByIdUseCase: GetShowByIdUseCase
 
-    private val _tmdbIdStateFlow = MutableStateFlow("")
+    private val _tmdbIdStateFlow = MutableStateFlow(-1)
     var showState = _tmdbIdStateFlow
-        .filter { it != "" }
+        .filter { it != -1 }
         .map { id ->
             when (val result = getShowByIdUseCase.execute(id)) {
                 is NetworkResult.Success -> ScreenState.Success(data = result.data)
@@ -34,12 +35,8 @@ class MovieViewModel @Inject constructor() : ViewModel() {
             ScreenState.Loading
         )
 
-    fun setTMDBId(id: String?) {
-        if (!id.isNullOrBlank()) {
-            _tmdbIdStateFlow.value = id
-        } else {
-            _tmdbIdStateFlow.value = ""
-        }
+    fun setTMDBId(id: Int, type: MediaType) {
+        _tmdbIdStateFlow.tryEmit(id)
     }
 
 
