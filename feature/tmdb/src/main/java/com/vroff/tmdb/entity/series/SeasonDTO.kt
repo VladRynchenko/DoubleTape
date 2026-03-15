@@ -17,9 +17,9 @@ data class SeasonDTO(
     val seasonNumber: Long,
     @SerializedName("vote_average")
     val voteAverage: Double,
-){
-    fun mapToDomain(): Season {
-        return Season(
+) {
+    fun mapToDomain(): Season =
+        Season(
             airDate = airDate,
             episodeCount = episodeCount,
             id = id,
@@ -29,5 +29,4 @@ data class SeasonDTO(
             seasonNumber = seasonNumber,
             voteAverage = voteAverage,
         )
-    }
 }

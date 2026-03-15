@@ -11,12 +11,11 @@ data class NetworkDTO(
     @SerializedName("origin_country")
     val originCountry: String,
 ) {
-    fun mapToDomain(): Network {
-        return Network(
+    fun mapToDomain(): Network =
+        Network(
             id = id,
             logoPath = logoPath,
             name = name,
             originCountry = originCountry,
         )
-    }
 }

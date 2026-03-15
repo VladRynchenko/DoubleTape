@@ -38,66 +38,69 @@ fun HideableItem(
     modifier: Modifier = Modifier,
     initialExtended: Boolean = false,
     title: @Composable () -> Unit,
-    content: @Composable () -> Unit
+    content: @Composable () -> Unit,
 ) {
     var extended by rememberSaveable { mutableStateOf(initialExtended) }
     val indicationSource = remember { MutableInteractionSource() }
     val rotationAngle by animateFloatAsState(
         targetValue = if (extended) 90f else 0f,
-        animationSpec = tween(durationMillis = 300), label = "ArrowRotation"
+        animationSpec = tween(durationMillis = 300),
+        label = "ArrowRotation",
     )
 
     Card(
-        modifier = modifier
-            .fillMaxWidth()
-            .clickable(
-                interactionSource = indicationSource,
-                indication = null,
-                true,
-            ) {
-                extended = !extended
-            },
-        shape = RoundedCornerShape(12.dp)
+        modifier =
+            modifier
+                .fillMaxWidth()
+                .clickable(
+                    interactionSource = indicationSource,
+                    indication = null,
+                    true,
+                ) {
+                    extended = !extended
+                },
+        shape = RoundedCornerShape(12.dp),
     ) {
         Row(
-            modifier = Modifier
-                .padding(12.dp),
-            verticalAlignment = Alignment.CenterVertically
+            modifier =
+                Modifier
+                    .padding(12.dp),
+            verticalAlignment = Alignment.CenterVertically,
         ) {
             Icon(
                 imageVector = Icons.AutoMirrored.Filled.KeyboardArrowRight,
                 contentDescription = if (extended) "Свернуть" else "Развернуть",
                 tint = MaterialTheme.colorScheme.onSurface,
-                modifier = Modifier.graphicsLayer(rotationZ = rotationAngle)
+                modifier = Modifier.graphicsLayer(rotationZ = rotationAngle),
             )
 
             title.invoke()
         }
         AnimatedVisibility(
-            modifier = Modifier
-                .fillMaxWidth().padding(horizontal = 12.dp),
+            modifier =
+                Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 12.dp),
             visible = extended,
             enter = expandVertically(animationSpec = tween(300)) + fadeIn(animationSpec = tween(300)),
-            exit = shrinkVertically(animationSpec = tween(300)) + fadeOut(animationSpec = tween(300))
+            exit = shrinkVertically(animationSpec = tween(300)) + fadeOut(animationSpec = tween(300)),
         ) {
             content.invoke()
         }
     }
-
 }
 
 @Preview(showBackground = true)
 @Composable
 fun PreviewHideableItem() {
-
     Surface(Modifier.padding(vertical = 40.dp)) {
         HideableItem(
             title = {
                 Text("Title")
             },
-            initialExtended = true
+            initialExtended = true,
         ) {
-            Column() {
+            Column {
                 repeat(7) {
                     Text("Episode $it")
                 }

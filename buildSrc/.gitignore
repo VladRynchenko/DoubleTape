@@ -1,2 +1,2 @@
 /build
-/src/main/java/com/vroff/buildsrc/Constants.kt
+/src/main/kotlin/com/vroff/buildsrc/Constants.kt

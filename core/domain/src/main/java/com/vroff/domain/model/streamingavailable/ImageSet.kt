@@ -1,8 +1,8 @@
-package com.vroff.domain.model.streaming_available
+package com.vroff.domain.model.streamingavailable
 
 data class ImageSet(
     var verticalPoster: VerticalPoster,
     var horizontalPoster: HorizontalPoster,
     var verticalBackdrop: VerticalPoster?,
-    var horizontalBackdrop: HorizontalPoster?
+    var horizontalBackdrop: HorizontalPoster?,
 )

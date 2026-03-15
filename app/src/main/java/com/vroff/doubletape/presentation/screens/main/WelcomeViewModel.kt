@@ -5,26 +5,25 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import coil3.ImageLoader
-import com.vroff.domain.model.streaming_available.ShowState
+import com.vroff.domain.model.streamingavailable.ShowState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class WelcomeViewModel @Inject constructor(
-) : ViewModel() {
-
-//    @Inject
+class WelcomeViewModel
+    @Inject
+    constructor() : ViewModel() {
+        //    @Inject
 //    lateinit var getShowByIdUseCase: GetShowByIdUseCase
 
-    var showState by mutableStateOf<ShowState>(
-        ShowState.Loading
-    )
-        private set
+        var showState by mutableStateOf<ShowState>(
+            ShowState.Loading,
+        )
+            private set
 
-    fun getShows() {
-        viewModelScope.launch {
+        fun getShows() {
+            viewModelScope.launch {
 //            showState = when (val result = showRepository.getShows()) {
 //                is Resource.Error -> {
 //                    ShowState.Error(
@@ -38,11 +37,9 @@ class WelcomeViewModel @Inject constructor(
 //                    )
 //                }
 //            }
+            }
+        }
+
+        fun getTopShows() {
         }
     }
-
-    fun getTopShows() {
-
-    }
-
-}

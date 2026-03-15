@@ -13,40 +13,36 @@ import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 
-
 @Module
 @InstallIn(SingletonComponent::class)
 object StreamingAvailabilityModule {
-
     @Provides
     @StreamingAvailable
     fun provideAuthBaseUrl(): String = STREAMING_AVAILABILITY_BASE_URL
 
     @Provides
     @StreamingAvailable
-    fun provideStreamingAvailabilityClient(
-        loggerInterceptor: HttpLoggingInterceptor
-    ): OkHttpClient {
-        return OkHttpClient.Builder()
+    fun provideStreamingAvailabilityClient(loggerInterceptor: HttpLoggingInterceptor): OkHttpClient =
+        OkHttpClient
+            .Builder()
             .addInterceptor(loggerInterceptor)
             .addInterceptor { chain ->
-                val request = chain.request().newBuilder()
-                    .addHeader(
-                        Constants.X_RAPIDAPI_KEY,
-                        BuildConfig.STREAMING_AVAILABILITY_API_KEY
-                    )
-                    .addHeader(
-                        Constants.X_RAPIDAPI_HOST,
-                        BuildConfig.STREAMING_AVAILABILITY_API_HOST
-                    )
-                    .build()
+                val request =
+                    chain
+                        .request()
+                        .newBuilder()
+                        .addHeader(
+                            Constants.X_RAPIDAPI_KEY,
+                            BuildConfig.STREAMING_AVAILABILITY_API_KEY,
+                        ).addHeader(
+                            Constants.X_RAPIDAPI_HOST,
+                            BuildConfig.STREAMING_AVAILABILITY_API_HOST,
+                        ).build()
                 chain.proceed(request)
-            }
-            .build()
-    }
+            }.build()
 
     @Provides
-    fun provideStreamingAvailability(@StreamingAvailable retrofit: Retrofit): StreamingAvailabilityApi {
-        return retrofit.create(StreamingAvailabilityApi::class.java)
-    }
+    fun provideStreamingAvailability(
+        @StreamingAvailable retrofit: Retrofit,
+    ): StreamingAvailabilityApi = retrofit.create(StreamingAvailabilityApi::class.java)
 }

@@ -1,6 +1,5 @@
 package com.vroff.domain.model.tmdb.series
 
-
 data class Season(
     val airDate: String,
     val episodeCount: Long,

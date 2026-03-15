@@ -1,13 +1,12 @@
 package com.vroff.domain.model.tmdb.search
 
 import com.vroff.domain.model.BackdropImage
-import com.vroff.domain.model.Image
 import com.vroff.domain.model.PosterImage
 import com.vroff.domain.model.ProfileImage
-import com.vroff.domain.model.tmdb.search.typed_result.MovieSearchResult
-import com.vroff.domain.model.tmdb.search.typed_result.PersonSearchResult
-import com.vroff.domain.model.tmdb.search.typed_result.SerialSearchResult
-import com.vroff.domain.model.tmdb.search.typed_result.TypedSearchResult
+import com.vroff.domain.model.tmdb.search.typed.MovieSearchResult
+import com.vroff.domain.model.tmdb.search.typed.PersonSearchResult
+import com.vroff.domain.model.tmdb.search.typed.SerialSearchResult
+import com.vroff.domain.model.tmdb.search.typed.TypedSearchResult
 
 data class SearchResult(
     val adult: Boolean = false,
@@ -34,55 +33,57 @@ data class SearchResult(
     val releaseDate: String = "",
     val video: Boolean = false,
 ) {
-    fun mapToTypedResult(): TypedSearchResult? {
-        return when (mediaType) {
-            MediaType.PERSON -> PersonSearchResult(
-                adult = adult,
-                id = id,
-                name = name,
-                originalName = originalName,
-                popularity = popularity,
-                gender = gender,
-                knownForDepartment = knownForDepartment,
-                profileImage = profileImage,
-                knownFor = knownFor
-            )
+    fun mapToTypedResult(): TypedSearchResult? =
+        when (mediaType) {
+            MediaType.PERSON ->
+                PersonSearchResult(
+                    adult = adult,
+                    id = id,
+                    name = name,
+                    originalName = originalName,
+                    popularity = popularity,
+                    gender = gender,
+                    knownForDepartment = knownForDepartment,
+                    profileImage = profileImage,
+                    knownFor = knownFor,
+                )
 
-            MediaType.MOVIE -> MovieSearchResult(
-                adult = adult,
-                backdropImage = backdropImage,
-                id = id,
-                title = title,
-                originalTitle = originalTitle,
-                overview = overview,
-                posterImage = posterImage,
-                originalLanguage = originalLanguage,
-                genreIds = genreIds,
-                popularity = popularity,
-                releaseDate = releaseDate,
-                video = video,
-                voteAverage = voteAverage,
-                voteCount = voteCount,
-            )
+            MediaType.MOVIE ->
+                MovieSearchResult(
+                    adult = adult,
+                    backdropImage = backdropImage,
+                    id = id,
+                    title = title,
+                    originalTitle = originalTitle,
+                    overview = overview,
+                    posterImage = posterImage,
+                    originalLanguage = originalLanguage,
+                    genreIds = genreIds,
+                    popularity = popularity,
+                    releaseDate = releaseDate,
+                    video = video,
+                    voteAverage = voteAverage,
+                    voteCount = voteCount,
+                )
 
-            MediaType.SERIES -> SerialSearchResult(
-                adult = adult,
-                backdropImage = backdropImage,
-                id = id,
-                name = name,
-                originalName = originalName,
-                overview = overview,
-                posterImage = posterImage,
-                originalLanguage = originalLanguage,
-                genreIds = genreIds,
-                popularity = popularity,
-                firstAirDate = firstAirDate,
-                voteAverage = voteAverage,
-                voteCount = voteCount,
-                originCountry = originCountry,
-            )
+            MediaType.SERIES ->
+                SerialSearchResult(
+                    adult = adult,
+                    backdropImage = backdropImage,
+                    id = id,
+                    name = name,
+                    originalName = originalName,
+                    overview = overview,
+                    posterImage = posterImage,
+                    originalLanguage = originalLanguage,
+                    genreIds = genreIds,
+                    popularity = popularity,
+                    firstAirDate = firstAirDate,
+                    voteAverage = voteAverage,
+                    voteCount = voteCount,
+                    originCountry = originCountry,
+                )
 
             else -> null
         }
-    }
 }

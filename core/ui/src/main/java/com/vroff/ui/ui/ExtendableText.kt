@@ -29,9 +29,10 @@ fun ExpandableText(
     expandText: String = "Читать дальше...",
     collapseText: String = "Свернуть",
     textStyle: TextStyle = MaterialTheme.typography.bodyMedium,
-    expandCollapseTextStyle: SpanStyle = SpanStyle(
-        fontWeight = FontWeight.Bold
-    )
+    expandCollapseTextStyle: SpanStyle =
+        SpanStyle(
+            fontWeight = FontWeight.Bold,
+        ),
 ) {
     var expanded by remember { mutableStateOf(false) }
 
@@ -41,39 +42,44 @@ fun ExpandableText(
             style = textStyle,
             maxLines = if (expanded) Int.MAX_VALUE else minLines,
             overflow = TextOverflow.Ellipsis,
-            modifier = Modifier
-                .animateContentSize(animationSpec = tween(durationMillis = 300))
-                .clickable(
-                    enabled = true
-                ) {
-                    expanded = !expanded
-                }
+            modifier =
+                Modifier
+                    .animateContentSize(animationSpec = tween(durationMillis = 300))
+                    .clickable(
+                        enabled = true,
+                    ) {
+                        expanded = !expanded
+                    },
         )
 
         if (!expanded && text.length > 100) {
             Text(
-                text = buildAnnotatedString {
-                    append("... ")
-                    withStyle(expandCollapseTextStyle) {
-                        append(expandText)
-                    }
-                },
-                modifier = Modifier
-                    .clickable { expanded = true }
-                    .padding(top = 4.dp),
-                style = textStyle
+                text =
+                    buildAnnotatedString {
+                        append("... ")
+                        withStyle(expandCollapseTextStyle) {
+                            append(expandText)
+                        }
+                    },
+                modifier =
+                    Modifier
+                        .clickable { expanded = true }
+                        .padding(top = 4.dp),
+                style = textStyle,
             )
         } else if (expanded && text.length > 100) {
             Text(
-                text = buildAnnotatedString {
-                    withStyle(expandCollapseTextStyle) {
-                        append(collapseText)
-                    }
-                },
-                modifier = Modifier
-                    .clickable { expanded = false }
-                    .padding(top = 4.dp),
-                style = textStyle
+                text =
+                    buildAnnotatedString {
+                        withStyle(expandCollapseTextStyle) {
+                            append(collapseText)
+                        }
+                    },
+                modifier =
+                    Modifier
+                        .clickable { expanded = false }
+                        .padding(top = 4.dp),
+                style = textStyle,
             )
         }
     }

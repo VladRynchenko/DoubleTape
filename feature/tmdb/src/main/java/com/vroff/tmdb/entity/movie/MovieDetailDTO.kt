@@ -2,11 +2,9 @@ package com.vroff.tmdb.entity.movie
 
 import com.google.gson.annotations.SerializedName
 import com.vroff.domain.model.BackdropImage
-import com.vroff.domain.model.Image
-import com.vroff.domain.model.ImageType
 import com.vroff.domain.model.PosterImage
+import com.vroff.domain.model.streamingavailable.Genre
 import com.vroff.domain.model.tmdb.movie.MovieDetail
-import com.vroff.domain.model.streaming_available.Genre
 import com.vroff.tmdb.entity.common.ProductionCompanyDTO
 import com.vroff.tmdb.entity.common.ProductionCountryDTO
 import com.vroff.tmdb.entity.common.SpokenLanguageDTO
@@ -52,10 +50,10 @@ data class MovieDetailDTO(
     @SerializedName("credits")
     val credits: CreditsDTO?,
 ) {
-    fun mapToDomain(): MovieDetail {
-        return MovieDetail(
+    fun mapToDomain(): MovieDetail =
+        MovieDetail(
             adult = adult,
-            backdrop = backdropPath?.let{BackdropImage(it)},
+            backdrop = backdropPath?.let { BackdropImage(it) },
             belongsToCollection = belongsToCollection,
             budget = budget,
             genres = genres,
@@ -81,5 +79,4 @@ data class MovieDetailDTO(
             voteCount = voteCount,
             credits = credits?.mapToDomainLight(),
         )
-    }
 }

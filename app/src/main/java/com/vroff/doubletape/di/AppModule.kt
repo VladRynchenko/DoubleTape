@@ -10,10 +10,7 @@ import javax.inject.Singleton
 @Module
 @InstallIn(SingletonComponent::class)
 object AppModule {
-
     @Provides
     @Singleton
-    fun provideLocale(): Locale {
-        return Locale.getDefault()
-    }
+    fun provideLocale(): Locale = Locale.getDefault()
 }

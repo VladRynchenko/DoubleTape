@@ -22,6 +22,5 @@ data class ShowDTO(
     @SerializedName("runtime") var runtime: Int?,
     @SerializedName("imageSet") var imageSet: ImageSetDTO,
     @SerializedName("creators") var creators: ArrayList<String>?,
-    @SerializedName("seasons") var seasons: ArrayList<SeasonDTO>?
-
+    @SerializedName("seasons") var seasons: ArrayList<SeasonDTO>?,
 )

@@ -6,17 +6,15 @@ data class CreditsDTO(
     val cast: List<CastDTO>,
     val crew: List<CrewDTO>,
 ) {
-    fun mapToDomain(): Credits {
-        return Credits(
+    fun mapToDomain(): Credits =
+        Credits(
             cast = cast.map { it.mapToDomain() },
             crew = crew.map { it.mapToDomain() },
         )
-    }
 
-    fun mapToDomainLight(): Credits {
-        return Credits(
+    fun mapToDomainLight(): Credits =
+        Credits(
             cast = cast.take(8).map { it.mapToDomain() },
-            crew = emptyList()
+            crew = emptyList(),
         )
-    }
 }

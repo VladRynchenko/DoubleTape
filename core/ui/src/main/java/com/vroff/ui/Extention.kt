@@ -15,7 +15,10 @@ fun hoursAndMinutesUsingFormat(totalMinutes: Long?): String {
 }
 
 @Composable
-fun seasonsAndSeriesCountFormat(seasonsCount: Int?, episodesCount: Int?): String {
+fun seasonsAndSeriesCountFormat(
+    seasonsCount: Int?,
+    episodesCount: Int?,
+): String {
     if (seasonsCount == null || episodesCount == null) {
         throw IllegalArgumentException("Can't be null")
     }

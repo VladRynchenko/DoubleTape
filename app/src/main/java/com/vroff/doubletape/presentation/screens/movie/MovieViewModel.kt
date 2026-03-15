@@ -3,7 +3,7 @@ package com.vroff.doubletape.presentation.screens.movie
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.vroff.data.usecase.GetShowByIdUseCase
-import com.vroff.domain.model.streaming_available.NetworkResult
+import com.vroff.domain.model.streamingavailable.NetworkResult
 import com.vroff.domain.model.tmdb.movie.MovieDetail
 import com.vroff.domain.model.tmdb.search.MediaType
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -15,34 +15,44 @@ import kotlinx.coroutines.flow.stateIn
 import javax.inject.Inject
 
 @HiltViewModel
-class MovieViewModel @Inject constructor() : ViewModel() {
-
+class MovieViewModel
     @Inject
-    lateinit var getShowByIdUseCase: GetShowByIdUseCase
+    constructor() : ViewModel() {
+        @Inject
+        lateinit var getShowByIdUseCase: GetShowByIdUseCase
 
-    private val _tmdbIdStateFlow = MutableStateFlow(-1)
-    var showState = _tmdbIdStateFlow
-        .filter { it != -1 }
-        .map { id ->
-            when (val result = getShowByIdUseCase.execute(id)) {
-                is NetworkResult.Success -> ScreenState.Success(data = result.data)
-                is NetworkResult.Error -> ScreenState.Error(result.message)
-                is NetworkResult.Exception -> ScreenState.Error(result.e.message)
-            }
-        }.stateIn(
-            viewModelScope,
-            SharingStarted.Lazily,
-            ScreenState.Loading
-        )
+        private val tmdbIdStateFlow = MutableStateFlow(-1)
+        val showState =
+            tmdbIdStateFlow
+                .filter { it != -1 }
+                .map { id ->
+                    when (val result = getShowByIdUseCase.execute(id)) {
+                        is NetworkResult.Success -> ScreenState.Success(data = result.data)
+                        is NetworkResult.Error -> ScreenState.Error(result.message)
+                        is NetworkResult.Exception -> ScreenState.Error(result.e.message)
+                    }
+                }.stateIn(
+                    viewModelScope,
+                    SharingStarted.Lazily,
+                    ScreenState.Loading,
+                )
 
-    fun setTMDBId(id: Int, type: MediaType) {
-        _tmdbIdStateFlow.tryEmit(id)
+        fun setTMDBId(
+            id: Int,
+            type: MediaType,
+        ) {
+            tmdbIdStateFlow.tryEmit(id)
+        }
+
+        sealed class ScreenState {
+            data class Success(
+                val data: MovieDetail,
+            ) : ScreenState()
+
+            data class Error(
+                val e: String?,
+            ) : ScreenState()
+
+            data object Loading : ScreenState()
+        }
     }
-
-
-    sealed class ScreenState {
-        data class Success(val data: MovieDetail) : ScreenState()
-        data class Error(val e: String?) : ScreenState()
-        data object Loading : ScreenState()
-    }
-}

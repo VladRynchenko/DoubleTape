@@ -22,7 +22,7 @@ android {
             isMinifyEnabled = false
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
-                "proguard-rules.pro"
+                "proguard-rules.pro",
             )
         }
     }
@@ -51,8 +51,6 @@ dependencies {
     ksp(libs.hilt.android.compiler)
     implementation(libs.logging.interceptor)
     implementation(libs.converter.gson)
-
-
 
     implementation(project(":core:ui"))
     implementation(project(":core:network"))

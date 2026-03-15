@@ -5,10 +5,10 @@ import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.hilt.android)
-    alias (libs.plugins.google.devtools.ksp)
+    alias(libs.plugins.google.devtools.ksp)
 }
 
-android{
+android {
     namespace = "com.vroff.network"
     compileSdk = BuildConfigs.COMPILE_SDK
 
@@ -28,7 +28,7 @@ android{
             isMinifyEnabled = false
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
-                "proguard-rules.pro"
+                "proguard-rules.pro",
             )
         }
     }
@@ -46,35 +46,34 @@ android{
             buildConfigField(
                 "String",
                 "STREAMING_AVAILABILITY_BASE_URL",
-                KeysApiDebug.STREAMING_AVAILABILITY_BASE_URL
+                KeysApiDebug.STREAMING_AVAILABILITY_BASE_URL,
             )
             buildConfigField(
                 "String",
                 "STREAMING_AVAILABILITY_API_KEY",
-                KeysApiDebug.STREAMING_AVAILABILITY_API_KEY
+                KeysApiDebug.STREAMING_AVAILABILITY_API_KEY,
             )
 
             buildConfigField(
                 "String",
                 "STREAMING_AVAILABILITY_API_HOST",
-                KeysApiDebug.STREAMING_AVAILABILITY_API_HOST
+                KeysApiDebug.STREAMING_AVAILABILITY_API_HOST,
             )
 
             buildConfigField(
                 "String",
                 "TMDB_API_KEY",
-                KeysApiDebug.TMBD_API_KEY
+                KeysApiDebug.TMBD_API_KEY,
             )
 
             buildConfigField(
                 "String",
                 "TMDB_API_HOST",
-                KeysApiDebug.TMBD_API_HOST
+                KeysApiDebug.TMBD_API_HOST,
             )
         }
     }
 }
-
 
 dependencies {
     implementation(libs.coil3.coil.network.okhttp)
@@ -82,11 +81,9 @@ dependencies {
     implementation(libs.retrofit)
     implementation(libs.logging.interceptor)
 
-    //Hilt
+    // Hilt
     implementation(libs.hilt.android)
     implementation(libs.androidx.paging.common)
     ksp(libs.hilt.android.compiler)
     implementation(project(":core:domain"))
-
 }
-

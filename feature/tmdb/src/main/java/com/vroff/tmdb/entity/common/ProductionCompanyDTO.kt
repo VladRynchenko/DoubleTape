@@ -10,13 +10,12 @@ data class ProductionCompanyDTO(
     val name: String,
     @SerializedName("origin_country")
     val originCountry: String,
-){
-    fun mapToDomain(): ProductionCompany {
-        return ProductionCompany(
+) {
+    fun mapToDomain(): ProductionCompany =
+        ProductionCompany(
             id = id,
             logoPath = logoPath,
             name = name,
             originCountry = originCountry,
         )
-    }
 }

@@ -34,7 +34,7 @@ import com.vroff.ui.ui.ExpandableText
 fun MovieScreen(
     tmdbId: Int,
     type: MediaType,
-    padding: PaddingValues
+    padding: PaddingValues,
 ) {
     val movieViewModel = hiltViewModel<MovieViewModel>()
     movieViewModel.setTMDBId(tmdbId, type)
@@ -45,14 +45,13 @@ fun MovieScreen(
 @Composable
 private fun ShowDetailsContent(
     state: MovieViewModel.ScreenState,
-    padding: PaddingValues
+    padding: PaddingValues,
 ) {
     when (state) {
-
         MovieViewModel.ScreenState.Loading -> {
             Box(
                 modifier = Modifier.fillMaxSize(),
-                contentAlignment = Alignment.Center
+                contentAlignment = Alignment.Center,
             ) {
                 CircularProgressIndicator()
             }
@@ -61,7 +60,7 @@ private fun ShowDetailsContent(
         is MovieViewModel.ScreenState.Error -> {
             Box(
                 modifier = Modifier.fillMaxSize(),
-                contentAlignment = Alignment.Center
+                contentAlignment = Alignment.Center,
             ) {
                 Text(state.e.toString(), color = MaterialTheme.colorScheme.error)
             }
@@ -71,18 +70,19 @@ private fun ShowDetailsContent(
             val show = state.data
             LazyColumn(
                 modifier = Modifier.fillMaxSize(),
-                contentPadding = PaddingValues(bottom = padding.calculateBottomPadding())
+                contentPadding = PaddingValues(bottom = padding.calculateBottomPadding()),
             ) {
                 item {
                     AsyncImage(
-                        ImageRequest.Builder(LocalContext.current)
+                        ImageRequest
+                            .Builder(LocalContext.current)
                             .data(show.poster)
                             .crossfade(true)
                             .build(),
                         contentDescription = "Movie poster",
                         placeholder = painterResource(R.drawable.placeholder),
                         contentScale = ContentScale.FillWidth,
-                        modifier = Modifier.fillMaxWidth()
+                        modifier = Modifier.fillMaxWidth(),
                     )
                 }
                 item {
@@ -91,36 +91,34 @@ private fun ShowDetailsContent(
                     ) {
                         Text(
                             text = show.title,
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(top = 12.dp),
+                            modifier =
+                                Modifier
+                                    .fillMaxWidth()
+                                    .padding(top = 12.dp),
                             style = MaterialTheme.typography.titleLarge,
-                            fontSize = 36.sp
+                            fontSize = 36.sp,
                         )
                         Row(
-                            horizontalArrangement = Arrangement.spacedBy(12.dp)
+                            horizontalArrangement = Arrangement.spacedBy(12.dp),
                         ) {
-
-
                             Text("${show.voteAverage}/100")
                             Text(
 //                                when (show.showType) {
 //                                    ShowType.MOVIE ->
-                                hoursAndMinutesUsingFormat(show.runtime)
+                                hoursAndMinutesUsingFormat(show.runtime),
 //                                    ShowType.SERIES -> seasonsAndSeriesCountFormat(
 //                                        show.seasonCount,
 //                                        show.episodeCount
                             )
-
                         }
                         Text(
                             "Overview",
                             style = MaterialTheme.typography.titleLarge,
-                            modifier = Modifier.padding(top = 12.dp)
+                            modifier = Modifier.padding(top = 12.dp),
                         )
                         ExpandableText(
                             show.overview,
-                            minLines = 4
+                            minLines = 4,
                         )
                     }
                 }
@@ -128,14 +126,16 @@ private fun ShowDetailsContent(
                     Text(
                         "Top Cast",
                         style = MaterialTheme.typography.titleLarge,
-                        modifier = Modifier
-                            .padding(top = 12.dp, start = 12.dp, end = 12.dp)
+                        modifier =
+                            Modifier
+                                .padding(top = 12.dp, start = 12.dp, end = 12.dp),
                     )
                     show.credits?.cast?.forEach { actor ->
                         Text(
                             actor?.name ?: "",
-                            modifier = Modifier
-                                .padding(top = 12.dp, start = 12.dp, end = 12.dp)
+                            modifier =
+                                Modifier
+                                    .padding(top = 12.dp, start = 12.dp, end = 12.dp),
                         )
                     }
                 }

@@ -15,7 +15,6 @@ import java.io.File
 
 @OptIn(ExperimentalCoroutinesApi::class)
 class DoubleTapeDataStoreImplTest {
-
     @get:Rule
     val tmpFolder = TemporaryFolder()
 
@@ -24,39 +23,45 @@ class DoubleTapeDataStoreImplTest {
 
     @Before
     fun setup() {
-        val testDataStore = PreferenceDataStoreFactory.create(
-            scope = testScope,
-            produceFile = { File(tmpFolder.newFolder(), "test.preferences_pb") }
-        )
+        val testDataStore =
+            PreferenceDataStoreFactory.create(
+                scope = testScope,
+                produceFile = { File(tmpFolder.newFolder(), "test.preferences_pb") },
+            )
         storage = DoubleTapeDataStoreImpl(testDataStore)
     }
 
     @Test
-    fun `saveString and getStringOrDefault should return correct value`() = runTest {
-        val key = DoubleTapeDataStore.Keys.Configuration
-        val value = "DoubleTapeValue"
+    fun `saveString and getStringOrDefault should return correct value`() =
+        runTest {
+            val key = DoubleTapeDataStore.Keys.Configuration
+            val value = "DoubleTapeValue"
 
-        storage.saveString(key, value)
+            storage.saveString(key, value)
 
-        storage.getStringOrDefault(key, "default").test {
-            assertEquals(value, awaitItem())
-            cancelAndIgnoreRemainingEvents()
+            storage.getStringOrDefault(key, "default").test {
+                assertEquals(value, awaitItem())
+                cancelAndIgnoreRemainingEvents()
+            }
         }
-    }
 
     @Test
-    fun `saveSerialize and getSerialize should work with objects`() = runTest {
-        @kotlinx.serialization.Serializable
-        data class TestModel(val id: Int, val name: String)
+    fun `saveSerialize and getSerialize should work with objects`() =
+        runTest {
+            @kotlinx.serialization.Serializable
+            data class TestModel(
+                val id: Int,
+                val name: String,
+            )
 
-        val key = DoubleTapeDataStore.Keys.Configuration
-        val model = TestModel(1, "Test")
+            val key = DoubleTapeDataStore.Keys.Configuration
+            val model = TestModel(1, "Test")
 
-        storage.saveSerialize(key, model, TestModel.serializer())
+            storage.saveSerialize(key, model, TestModel.serializer())
 
-        storage.getSerialize(key, TestModel.serializer()).test {
-            assertEquals(model, awaitItem())
-            cancelAndIgnoreRemainingEvents()
+            storage.getSerialize(key, TestModel.serializer()).test {
+                assertEquals(model, awaitItem())
+                cancelAndIgnoreRemainingEvents()
+            }
         }
-    }
 }

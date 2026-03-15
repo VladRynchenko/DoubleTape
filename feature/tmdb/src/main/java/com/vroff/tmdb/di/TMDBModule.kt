@@ -16,34 +16,30 @@ import retrofit2.Retrofit
 @Module
 @InstallIn(SingletonComponent::class)
 object TMDBModule {
-
     @Provides
     @TMDB
     fun provideAuthBaseUrl(): String = TMDB_API_HOST
 
     @Provides
     @TMDB
-    fun provideStreamingAvailabilityClient(
-        loggerInterceptor: HttpLoggingInterceptor
-    ): OkHttpClient {
-        return OkHttpClient.Builder()
+    fun provideStreamingAvailabilityClient(loggerInterceptor: HttpLoggingInterceptor): OkHttpClient =
+        OkHttpClient
+            .Builder()
             .addInterceptor(loggerInterceptor)
             .addInterceptor { chain ->
-                val request = chain.request().newBuilder()
-                    .addHeader(
-                        Constants.AUTHORIZATION,
-                        Constants.BEARER + BuildConfig.TMDB_API_KEY
-                    )
-                    .build()
+                val request =
+                    chain
+                        .request()
+                        .newBuilder()
+                        .addHeader(
+                            Constants.AUTHORIZATION,
+                            Constants.BEARER + BuildConfig.TMDB_API_KEY,
+                        ).build()
                 chain.proceed(request)
-            }
-            .build()
-    }
-
+            }.build()
 
     @Provides
-    fun provideStreamingAvailability(@TMDB retrofit: Retrofit): TMDBApi {
-        return retrofit.create(TMDBApi::class.java)
-    }
-
+    fun provideStreamingAvailability(
+        @TMDB retrofit: Retrofit,
+    ): TMDBApi = retrofit.create(TMDBApi::class.java)
 }

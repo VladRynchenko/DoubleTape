@@ -1,8 +1,8 @@
-package com.vroff.domain.model.streaming_available
+package com.vroff.domain.model.streamingavailable
 
 data class Season(
     var title: String,
     var firstAirYear: Int,
     var lastAirYear: Int,
-    var episodes: List<Episode>
+    var episodes: List<Episode>,
 )

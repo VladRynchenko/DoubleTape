@@ -2,7 +2,7 @@ package com.vroff.doubletape.storage.entity.tmdb
 
 data class ConfigurationEntity(
     val images: ImagesEntity?,
-    val changeKeys: List<String>
+    val changeKeys: List<String>,
 )
 
 data class ImagesEntity(
@@ -14,5 +14,3 @@ data class ImagesEntity(
     val profileSizes: List<String>,
     val stillSizes: List<String>,
 )
-
-

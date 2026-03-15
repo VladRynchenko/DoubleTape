@@ -43,8 +43,9 @@ import androidx.compose.ui.unit.dp
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Preview(
-    showBackground = true, showSystemUi = true,
-    device = "spec:parent=pixel_5"
+    showBackground = true,
+    showSystemUi = true,
+    device = "spec:parent=pixel_5",
 )
 @Composable
 fun ShowTopAppBar(
@@ -69,21 +70,21 @@ fun ShowTopAppBar(
                 NavigationState.More -> {
                     NavigationTopBarButton(
                         Icons.AutoMirrored.Filled.ArrowBack,
-                        onNavigationIconClick
+                        onNavigationIconClick,
                     )
                 }
 
                 NavigationState.Search -> {
                     NavigationTopBarButton(
                         Icons.AutoMirrored.Filled.ArrowBack,
-                        onNavigationIconClick
+                        onNavigationIconClick,
                     )
                 }
 
                 NavigationState.MainScreen -> {
                     NavigationTopBarButton(
                         Icons.Filled.AccountCircle,
-                        onNavigationIconClick
+                        onNavigationIconClick,
                     )
                 }
             }
@@ -94,32 +95,32 @@ fun ShowTopAppBar(
                 transitionSpec = {
                     fadeIn() togetherWith fadeOut() using SizeTransform(clip = false)
                 },
-                label = "ActionsContentAnimation"
+                label = "ActionsContentAnimation",
             ) { targetState ->
                 when (targetState) {
-
                     NavigationState.Search -> {
                         NavigationTextField(
-                            searchQuery, onSearchQueryChange
+                            searchQuery,
+                            onSearchQueryChange,
                         )
                     }
 
                     NavigationState.MainScreen -> {
                         NavigationTopBarButton(
                             Icons.Filled.Search,
-                            onActionIconClick
+                            onActionIconClick,
                         )
                     }
 
                     NavigationState.More -> {
                         NavigationTopBarButton(
                             Icons.Default.MoreVert,
-                            onActionIconClick
+                            onActionIconClick,
                         )
                     }
                 }
             }
-        }
+        },
     )
 }
 
@@ -141,39 +142,44 @@ private fun NavigationTextField(
         },
         singleLine = true,
         shape = RoundedCornerShape(100),
-        colors = TextFieldDefaults.colors().copy(
-            focusedContainerColor = MaterialTheme.colorScheme.surface.copy(0.5f),
-            unfocusedContainerColor = MaterialTheme.colorScheme.surface.copy(0.5f),
-        ),
-        modifier = Modifier
-            .focusRequester(focusRequester)
+        colors =
+            TextFieldDefaults.colors().copy(
+                focusedContainerColor = MaterialTheme.colorScheme.surface.copy(0.5f),
+                unfocusedContainerColor = MaterialTheme.colorScheme.surface.copy(0.5f),
+            ),
+        modifier =
+            Modifier
+                .focusRequester(focusRequester),
     )
 }
 
 @Composable
-fun NavigationTopBarButton(icon: ImageVector, onClick: () -> Unit) {
-    return IconButton(
-        onClick = onClick,
-        modifier = Modifier
+fun NavigationTopBarButton(
+    icon: ImageVector,
+    onClick: () -> Unit,
+) = IconButton(
+    onClick = onClick,
+    modifier =
+        Modifier
             .size(56.dp)
             .clip(CircleShape)
             .border(
                 1.dp,
                 MaterialTheme.colorScheme.onSurfaceVariant.copy(0.5f),
-                CircleShape
-            )
-            .background(MaterialTheme.colorScheme.surface.copy(0.5f), CircleShape)
-    ) {
-        Icon(
-            imageVector = icon,
-            contentDescription = "",
-            modifier = Modifier.size(32.dp)
-        )
-    }
+                CircleShape,
+            ).background(MaterialTheme.colorScheme.surface.copy(0.5f), CircleShape),
+) {
+    Icon(
+        imageVector = icon,
+        contentDescription = "",
+        modifier = Modifier.size(32.dp),
+    )
 }
 
 sealed class NavigationState {
     data object Search : NavigationState()
+
     data object More : NavigationState()
+
     data object MainScreen : NavigationState()
 }

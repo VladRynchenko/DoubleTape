@@ -7,13 +7,13 @@ import com.vroff.domain.model.tmdb.TMDBConfiguration
 data class Configuration(
     val images: Images? = null,
     @SerializedName("changed_keys")
-    val changeKeys: List<String> = emptyList()
+    val changeKeys: List<String> = emptyList(),
 ) {
     fun mapToDomain() =
         TMDBConfiguration(
             changeKeys = changeKeys,
             images = images?.mapToDomain(),
-            timestampSeconds = System.currentTimeMillis() / 1000
+            timestampSeconds = System.currentTimeMillis() / 1000,
         )
 }
 
@@ -41,6 +41,6 @@ data class Images(
             logoSizes = logoSizes,
             posterSizes = posterSizes,
             profileSizes = profileSizes,
-            stillSizes = stillSizes
+            stillSizes = stillSizes,
         )
 }

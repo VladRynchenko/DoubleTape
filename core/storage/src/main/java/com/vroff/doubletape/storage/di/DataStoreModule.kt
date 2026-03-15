@@ -22,24 +22,23 @@ import javax.inject.Singleton
 @Module
 @InstallIn(SingletonComponent::class)
 object DataStoreModule {
-
     private const val DATASTORE_NAME = "DoubleTapeDataStore"
 
     @Provides
     @Singleton
-    fun provideDataStore(@ApplicationContext context: Context): DataStore<Preferences> {
-        return PreferenceDataStoreFactory.create(
-            corruptionHandler = ReplaceFileCorruptionHandler(
-                produceNewData = { emptyPreferences() }
-            ),
+    fun provideDataStore(
+        @ApplicationContext context: Context,
+    ): DataStore<Preferences> =
+        PreferenceDataStoreFactory.create(
+            corruptionHandler =
+                ReplaceFileCorruptionHandler(
+                    produceNewData = { emptyPreferences() },
+                ),
             scope = CoroutineScope(Dispatchers.IO + SupervisorJob()),
-            produceFile = { context.preferencesDataStoreFile(DATASTORE_NAME) }
+            produceFile = { context.preferencesDataStoreFile(DATASTORE_NAME) },
         )
-    }
 
     @Provides
     @Singleton
-    fun provideDoubleTapeDataStore(impl: DoubleTapeDataStoreImpl): DoubleTapeDataStore {
-        return impl
-    }
+    fun provideDoubleTapeDataStore(impl: DoubleTapeDataStoreImpl): DoubleTapeDataStore = impl
 }

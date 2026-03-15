@@ -8,26 +8,28 @@ import com.vroff.domain.model.ImageType
 import com.vroff.domain.model.tmdb.TMDBConfiguration
 
 class TMDBImageMapper(
-    private val config: TMDBConfiguration?
+    private val config: TMDBConfiguration?,
 ) : Mapper<Image, String> {
-
-    override fun map(data: Image, options: Options): String? {
-
+    override fun map(
+        data: Image,
+        options: Options,
+    ): String? {
         val config = config ?: return null
         val widthPx = options.size.width.pxOrElse { 1080 }
 
-        val bestSize = selectBestTmdbSize(
-            config.specifiedSizes(data.imageType) ?: emptyList(),
-            widthPx
-        )
+        val bestSize =
+            selectBestTmdbSize(
+                config.specifiedSizes(data.imageType) ?: emptyList(),
+                widthPx,
+            )
 
         val cleanPath = if (data.path.startsWith("/")) data.path else "/${data.path}"
 
         return "${config.images?.secureBaseUrl}$bestSize$cleanPath"
     }
 
-    private fun TMDBConfiguration.specifiedSizes(imageType: ImageType): List<String>? {
-        return when (imageType) {
+    private fun TMDBConfiguration.specifiedSizes(imageType: ImageType): List<String>? =
+        when (imageType) {
             ImageType.BACKDROP -> {
                 this.images?.backdropSizes
             }
@@ -48,21 +50,22 @@ class TMDBImageMapper(
                 this.images?.stillSizes
             }
         }
-    }
 
     fun selectBestTmdbSize(
         availableSizes: List<String>,
-        targetWidthPx: Int
+        targetWidthPx: Int,
     ): String {
         if (availableSizes.isEmpty()) return "original"
-        val sizeMap = availableSizes
-            .filter { it.startsWith("w") }
-            .associateBy { it.substring(1).toIntOrNull() ?: 0 }
+        val sizeMap =
+            availableSizes
+                .filter { it.startsWith("w") }
+                .associateBy { it.substring(1).toIntOrNull() ?: 0 }
 
         val sortedWidths = sizeMap.keys.sorted()
 
-        val bestWidth = sortedWidths.firstOrNull { it >= targetWidthPx }
-            ?: sortedWidths.lastOrNull()
+        val bestWidth =
+            sortedWidths.firstOrNull { it >= targetWidthPx }
+                ?: sortedWidths.lastOrNull()
 
         return sizeMap[bestWidth] ?: "original"
     }

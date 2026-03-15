@@ -29,7 +29,7 @@ android {
             isMinifyEnabled = false
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
-                "proguard-rules.pro"
+                "proguard-rules.pro",
             )
         }
     }
@@ -52,13 +52,13 @@ dependencies {
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
 
-    //Hilt
+    // Hilt
     implementation(libs.hilt.android)
     implementation(libs.androidx.paging.common)
     ksp(libs.hilt.android.compiler)
     implementation(project(":core:domain"))
 
-    //Data Store
+    // Data Store
     implementation(libs.androidx.datastore.preferences)
 
     implementation(libs.kotlinx.serialization.core)

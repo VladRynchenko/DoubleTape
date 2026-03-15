@@ -20,8 +20,8 @@ data class CrewDTO(
     val department: String,
     val job: String,
 ) {
-    fun mapToDomain(): Crew {
-        return Crew(
+    fun mapToDomain(): Crew =
+        Crew(
             adult = adult,
             gender = gender,
             id = id,
@@ -34,5 +34,4 @@ data class CrewDTO(
             department = department,
             job = job,
         )
-    }
 }

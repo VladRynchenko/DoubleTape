@@ -8,9 +8,10 @@ import kotlinx.coroutines.flow.asStateFlow
 import javax.inject.Inject
 
 @HiltViewModel
-class MainViewModel @Inject constructor() : ViewModel() {
-
-//    @Inject
+class MainViewModel
+    @Inject
+    constructor() : ViewModel() {
+        //    @Inject
 //    lateinit var getConfigurationUseCase: GetConfigurationUseCase
 //
 //    init {
@@ -19,14 +20,14 @@ class MainViewModel @Inject constructor() : ViewModel() {
 //        }
 //    }
 
-    private val _query = MutableStateFlow(TextFieldValue())
-    val query = _query.asStateFlow()
+        private val _query = MutableStateFlow(TextFieldValue())
+        val query = _query.asStateFlow()
 
-    fun clearQuery() {
-        _query.value = TextFieldValue()
-    }
+        fun clearQuery() {
+            _query.value = TextFieldValue()
+        }
 
-    fun setQuery(newQuery: TextFieldValue) {
-        _query.value = newQuery
+        fun setQuery(newQuery: TextFieldValue) {
+            _query.value = newQuery
+        }
     }
-}

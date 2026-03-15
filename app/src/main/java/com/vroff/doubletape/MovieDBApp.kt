@@ -9,8 +9,8 @@ import coil3.disk.directory
 import coil3.memory.MemoryCache
 import coil3.svg.SvgDecoder
 import com.vroff.domain.repository.ConfigManager
-import com.vroff.network.TMDBImageMapper
 import com.vroff.network.CoilLogger
+import com.vroff.network.TMDBImageMapper
 import dagger.hilt.android.HiltAndroidApp
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -18,7 +18,9 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltAndroidApp
-class MovieDBApp : Application(), SingletonImageLoader.Factory {
+class MovieDBApp :
+    Application(),
+    SingletonImageLoader.Factory {
     @Inject
     lateinit var configManager: ConfigManager
 
@@ -29,24 +31,23 @@ class MovieDBApp : Application(), SingletonImageLoader.Factory {
         }
     }
 
-    override fun newImageLoader(context: PlatformContext): ImageLoader {
-        return ImageLoader.Builder(context)
+    override fun newImageLoader(context: PlatformContext): ImageLoader =
+        ImageLoader
+            .Builder(context)
             .eventListenerFactory { CoilLogger() }
             .components {
                 add(TMDBImageMapper(configManager.config))
                 add(SvgDecoder.Factory())
-            }
-            .memoryCache {
-                MemoryCache.Builder()
+            }.memoryCache {
+                MemoryCache
+                    .Builder()
                     .maxSizePercent(context, 0.25)
                     .build()
-            }
-            .diskCache {
-                DiskCache.Builder()
+            }.diskCache {
+                DiskCache
+                    .Builder()
                     .directory(context.cacheDir.resolve("image_cache_hilt"))
                     .maxSizeBytes(100L * 1024 * 1024)
                     .build()
-            }
-            .build()
-    }
+            }.build()
 }

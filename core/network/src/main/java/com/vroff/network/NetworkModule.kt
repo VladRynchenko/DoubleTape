@@ -1,6 +1,6 @@
 package com.vroff.network
 
-import com.vroff.network.call_adapter.ResourceCallAdapterFactory
+import com.vroff.network.calladapter.ResourceCallAdapterFactory
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -23,25 +23,24 @@ annotation class StreamingAvailable
 @Module
 @InstallIn(SingletonComponent::class)
 object NetworkModule {
-
     private fun createRetrofit(
         baseUrl: String,
-        client: OkHttpClient
-    ): Retrofit {
-        return Retrofit.Builder()
+        client: OkHttpClient,
+    ): Retrofit =
+        Retrofit
+            .Builder()
             .baseUrl(baseUrl)
             .client(client)
             .addConverterFactory(GsonConverterFactory.create())
             .addCallAdapterFactory(ResourceCallAdapterFactory())
             .build()
-    }
 
     @Provides
     @Singleton
     @TMDB
     fun provideTMDBRetrofit(
         @TMDB baseUrl: String,
-        @TMDB client: OkHttpClient
+        @TMDB client: OkHttpClient,
     ): Retrofit = createRetrofit(baseUrl, client)
 
     @Provides
@@ -49,17 +48,17 @@ object NetworkModule {
     @StreamingAvailable
     fun provideStreamingAvailabilityRetrofit(
         @StreamingAvailable baseUrl: String,
-        @StreamingAvailable client: OkHttpClient
+        @StreamingAvailable client: OkHttpClient,
     ): Retrofit = createRetrofit(baseUrl, client)
 
     @Provides
-    fun provideLoggerInterceptor(): HttpLoggingInterceptor {
-        return HttpLoggingInterceptor().apply {
-            level = if (BuildConfig.DEBUG) {
-                HttpLoggingInterceptor.Level.BODY
-            } else {
-                HttpLoggingInterceptor.Level.NONE
-            }
+    fun provideLoggerInterceptor(): HttpLoggingInterceptor =
+        HttpLoggingInterceptor().apply {
+            level =
+                if (BuildConfig.DEBUG) {
+                    HttpLoggingInterceptor.Level.BODY
+                } else {
+                    HttpLoggingInterceptor.Level.NONE
+                }
         }
-    }
 }

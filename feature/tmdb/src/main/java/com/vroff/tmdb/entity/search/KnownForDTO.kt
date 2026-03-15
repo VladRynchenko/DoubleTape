@@ -36,8 +36,8 @@ data class KnownForDTO(
     val releaseDate: String?,
     val video: Boolean?,
 ) {
-    fun mapToDomain(): KnownFor {
-        return KnownFor(
+    fun mapToDomain(): KnownFor =
+        KnownFor(
             adult = adult,
             backdropPath = backdropPath,
             id = id,
@@ -58,6 +58,4 @@ data class KnownForDTO(
             releaseDate = releaseDate,
             video = video,
         )
-    }
-
 }

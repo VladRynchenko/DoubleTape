@@ -1,4 +1,4 @@
-package com.vroff.domain.model.streaming_available
+package com.vroff.domain.model.streamingavailable
 
 data class VerticalPoster(
     var w240: String,

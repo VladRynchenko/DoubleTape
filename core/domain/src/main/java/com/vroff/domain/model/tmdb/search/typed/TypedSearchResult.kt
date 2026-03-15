@@ -1,7 +1,6 @@
-package com.vroff.domain.model.tmdb.search.typed_result
+package com.vroff.domain.model.tmdb.search.typed
 
 import com.vroff.domain.model.BackdropImage
-import com.vroff.domain.model.Image
 import com.vroff.domain.model.PosterImage
 import com.vroff.domain.model.ProfileImage
 import com.vroff.domain.model.tmdb.search.Gender
@@ -10,7 +9,7 @@ import com.vroff.domain.model.tmdb.search.KnownFor
 sealed class TypedSearchResult(
     open val adult: Boolean,
     open val id: Int,
-    open val popularity: Double
+    open val popularity: Double,
 )
 
 data class MovieSearchResult(
@@ -29,7 +28,6 @@ data class MovieSearchResult(
     val voteAverage: Double,
     val voteCount: Long,
 ) : TypedSearchResult(adult, id, popularity)
-
 
 data class PersonSearchResult(
     override val adult: Boolean,

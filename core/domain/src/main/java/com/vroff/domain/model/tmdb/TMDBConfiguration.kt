@@ -6,7 +6,7 @@ import kotlinx.serialization.Serializable
 data class TMDBConfiguration(
     val images: ImagesConfiguration?,
     val changeKeys: List<String>,
-    val timestampSeconds: Long
+    val timestampSeconds: Long,
 )
 
 @Serializable

@@ -1,31 +1,29 @@
 package com.vroff.domain.repository
 
 import androidx.paging.PagingData
-import com.vroff.domain.model.streaming_available.NetworkResult
-import com.vroff.domain.model.tmdb.TMDBConfiguration
+import com.vroff.domain.model.streamingavailable.NetworkResult
 import com.vroff.domain.model.tmdb.movie.MovieDetail
 import com.vroff.domain.model.tmdb.search.SearchResult
 import com.vroff.domain.model.tmdb.series.SeriesDetail
 import kotlinx.coroutines.flow.Flow
 
 interface TMDBRepository {
-
     suspend fun getMovieDetails(
         movieId: Int,
         language: String,
-        appendToResponse: String
+        appendToResponse: String,
     ): NetworkResult<MovieDetail>
 
     suspend fun getSeriesDetails(
         seriesId: Int,
         language: String,
-        appendToResponse: String
+        appendToResponse: String,
     ): NetworkResult<SeriesDetail>
 
     suspend fun multiSearch(
         query: String,
         includeAdult: Boolean,
         language: String,
-        region: String
+        region: String,
     ): Flow<PagingData<SearchResult>>
 }

@@ -21,9 +21,9 @@ data class CastDTO(
     @SerializedName("credit_id")
     val creditId: String,
     val order: Long,
-){
-    fun mapToDomain(): Cast {
-        return Cast(
+) {
+    fun mapToDomain(): Cast =
+        Cast(
             adult = adult,
             gender = gender,
             id = id,
@@ -37,5 +37,4 @@ data class CastDTO(
             creditId = creditId,
             order = order,
         )
-    }
 }

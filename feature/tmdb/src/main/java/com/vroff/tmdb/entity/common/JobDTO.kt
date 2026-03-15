@@ -10,11 +10,10 @@ data class JobDTO(
     @SerializedName("episode_count")
     val episodeCount: Long,
 ) {
-    fun mapToDomain(): Job {
-        return Job(
+    fun mapToDomain(): Job =
+        Job(
             creditId = creditId,
             job = job,
             episodeCount = episodeCount,
         )
-    }
 }

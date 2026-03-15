@@ -14,7 +14,6 @@ sealed class Graph {
     @Serializable
     data class Details(
         val id: Int,
-        val type: MediaType
+        val type: MediaType,
     ) : Graph()
 }
-

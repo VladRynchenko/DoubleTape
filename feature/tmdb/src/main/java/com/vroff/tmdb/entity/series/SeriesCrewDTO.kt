@@ -4,7 +4,7 @@ import com.google.gson.annotations.SerializedName
 import com.vroff.domain.model.tmdb.series.SeriesCrew
 import com.vroff.tmdb.entity.common.JobDTO
 
-data class SeriesCrewDTO (
+data class SeriesCrewDTO(
     val adult: Boolean,
     val gender: Long,
     val id: Long,
@@ -21,8 +21,8 @@ data class SeriesCrewDTO (
     @SerializedName("total_episode_count")
     val totalEpisodeCount: Long,
 ) {
-    fun mapToDomain(): SeriesCrew {
-        return SeriesCrew(
+    fun mapToDomain(): SeriesCrew =
+        SeriesCrew(
             adult = adult,
             gender = gender,
             id = id,
@@ -35,5 +35,4 @@ data class SeriesCrewDTO (
             department = department,
             totalEpisodeCount = totalEpisodeCount,
         )
-    }
 }

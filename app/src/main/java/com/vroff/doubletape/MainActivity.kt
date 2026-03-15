@@ -21,7 +21,6 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.toRoute
 import com.vroff.doubletape.presentation.screens.Graph
-import kotlinx.serialization.Serializable
 import com.vroff.doubletape.presentation.screens.main.WelcomeScreen
 import com.vroff.doubletape.presentation.screens.movie.MovieScreen
 import com.vroff.search.SearchScreen
@@ -62,20 +61,23 @@ class MainActivity : ComponentActivity() {
                             },
                             onNavigationIconClick = {
                                 when {
-                                    isMain -> Toast.makeText(context, "MAIN", Toast.LENGTH_SHORT)
-                                        .show()
+                                    isMain ->
+                                        Toast
+                                            .makeText(context, "MAIN", Toast.LENGTH_SHORT)
+                                            .show()
 
                                     isSearch || isDetails -> navController.popBackStack()
                                 }
                             },
-                            state = when {
-                                isMain -> NavigationState.MainScreen
-                                isSearch -> NavigationState.Search
-                                else -> NavigationState.More
-                            }
+                            state =
+                                when {
+                                    isMain -> NavigationState.MainScreen
+                                    isSearch -> NavigationState.Search
+                                    else -> NavigationState.More
+                                },
                         )
                     },
-                    modifier = Modifier.fillMaxSize()
+                    modifier = Modifier.fillMaxSize(),
                 ) { innerPadding ->
 
                     NavHost(
@@ -92,7 +94,7 @@ class MainActivity : ComponentActivity() {
                                 padding = innerPadding,
                                 onItemClick = { id, type ->
                                     navController.navigate(Graph.Details(id, type))
-                                }
+                                },
                             )
                         }
 
@@ -101,7 +103,7 @@ class MainActivity : ComponentActivity() {
                             MovieScreen(
                                 tmdbId = details.id,
                                 type = details.type,
-                                padding = innerPadding
+                                padding = innerPadding,
                             )
                         }
                     }
@@ -114,7 +116,7 @@ class MainActivity : ComponentActivity() {
 fun <T : Any> NavHostController.navigateSingleTopTo(route: T) {
     this.navigate(route) {
         popUpTo(
-            this@navigateSingleTopTo.graph.findStartDestination().id
+            this@navigateSingleTopTo.graph.findStartDestination().id,
         ) {
             saveState = true
         }

@@ -7,13 +7,17 @@ import kotlinx.coroutines.flow.Flow
 import java.util.Locale
 import javax.inject.Inject
 
-class SearchUseCase @Inject constructor(val repository: TMDBRepository, val locale: Locale) {
-    suspend fun execute(title: String): Flow<PagingData<SearchResult>> {
-        return repository.multiSearch(
-            title,
-            false,
-            locale.language,
-            locale.country
-        )
+class SearchUseCase
+    @Inject
+    constructor(
+        val repository: TMDBRepository,
+        val locale: Locale,
+    ) {
+        suspend fun execute(title: String): Flow<PagingData<SearchResult>> =
+            repository.multiSearch(
+                title,
+                false,
+                locale.language,
+                locale.country,
+            )
     }
-}

@@ -21,8 +21,8 @@ data class SeriesCastDTO(
     val totalEpisodeCount: Long,
     val order: Long,
 ) {
-    fun mapToDomain(): SeriesCast {
-        return SeriesCast(
+    fun mapToDomain(): SeriesCast =
+        SeriesCast(
             adult = adult,
             gender = gender,
             id = id,
@@ -35,5 +35,4 @@ data class SeriesCastDTO(
             totalEpisodeCount = totalEpisodeCount,
             order = order,
         )
-    }
 }

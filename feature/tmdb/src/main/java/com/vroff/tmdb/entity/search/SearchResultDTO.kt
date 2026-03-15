@@ -2,8 +2,6 @@ package com.vroff.tmdb.entity.search
 
 import com.google.gson.annotations.SerializedName
 import com.vroff.domain.model.BackdropImage
-import com.vroff.domain.model.Image
-import com.vroff.domain.model.ImageType
 import com.vroff.domain.model.PosterImage
 import com.vroff.domain.model.ProfileImage
 import com.vroff.domain.model.tmdb.search.Gender
@@ -51,8 +49,8 @@ data class SearchResultDTO(
     val releaseDate: String?,
     val video: Boolean?,
 ) {
-    fun mapToDomain(): SearchResult {
-        return SearchResult(
+    fun mapToDomain(): SearchResult =
+        SearchResult(
             adult = adult,
             backdropImage = backdropPath?.let { BackdropImage(it) },
             id = id,
@@ -77,5 +75,4 @@ data class SearchResultDTO(
             releaseDate = releaseDate.orEmpty(),
             video = video ?: false,
         )
-    }
 }

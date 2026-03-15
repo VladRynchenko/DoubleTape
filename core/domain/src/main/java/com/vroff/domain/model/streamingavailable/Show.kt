@@ -1,4 +1,4 @@
-package com.vroff.domain.model.streaming_available
+package com.vroff.domain.model.streamingavailable
 
 data class Show(
     var id: String,
@@ -20,11 +20,10 @@ data class Show(
     var runtime: Int?,
     var imageSet: ImageSet,
     var creators: List<String>?,
-    var seasons: List<Season>?
-){
-
-    fun getReleaseData(): String {
-        return when (this.showType) {
+    var seasons: List<Season>?,
+) {
+    fun getReleaseData(): String =
+        when (this.showType) {
             ShowType.MOVIE -> {
                 this.releaseYear.toString()
             }
@@ -37,5 +36,4 @@ data class Show(
                 }
             }
         }
-    }
 }

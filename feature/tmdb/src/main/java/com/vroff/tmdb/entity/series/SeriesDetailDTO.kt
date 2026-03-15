@@ -64,8 +64,8 @@ data class SeriesDetailDTO(
     @SerializedName("aggregate_credits")
     val aggregateCredits: AggregateCreditsDTO,
 ) {
-    fun mapToDomain(): SeriesDetail {
-        return SeriesDetail(
+    fun mapToDomain(): SeriesDetail =
+        SeriesDetail(
             adult = adult,
             backdropImage = backdropPath?.let { BackdropImage(it) },
             createdBy = createdBy.map { it.mapToDomain() },
@@ -100,5 +100,4 @@ data class SeriesDetailDTO(
             voteCount = voteCount,
             aggregateCredits = aggregateCredits.mapToDomain(),
         )
-    }
 }

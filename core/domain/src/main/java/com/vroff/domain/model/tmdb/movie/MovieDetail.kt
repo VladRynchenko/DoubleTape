@@ -2,13 +2,12 @@ package com.vroff.domain.model.tmdb.movie
 
 import com.vroff.domain.model.BackdropImage
 import com.vroff.domain.model.PosterImage
-import com.vroff.domain.model.streaming_available.Genre
+import com.vroff.domain.model.streamingavailable.Genre
 import com.vroff.domain.model.tmdb.common.ProductionCompany
 import com.vroff.domain.model.tmdb.common.ProductionCountry
 import com.vroff.domain.model.tmdb.common.SpokenLanguage
 
-
-data class MovieDetail (
+data class MovieDetail(
     val adult: Boolean,
     val backdrop: BackdropImage?,
     val belongsToCollection: Any?,

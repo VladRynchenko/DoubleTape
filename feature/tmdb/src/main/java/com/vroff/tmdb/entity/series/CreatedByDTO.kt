@@ -11,14 +11,13 @@ data class CreatedByDTO(
     val gender: Long,
     @SerializedName("profile_path")
     val profilePath: String,
-){
-    fun mapToDomain(): CreatedBy {
-        return CreatedBy(
+) {
+    fun mapToDomain(): CreatedBy =
+        CreatedBy(
             id = id,
             creditId = creditId,
             name = name,
             gender = gender,
             profilePath = profilePath,
         )
-    }
 }
