@@ -1,6 +1,6 @@
 package com.vroff.tmdb.manager
 
-import com.vroff.domain.model.streamingavailable.NetworkResult
+import com.vroff.domain.model.NetworkResult
 import com.vroff.domain.model.tmdb.TMDBConfiguration
 import com.vroff.domain.repository.ConfigManager
 import com.vroff.domain.storage.DoubleTapeDataStore

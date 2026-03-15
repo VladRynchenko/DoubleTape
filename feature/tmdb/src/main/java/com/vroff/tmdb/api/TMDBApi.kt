@@ -1,10 +1,11 @@
 package com.vroff.tmdb.api
 
-import com.vroff.domain.model.streamingavailable.NetworkResult
+import com.vroff.domain.model.NetworkResult
 import com.vroff.tmdb.Endpoint
 import com.vroff.tmdb.entity.Configuration
 import com.vroff.tmdb.entity.PagerResponse
 import com.vroff.tmdb.entity.movie.MovieDetailDTO
+import com.vroff.tmdb.entity.search.GenresDTO
 import com.vroff.tmdb.entity.search.SearchResultDTO
 import com.vroff.tmdb.entity.series.SeriesDetailDTO
 import retrofit2.http.GET
@@ -14,6 +15,12 @@ import retrofit2.http.Query
 interface TMDBApi {
     @GET(Endpoint.CONFIGURATION)
     suspend fun getConfiguration(): NetworkResult<Configuration>
+
+    @GET(Endpoint.SERIES_GENRES)
+    suspend fun getSeriesGenres(): NetworkResult<GenresDTO>
+
+    @GET(Endpoint.MOVIE_GENRES)
+    suspend fun getMovieGenres(): NetworkResult<GenresDTO>
 
     @GET(Endpoint.MOVIE_DETAILS)
     suspend fun getMovieDetails(

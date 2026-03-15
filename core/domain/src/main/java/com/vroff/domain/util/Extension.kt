@@ -1,6 +1,6 @@
 package com.vroff.domain.util
 
-import com.vroff.domain.model.streamingavailable.NetworkResult
+import com.vroff.domain.model.NetworkResult
 
 inline fun <T, R> NetworkResult<T>.safeApiCall(transform: (T) -> R): NetworkResult<R> =
     when (this) {
@@ -15,3 +15,5 @@ inline fun <R> NetworkResult<R>.saveToDataStore(save: (R) -> Unit): NetworkResul
     }
     return this
 }
+
+fun <T> NetworkResult<T>.getOrNull(): T? = if (this is NetworkResult.Success) data else null

@@ -3,6 +3,7 @@ package com.vroff.domain.model.tmdb.search.typed
 import com.vroff.domain.model.BackdropImage
 import com.vroff.domain.model.PosterImage
 import com.vroff.domain.model.ProfileImage
+import com.vroff.domain.model.tmdb.common.Genre
 import com.vroff.domain.model.tmdb.search.Gender
 import com.vroff.domain.model.tmdb.search.KnownFor
 
@@ -21,7 +22,7 @@ data class MovieSearchResult(
     val overview: String,
     val posterImage: PosterImage?,
     val originalLanguage: String,
-    val genreIds: List<Long>,
+    val genres: List<Genre>,
     override val popularity: Double,
     val releaseDate: String,
     val video: Boolean,
@@ -50,7 +51,7 @@ data class SerialSearchResult(
     val overview: String,
     val posterImage: PosterImage?,
     val originalLanguage: String,
-    val genreIds: List<Long>,
+    val genres: List<Genre>,
     override val popularity: Double,
     val firstAirDate: String,
     val voteAverage: Double,

@@ -4,6 +4,7 @@ import com.google.gson.annotations.SerializedName
 import com.vroff.domain.model.BackdropImage
 import com.vroff.domain.model.PosterImage
 import com.vroff.domain.model.ProfileImage
+import com.vroff.domain.model.tmdb.common.Genre
 import com.vroff.domain.model.tmdb.search.Gender
 import com.vroff.domain.model.tmdb.search.MediaType
 import com.vroff.domain.model.tmdb.search.SearchResult
@@ -49,8 +50,9 @@ data class SearchResultDTO(
     val releaseDate: String?,
     val video: Boolean?,
 ) {
-    fun mapToDomain(): SearchResult =
-        SearchResult(
+    fun mapToDomain(genreMapper: (List<Long>?, MediaType) -> List<Genre>): SearchResult {
+        val mediaType = MediaType.entries.associateBy { it.type }[mediaType] ?: MediaType.UNKNOWN
+        return SearchResult(
             adult = adult,
             backdropImage = backdropPath?.let { BackdropImage(it) },
             id = id,
@@ -58,9 +60,9 @@ data class SearchResultDTO(
             originalName = originalName.orEmpty(),
             overview = overview.orEmpty(),
             posterImage = posterPath?.let { PosterImage(it) },
-            mediaType = MediaType.entries.associateBy { it.type }[mediaType] ?: MediaType.UNKNOWN,
+            mediaType = mediaType,
             originalLanguage = originalLanguage.orEmpty(),
-            genreIds = genreIds.orEmpty(),
+            genres = genreMapper(genreIds, mediaType),
             popularity = popularity,
             firstAirDate = firstAirDate.orEmpty(),
             voteAverage = voteAverage ?: 0.0,
@@ -75,4 +77,5 @@ data class SearchResultDTO(
             releaseDate = releaseDate.orEmpty(),
             video = video ?: false,
         )
+    }
 }

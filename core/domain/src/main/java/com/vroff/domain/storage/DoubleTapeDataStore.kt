@@ -47,5 +47,11 @@ abstract class DoubleTapeDataStore {
         val key: String,
     ) {
         data object Configuration : Keys("configuration")
+
+        sealed class Genres {
+            data object Movie : Keys("movie_genres")
+
+            data object Series : Keys("series_genres")
+        }
     }
 }

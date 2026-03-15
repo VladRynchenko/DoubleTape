@@ -1,6 +1,6 @@
 package com.vroff.network.calladapter
 
-import com.vroff.domain.model.streamingavailable.NetworkResult
+import com.vroff.domain.model.NetworkResult
 import okhttp3.Request
 import okio.Timeout
 import retrofit2.Call

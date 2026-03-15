@@ -3,6 +3,7 @@ package com.vroff.domain.model.tmdb.search
 import com.vroff.domain.model.BackdropImage
 import com.vroff.domain.model.PosterImage
 import com.vroff.domain.model.ProfileImage
+import com.vroff.domain.model.tmdb.common.Genre
 import com.vroff.domain.model.tmdb.search.typed.MovieSearchResult
 import com.vroff.domain.model.tmdb.search.typed.PersonSearchResult
 import com.vroff.domain.model.tmdb.search.typed.SerialSearchResult
@@ -18,7 +19,7 @@ data class SearchResult(
     val posterImage: PosterImage?,
     val mediaType: MediaType,
     val originalLanguage: String = "",
-    val genreIds: List<Long>,
+    val genres: List<Genre>,
     val popularity: Double,
     val firstAirDate: String = "",
     val voteAverage: Double = 0.0,
@@ -58,7 +59,7 @@ data class SearchResult(
                     overview = overview,
                     posterImage = posterImage,
                     originalLanguage = originalLanguage,
-                    genreIds = genreIds,
+                    genres = genres,
                     popularity = popularity,
                     releaseDate = releaseDate,
                     video = video,
@@ -76,7 +77,7 @@ data class SearchResult(
                     overview = overview,
                     posterImage = posterImage,
                     originalLanguage = originalLanguage,
-                    genreIds = genreIds,
+                    genres = genres,
                     popularity = popularity,
                     firstAirDate = firstAirDate,
                     voteAverage = voteAverage,

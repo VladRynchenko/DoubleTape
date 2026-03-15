@@ -1,7 +1,7 @@
 package com.vroff.domain.repository
 
 import androidx.paging.PagingData
-import com.vroff.domain.model.streamingavailable.NetworkResult
+import com.vroff.domain.model.NetworkResult
 import com.vroff.domain.model.tmdb.movie.MovieDetail
 import com.vroff.domain.model.tmdb.search.SearchResult
 import com.vroff.domain.model.tmdb.series.SeriesDetail

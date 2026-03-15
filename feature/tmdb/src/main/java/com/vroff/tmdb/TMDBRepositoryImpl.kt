@@ -3,13 +3,14 @@ package com.vroff.tmdb
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
-import com.vroff.domain.model.streamingavailable.NetworkResult
+import com.vroff.domain.model.NetworkResult
 import com.vroff.domain.model.tmdb.movie.MovieDetail
 import com.vroff.domain.model.tmdb.search.SearchResult
 import com.vroff.domain.model.tmdb.series.SeriesDetail
 import com.vroff.domain.repository.TMDBRepository
 import com.vroff.domain.util.safeApiCall
 import com.vroff.tmdb.api.TMDBApi
+import com.vroff.tmdb.entity.common.GenreMapper
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
@@ -17,6 +18,7 @@ class TMDBRepositoryImpl
     @Inject
     constructor(
         private val api: TMDBApi,
+        private val genreMapper: GenreMapper,
     ) : TMDBRepository {
         override suspend fun getMovieDetails(
             movieId: Int,
@@ -47,7 +49,9 @@ class TMDBRepositoryImpl
                 pagingSourceFactory = {
                     BasePagingSource(
                         request = { api.multiSearch(query, it, includeAdult, language, region) },
-                        mapper = { it.mapToDomain() },
+                        mapper = {
+                            it.mapToDomain(genreMapper::map)
+                        },
                     )
                 },
             ).flow

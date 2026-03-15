@@ -3,7 +3,7 @@ package com.vroff.doubletape.presentation.screens.movie
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.vroff.data.usecase.GetShowByIdUseCase
-import com.vroff.domain.model.streamingavailable.NetworkResult
+import com.vroff.domain.model.NetworkResult
 import com.vroff.domain.model.tmdb.movie.MovieDetail
 import com.vroff.domain.model.tmdb.search.MediaType
 import dagger.hilt.android.lifecycle.HiltViewModel

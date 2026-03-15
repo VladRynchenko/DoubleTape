@@ -9,11 +9,13 @@ import coil3.disk.directory
 import coil3.memory.MemoryCache
 import coil3.svg.SvgDecoder
 import com.vroff.domain.repository.ConfigManager
+import com.vroff.domain.repository.GenresManager
 import com.vroff.network.CoilLogger
 import com.vroff.network.TMDBImageMapper
 import dagger.hilt.android.HiltAndroidApp
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -24,11 +26,15 @@ class MovieDBApp :
     @Inject
     lateinit var configManager: ConfigManager
 
+    @Inject
+    lateinit var genresManager: GenresManager
+
+    private val scope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
+
     override fun onCreate() {
         super.onCreate()
-        CoroutineScope(Dispatchers.IO).launch {
-            configManager.loadConfig()
-        }
+        scope.launch { configManager.loadConfig() }
+        scope.launch { genresManager.loadGenres() }
     }
 
     override fun newImageLoader(context: PlatformContext): ImageLoader =

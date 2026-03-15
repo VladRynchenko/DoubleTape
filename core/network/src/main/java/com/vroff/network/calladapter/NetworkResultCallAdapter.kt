@@ -1,6 +1,6 @@
 package com.vroff.network.calladapter
 
-import com.vroff.domain.model.streamingavailable.NetworkResult
+import com.vroff.domain.model.NetworkResult
 import retrofit2.Call
 import retrofit2.CallAdapter
 import java.lang.reflect.Type

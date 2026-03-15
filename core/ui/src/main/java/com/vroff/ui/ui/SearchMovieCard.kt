@@ -11,6 +11,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -62,6 +63,7 @@ fun SearchSerialCard(
                     .clip(RoundedCornerShape(12.dp))
                     .size(140.dp, 210.dp)
                     .background(MaterialTheme.colorScheme.onSurface)
+                    .shadow(elevation = 2.dp)
                     .constrainAs(poster) {
                         top.linkTo(parent.top)
                         start.linkTo(parent.start)
@@ -84,7 +86,7 @@ fun SearchSerialCard(
                     },
         )
         Text(
-            item.genreIds.joinToString(", ") { it.toString() },
+            item.genres.joinToString(", ") { it.name },
             style = MaterialTheme.typography.bodyMedium,
             modifier =
                 Modifier
@@ -221,7 +223,7 @@ fun SearchMovieCard(
                     },
         )
         Text(
-            item.genreIds.joinToString(", ") { it.toString() },
+            item.genres.joinToString(", ") { it.name },
             style = MaterialTheme.typography.bodyMedium,
             modifier =
                 Modifier

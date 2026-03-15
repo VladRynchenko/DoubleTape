@@ -1,4 +1,4 @@
-package com.vroff.domain.model.streamingavailable
+package com.vroff.domain.model
 
 sealed class NetworkResult<out T> {
     data class Success<out T>(

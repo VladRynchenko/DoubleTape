@@ -1,7 +1,7 @@
 package com.vroff.data.usecase
 
 import android.util.Log
-import com.vroff.domain.model.streamingavailable.NetworkResult
+import com.vroff.domain.model.NetworkResult
 import com.vroff.domain.model.tmdb.movie.MovieDetail
 import com.vroff.domain.repository.TMDBRepository
 import java.util.Locale
