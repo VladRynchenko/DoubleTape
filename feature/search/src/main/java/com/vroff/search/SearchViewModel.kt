@@ -16,9 +16,10 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.distinctUntilChanged
-import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.flatMapLatest
+import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.mapNotNull
+import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -26,37 +27,42 @@ import javax.inject.Inject
 @OptIn(FlowPreview::class, ExperimentalCoroutinesApi::class)
 @HiltViewModel
 class SearchViewModel
-    @Inject
-    constructor(
-        private val searchUseCase: SearchUseCase,
-        private val configuraManager: ConfigManager,
-    ) : ViewModel() {
-        init {
-            viewModelScope.launch {
-                println("Config: ${configuraManager.config}")
-            }
+@Inject
+constructor(
+    private val searchUseCase: SearchUseCase,
+    private val configuraManager: ConfigManager,
+) : ViewModel() {
+    init {
+        viewModelScope.launch {
+            println("Config: ${configuraManager.config}")
         }
+    }
 
-        private val _searchQuery = MutableStateFlow("")
-        val searchQuery = _searchQuery.asStateFlow()
+    private val _searchQuery = MutableStateFlow("")
+    val searchQuery = _searchQuery.asStateFlow()
 
-        val pagingFlow: Flow<PagingData<TypedSearchResult>> =
-            searchQuery
-                .debounce(500)
-                .filter { it.length >= 2 }
-                .distinctUntilChanged()
-                .flatMapLatest { query ->
+    val pagingFlow: Flow<PagingData<TypedSearchResult>> =
+        searchQuery
+            .debounce(500)
+            .distinctUntilChanged()
+            .flatMapLatest { query ->
+                if (query.length < 2) {
+                    flowOf(PagingData.empty())
+                } else {
                     searchUseCase
                         .execute(query)
                         .mapNotNull { item ->
                             item.map { it.mapToTypedResult() as TypedSearchResult }
                         }
-                }.cachedIn(viewModelScope)
+                }
+            }.onStart {
+                emit(PagingData.empty())
+            }.cachedIn(viewModelScope)
 
-        fun setSearchQuery(searchQuery: String) {
-            _searchQuery.update { searchQuery }
-        }
+    fun setSearchQuery(searchQuery: String) {
+        _searchQuery.update { searchQuery }
     }
+}
 
 sealed class SearchScreenState {
     data object Loading : SearchScreenState()
@@ -64,6 +70,7 @@ sealed class SearchScreenState {
     data object Waiting : SearchScreenState()
 
     data object Success : SearchScreenState()
+    data object Empty : SearchScreenState()
 
     data class Error(
         val e: String,

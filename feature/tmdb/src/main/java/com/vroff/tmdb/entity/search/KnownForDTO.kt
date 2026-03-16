@@ -1,13 +1,18 @@
 package com.vroff.tmdb.entity.search
 
 import com.google.gson.annotations.SerializedName
+import com.vroff.domain.model.BackdropImage
+import com.vroff.domain.model.PosterImage
+import com.vroff.domain.model.ProfileImage
+import com.vroff.domain.model.tmdb.search.Gender
 import com.vroff.domain.model.tmdb.search.KnownFor
+import com.vroff.domain.model.tmdb.search.MediaType
 
 data class KnownForDTO(
     val adult: Boolean,
     @SerializedName("backdrop_path")
     val backdropPath: String?,
-    val id: Long,
+    val id: Int,
     val name: String?,
     @SerializedName("original_name")
     val originalName: String?,

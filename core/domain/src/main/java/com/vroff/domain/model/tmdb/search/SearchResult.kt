@@ -6,7 +6,7 @@ import com.vroff.domain.model.ProfileImage
 import com.vroff.domain.model.tmdb.common.Genre
 import com.vroff.domain.model.tmdb.search.typed.MovieSearchResult
 import com.vroff.domain.model.tmdb.search.typed.PersonSearchResult
-import com.vroff.domain.model.tmdb.search.typed.SerialSearchResult
+import com.vroff.domain.model.tmdb.search.typed.SeriesSearchResult
 import com.vroff.domain.model.tmdb.search.typed.TypedSearchResult
 
 data class SearchResult(
@@ -68,7 +68,7 @@ data class SearchResult(
                 )
 
             MediaType.SERIES ->
-                SerialSearchResult(
+                SeriesSearchResult(
                     adult = adult,
                     backdropImage = backdropImage,
                     id = id,

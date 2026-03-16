@@ -42,7 +42,7 @@ data class PersonSearchResult(
     val knownFor: List<KnownFor>,
 ) : TypedSearchResult(adult, id, popularity)
 
-data class SerialSearchResult(
+data class SeriesSearchResult(
     override val adult: Boolean,
     val backdropImage: BackdropImage?,
     override val id: Int,

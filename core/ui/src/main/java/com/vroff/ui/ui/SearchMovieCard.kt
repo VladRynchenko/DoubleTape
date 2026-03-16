@@ -13,6 +13,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
@@ -21,231 +23,119 @@ import coil3.compose.AsyncImage
 import com.vroff.domain.model.tmdb.search.MediaType
 import com.vroff.domain.model.tmdb.search.typed.MovieSearchResult
 import com.vroff.domain.model.tmdb.search.typed.PersonSearchResult
-import com.vroff.domain.model.tmdb.search.typed.SerialSearchResult
+import com.vroff.domain.model.tmdb.search.typed.SeriesSearchResult
 import com.vroff.domain.model.tmdb.search.typed.TypedSearchResult
+import com.vroff.ui.formatDate
+import com.vroff.ui.preview.SearchItemPreviewProvider
 
+@Preview
 @Composable
 fun SearchItem(
-    item: TypedSearchResult,
+    @PreviewParameter(SearchItemPreviewProvider::class) item: TypedSearchResult,
     modifier: Modifier = Modifier,
     onItemClick: (Int, MediaType) -> Unit = { id, type -> },
 ) {
     when (item) {
-        is MovieSearchResult -> SearchMovieCard(item, modifier, onItemClick)
-        is PersonSearchResult -> SearchPersonCard(item, modifier, onItemClick)
-        is SerialSearchResult -> SearchSerialCard(item, modifier, onItemClick)
-    }
-}
+        is PersonSearchResult -> SearchBaseCard(
+            image = item.profileImage,
+            title = item.name,
+            subtitle = item.knownFor.joinToString(", ") { it.name ?: it.title ?: "" },
+            date = null,
+            onClick = { onItemClick(item.id, MediaType.PERSON) },
+        )
 
-@Composable
-fun SearchSerialCard(
-    item: SerialSearchResult,
-    modifier: Modifier,
-    onItemClick: (Int, MediaType) -> Unit,
-) {
-    ConstraintLayout(
-        modifier =
-            Modifier
-                .fillMaxWidth()
-                .then(modifier)
-                .background(
-                    MaterialTheme.colorScheme.surfaceContainer,
-                    RoundedCornerShape(12.dp),
-                ).clickable {
-                    onItemClick(item.id, MediaType.SERIES)
-                },
-    ) {
-        val (poster, title, genres, year, overview) = remember { createRefs() }
-        AsyncImage(
-            model = item.posterImage,
-            modifier =
-                Modifier
-                    .clip(RoundedCornerShape(12.dp))
-                    .size(140.dp, 210.dp)
-                    .background(MaterialTheme.colorScheme.onSurface)
-                    .shadow(elevation = 2.dp)
-                    .constrainAs(poster) {
-                        top.linkTo(parent.top)
-                        start.linkTo(parent.start)
-                        bottom.linkTo(parent.bottom)
-                    },
-            contentDescription = "",
-            contentScale = ContentScale.FillBounds,
+        is SeriesSearchResult -> SearchBaseCard(
+            image = item.posterImage,
+            title = item.name,
+            subtitle = item.genres.joinToString(", ") { it.name },
+            date = formatDate(item.firstAirDate),
+            modifier = modifier, onClick = { onItemClick(item.id, MediaType.SERIES) },
         )
-        Text(
-            item.name,
-            style = MaterialTheme.typography.titleMedium,
-            maxLines = 2,
-            modifier =
-                Modifier
-                    .constrainAs(title) {
-                        top.linkTo(poster.top, margin = 12.dp)
-                        end.linkTo(parent.end, margin = 12.dp)
-                        start.linkTo(poster.end, 12.dp)
-                        width = Dimension.fillToConstraints
-                    },
-        )
-        Text(
-            item.genres.joinToString(", ") { it.name },
-            style = MaterialTheme.typography.bodyMedium,
-            modifier =
-                Modifier
-                    .constrainAs(genres) {
-                        top.linkTo(title.bottom)
-                        end.linkTo(title.end)
-                        start.linkTo(title.start)
-                        width = Dimension.fillToConstraints
-                    },
-        )
-        Text(
-            item.firstAirDate,
-            fontSize = 14.sp,
-            style = MaterialTheme.typography.bodyMedium,
-            modifier =
-                Modifier
-                    .constrainAs(year) {
-                        start.linkTo(title.start)
-                        end.linkTo(title.end)
-                        top.linkTo(genres.bottom)
-                        horizontalBias = 0f
-                    },
+
+        is MovieSearchResult -> SearchBaseCard(
+            image = item.posterImage,
+            title = item.title,
+            subtitle = item.genres.joinToString(", ") { it.name },
+            date = formatDate(item.releaseDate),
+            modifier = modifier, onClick = { onItemClick(item.id, MediaType.MOVIE) },
         )
     }
 }
 
 @Composable
-fun SearchPersonCard(
-    item: PersonSearchResult,
-    modifier: Modifier,
-    onItemClick: (Int, MediaType) -> Unit,
-) {
-    ConstraintLayout(
-        modifier =
-            Modifier
-                .fillMaxWidth()
-                .then(modifier)
-                .background(
-                    MaterialTheme.colorScheme.surfaceContainer,
-                    RoundedCornerShape(12.dp),
-                ).clickable {
-                    onItemClick(item.id, MediaType.MOVIE)
-                },
-    ) {
-        val (poster, title, genres, year, overview) = remember { createRefs() }
-        AsyncImage(
-            model = item.profileImage,
-            modifier =
-                Modifier
-                    .clip(RoundedCornerShape(12.dp))
-                    .size(140.dp, 210.dp)
-                    .background(MaterialTheme.colorScheme.onSurface)
-                    .constrainAs(poster) {
-                        top.linkTo(parent.top)
-                        start.linkTo(parent.start)
-                        bottom.linkTo(parent.bottom)
-                    },
-            contentDescription = "",
-            contentScale = ContentScale.FillBounds,
-        )
-        Text(
-            item.name,
-            style = MaterialTheme.typography.titleMedium,
-            maxLines = 2,
-            modifier =
-                Modifier
-                    .constrainAs(title) {
-                        top.linkTo(poster.top, margin = 12.dp)
-                        end.linkTo(parent.end, margin = 12.dp)
-                        start.linkTo(poster.end, 12.dp)
-                        width = Dimension.fillToConstraints
-                    },
-        )
-        Text(
-            item.gender.name,
-            style = MaterialTheme.typography.bodyMedium,
-            modifier =
-                Modifier
-                    .constrainAs(genres) {
-                        top.linkTo(title.bottom)
-                        end.linkTo(title.end)
-                        start.linkTo(title.start)
-                        width = Dimension.fillToConstraints
-                    },
-        )
-    }
-}
-
-@Composable
-fun SearchMovieCard(
-    item: MovieSearchResult,
+fun SearchBaseCard(
     modifier: Modifier = Modifier,
-    onItemClick: (Int, MediaType) -> Unit = { id, type -> },
+    image: Any?,
+    title: String,
+    subtitle: String? = null,
+    date: String? = null,
+    onClick: () -> Unit,
 ) {
     ConstraintLayout(
-        modifier =
-            Modifier
-                .fillMaxWidth()
-                .then(modifier)
-                .background(
-                    MaterialTheme.colorScheme.surfaceContainer,
-                    RoundedCornerShape(12.dp),
-                ).clickable {
-                    onItemClick(item.id, MediaType.MOVIE)
-                },
+        modifier = Modifier
+            .fillMaxWidth()
+            .then(modifier)
+            .clip(RoundedCornerShape(14.dp))
+            .background(MaterialTheme.colorScheme.surfaceContainer)
+            .clickable { onClick() },
     ) {
-        val (poster, title, genres, year, overview) = remember { createRefs() }
+        val (poster, titleRef, subtitleRef, dateRef) = createRefs()
+
         AsyncImage(
-            model = item.posterImage,
-            modifier =
-                Modifier
-                    .clip(RoundedCornerShape(12.dp))
-                    .size(140.dp, 210.dp)
-                    .background(MaterialTheme.colorScheme.onSurface)
-                    .constrainAs(poster) {
-                        top.linkTo(parent.top)
-                        start.linkTo(parent.start)
-                        bottom.linkTo(parent.bottom)
-                    },
-            contentDescription = "",
-            contentScale = ContentScale.FillBounds,
+            model = image,
+            contentDescription = null,
+            contentScale = ContentScale.Crop,
+            modifier = Modifier
+                .clip(RoundedCornerShape(12.dp))
+                .size(120.dp, 160.dp)
+                .background(MaterialTheme.colorScheme.onSurface)
+                .clip(RoundedCornerShape(14.dp))
+                .constrainAs(poster) {
+                    top.linkTo(parent.top)
+                    bottom.linkTo(parent.bottom)
+                    start.linkTo(parent.start)
+                },
         )
+
         Text(
-            item.title,
+            text = title,
             style = MaterialTheme.typography.titleMedium,
             maxLines = 2,
-            modifier =
-                Modifier
-                    .constrainAs(title) {
-                        top.linkTo(poster.top, margin = 12.dp)
-                        end.linkTo(parent.end, margin = 12.dp)
-                        start.linkTo(poster.end, 12.dp)
-                        width = Dimension.fillToConstraints
-                    },
+            modifier = Modifier.constrainAs(titleRef) {
+                start.linkTo(poster.end, 8.dp)
+                end.linkTo(parent.end, 8.dp)
+                top.linkTo(poster.top, 8.dp)
+                width = Dimension.fillToConstraints
+            },
         )
-        Text(
-            item.genres.joinToString(", ") { it.name },
-            style = MaterialTheme.typography.bodyMedium,
-            modifier =
-                Modifier
-                    .constrainAs(genres) {
-                        top.linkTo(title.bottom)
-                        end.linkTo(title.end)
-                        start.linkTo(title.start)
-                        width = Dimension.fillToConstraints
-                    },
-        )
-        Text(
-            item.releaseDate,
-            fontSize = 14.sp,
-            style = MaterialTheme.typography.bodyMedium,
-            modifier =
-                Modifier
-                    .constrainAs(year) {
-                        start.linkTo(title.start)
-                        end.linkTo(title.end)
-                        top.linkTo(genres.bottom)
-                        horizontalBias = 0f
-                    },
-        )
+
+        date?.let {
+            Text(
+                text = it,
+                style = MaterialTheme.typography.bodyMedium,
+                modifier = Modifier.constrainAs(dateRef) {
+                    start.linkTo(titleRef.start)
+                    top.linkTo(titleRef.bottom, 4.dp)
+                },
+            )
+        }
+
+        subtitle?.let {
+            Text(
+                text = it,
+                style = MaterialTheme.typography.bodySmall,
+                maxLines = 2,
+                modifier = Modifier.constrainAs(subtitleRef) {
+                    start.linkTo(titleRef.start)
+                    end.linkTo(titleRef.end)
+                    width = Dimension.fillToConstraints
+                    if (!date.isNullOrEmpty()) {
+                        top.linkTo(dateRef.bottom)
+                    } else {
+                        top.linkTo(titleRef.bottom, 4.dp)
+                    }
+                },
+            )
+        }
     }
 }

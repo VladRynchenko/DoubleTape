@@ -3,7 +3,7 @@ package com.vroff.domain.model.tmdb.search
 data class KnownFor(
     val adult: Boolean,
     val backdropPath: String?,
-    val id: Long,
+    val id: Int,
     val name: String?,
     val originalName: String?,
     val overview: String,
