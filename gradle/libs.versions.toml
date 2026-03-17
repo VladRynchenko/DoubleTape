@@ -47,6 +47,7 @@ junit = "4.13.2"
 junitVersion = "1.2.1"
 turbine = "1.2.1"
 navigationComposeVersion = "2.9.7"
+material3 = "1.4.0"
 
 [libraries]
 # AndroidX Core & Lifecycle
@@ -103,6 +104,7 @@ androidx-espresso-core = { group = "androidx.test.espresso", name = "espresso-co
 androidx-ui-test-manifest = { group = "androidx.compose.ui", name = "ui-test-manifest" }
 androidx-ui-test-junit4 = { group = "androidx.compose.ui", name = "ui-test-junit4" }
 turbine = { module = "app.cash.turbine:turbine", version.ref = "turbine" }
+androidx-compose-material3 = { group = "androidx.compose.material3", name = "material3", version.ref = "material3" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

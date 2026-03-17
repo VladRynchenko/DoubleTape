@@ -8,15 +8,12 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
 import coil3.compose.AsyncImage
@@ -36,29 +33,33 @@ fun SearchItem(
     onItemClick: (Int, MediaType) -> Unit = { id, type -> },
 ) {
     when (item) {
-        is PersonSearchResult -> SearchBaseCard(
-            image = item.profileImage,
-            title = item.name,
-            subtitle = item.knownFor.joinToString(", ") { it.name ?: it.title ?: "" },
-            date = null,
-            onClick = { onItemClick(item.id, MediaType.PERSON) },
-        )
+        is PersonSearchResult ->
+            SearchBaseCard(
+                image = item.image,
+                title = item.name,
+                subtitle = item.knownFor.joinToString(", ") { it.name ?: it.title ?: "" },
+                onClick = { onItemClick(item.id, MediaType.PERSON) },
+            )
 
-        is SeriesSearchResult -> SearchBaseCard(
-            image = item.posterImage,
-            title = item.name,
-            subtitle = item.genres.joinToString(", ") { it.name },
-            date = formatDate(item.firstAirDate),
-            modifier = modifier, onClick = { onItemClick(item.id, MediaType.SERIES) },
-        )
+        is SeriesSearchResult ->
+            SearchBaseCard(
+                image = item.image,
+                title = item.name,
+                subtitle = item.genres.joinToString(", ") { it.name },
+                date = formatDate(item.firstAirDate),
+                modifier = modifier,
+                onClick = { onItemClick(item.id, MediaType.SERIES) },
+            )
 
-        is MovieSearchResult -> SearchBaseCard(
-            image = item.posterImage,
-            title = item.title,
-            subtitle = item.genres.joinToString(", ") { it.name },
-            date = formatDate(item.releaseDate),
-            modifier = modifier, onClick = { onItemClick(item.id, MediaType.MOVIE) },
-        )
+        is MovieSearchResult ->
+            SearchBaseCard(
+                image = item.image,
+                title = item.title,
+                subtitle = item.genres.joinToString(", ") { it.name },
+                date = formatDate(item.releaseDate),
+                modifier = modifier,
+                onClick = { onItemClick(item.id, MediaType.MOVIE) },
+            )
     }
 }
 
@@ -72,12 +73,13 @@ fun SearchBaseCard(
     onClick: () -> Unit,
 ) {
     ConstraintLayout(
-        modifier = Modifier
-            .fillMaxWidth()
-            .then(modifier)
-            .clip(RoundedCornerShape(14.dp))
-            .background(MaterialTheme.colorScheme.surfaceContainer)
-            .clickable { onClick() },
+        modifier =
+            Modifier
+                .fillMaxWidth()
+                .then(modifier)
+                .clip(RoundedCornerShape(14.dp))
+                .background(MaterialTheme.colorScheme.surface.copy(0.9f))
+                .clickable { onClick() },
     ) {
         val (poster, titleRef, subtitleRef, dateRef) = createRefs()
 
@@ -85,38 +87,43 @@ fun SearchBaseCard(
             model = image,
             contentDescription = null,
             contentScale = ContentScale.Crop,
-            modifier = Modifier
-                .clip(RoundedCornerShape(12.dp))
-                .size(120.dp, 160.dp)
-                .background(MaterialTheme.colorScheme.onSurface)
-                .clip(RoundedCornerShape(14.dp))
-                .constrainAs(poster) {
-                    top.linkTo(parent.top)
-                    bottom.linkTo(parent.bottom)
-                    start.linkTo(parent.start)
-                },
+            modifier =
+                Modifier
+                    .clip(RoundedCornerShape(12.dp))
+                    .size(120.dp, 160.dp)
+                    .background(MaterialTheme.colorScheme.onSurface)
+                    .clip(RoundedCornerShape(14.dp))
+                    .constrainAs(poster) {
+                        top.linkTo(parent.top)
+                        bottom.linkTo(parent.bottom)
+                        start.linkTo(parent.start)
+                    },
         )
 
         Text(
             text = title,
             style = MaterialTheme.typography.titleMedium,
+            color = MaterialTheme.colorScheme.onPrimary,
             maxLines = 2,
-            modifier = Modifier.constrainAs(titleRef) {
-                start.linkTo(poster.end, 8.dp)
-                end.linkTo(parent.end, 8.dp)
-                top.linkTo(poster.top, 8.dp)
-                width = Dimension.fillToConstraints
-            },
+            modifier =
+                Modifier.constrainAs(titleRef) {
+                    start.linkTo(poster.end, 8.dp)
+                    end.linkTo(parent.end, 8.dp)
+                    top.linkTo(poster.top, 8.dp)
+                    width = Dimension.fillToConstraints
+                },
         )
 
         date?.let {
             Text(
                 text = it,
-                style = MaterialTheme.typography.bodyMedium,
-                modifier = Modifier.constrainAs(dateRef) {
-                    start.linkTo(titleRef.start)
-                    top.linkTo(titleRef.bottom, 4.dp)
-                },
+                style = MaterialTheme.typography.bodySmall,
+                color = MaterialTheme.colorScheme.onPrimary,
+                modifier =
+                    Modifier.constrainAs(dateRef) {
+                        start.linkTo(titleRef.start)
+                        top.linkTo(titleRef.bottom, 4.dp)
+                    },
             )
         }
 
@@ -124,17 +131,19 @@ fun SearchBaseCard(
             Text(
                 text = it,
                 style = MaterialTheme.typography.bodySmall,
+                color = MaterialTheme.colorScheme.onPrimary,
                 maxLines = 2,
-                modifier = Modifier.constrainAs(subtitleRef) {
-                    start.linkTo(titleRef.start)
-                    end.linkTo(titleRef.end)
-                    width = Dimension.fillToConstraints
-                    if (!date.isNullOrEmpty()) {
-                        top.linkTo(dateRef.bottom)
-                    } else {
-                        top.linkTo(titleRef.bottom, 4.dp)
-                    }
-                },
+                modifier =
+                    Modifier.constrainAs(subtitleRef) {
+                        start.linkTo(titleRef.start)
+                        end.linkTo(titleRef.end)
+                        width = Dimension.fillToConstraints
+                        if (!date.isNullOrEmpty()) {
+                            top.linkTo(dateRef.bottom)
+                        } else {
+                            top.linkTo(titleRef.bottom, 4.dp)
+                        }
+                    },
             )
         }
     }

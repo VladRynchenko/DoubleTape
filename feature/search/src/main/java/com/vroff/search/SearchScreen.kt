@@ -1,12 +1,10 @@
 package com.vroff.search
 
 import androidx.compose.animation.AnimatedContent
-import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.slideInVertically
-import androidx.compose.animation.slideOutVertically
 import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -21,9 +19,6 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -57,7 +52,8 @@ fun SearchScreen(
             pagingFlow.loadState.refresh is LoadState.Error ->
                 SearchScreenState.Error(
                     (pagingFlow.loadState.refresh as LoadState.Error)
-                        .error.message.orEmpty(),
+                        .error.message
+                        .orEmpty(),
                 )
 
             pagingFlow.loadState.append.endOfPaginationReached &&
@@ -80,14 +76,15 @@ fun SearchContent(
     AnimatedContent(
         screenState,
         transitionSpec = {
-            (fadeIn(tween(220)) +
-                slideInVertically { it / 4 }) togetherWith
+            (
+                fadeIn(tween(220)) +
+                    slideInVertically { it / 4 }
+            ) togetherWith
                 (fadeOut(tween(90)))
         },
         label = "screen_state",
     ) { state ->
         when (state) {
-
             is SearchScreenState.Waiting ->
                 Box(
                     modifier = Modifier.fillMaxSize(),
@@ -107,8 +104,8 @@ fun SearchContent(
 
             is SearchScreenState.Success -> {
                 val listState = rememberLazyListState()
-                LaunchedEffect(Unit) {
-                    listState.animateScrollToItem(0)
+                LaunchedEffect(pagingFlow.itemCount) {
+                    listState.scrollToItem(0)
                 }
                 LazyColumn(
                     modifier =
@@ -121,7 +118,7 @@ fun SearchContent(
                 ) {
                     items(
                         count = pagingFlow.itemCount,
-                        key = pagingFlow.itemKey { item -> item.id },
+                        key = pagingFlow.itemKey { item -> "${item.mediaType.name}/${item.id}" },
                     ) { index ->
                         pagingFlow[index]?.let {
                             SearchItem(

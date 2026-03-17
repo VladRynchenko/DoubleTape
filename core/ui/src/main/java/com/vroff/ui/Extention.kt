@@ -28,11 +28,10 @@ fun seasonsAndSeriesCountFormat(
 }
 
 @Composable
-fun formatDate(input: String): String {
-    return try {
+fun formatDate(input: String): String =
+    try {
         val parsedDate = LocalDate.parse(input, DateTimeFormatter.ISO_DATE)
         parsedDate.format(DateTimeFormatter.ofPattern("dd/MM/yyyy"))
     } catch (e: Exception) {
         input
     }
-}

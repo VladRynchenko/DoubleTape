@@ -65,6 +65,7 @@ dependencies {
 // Compose Animation
     implementation(libs.androidx.animation)
     implementation(libs.androidx.animation.core)
+    implementation(libs.androidx.compose.material3)
 
 // Compose Tooling (debug only)
     debugImplementation(libs.androidx.ui.tooling)

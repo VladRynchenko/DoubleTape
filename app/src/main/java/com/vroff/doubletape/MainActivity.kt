@@ -26,7 +26,7 @@ import com.vroff.doubletape.presentation.screens.movie.MovieScreen
 import com.vroff.search.SearchScreen
 import com.vroff.ui.theme.MovieDDTheme
 import com.vroff.ui.ui.NavigationState
-import com.vroff.ui.ui.ShowTopAppBar
+import com.vroff.ui.ui.ShowTopAppBarTest
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -50,9 +50,9 @@ class MainActivity : ComponentActivity() {
             MovieDDTheme {
                 Scaffold(
                     topBar = {
-                        ShowTopAppBar(
+                        ShowTopAppBarTest(
                             searchQuery = query,
-                            onSearchQueryChange = mainViewModel::setQuery,
+                            searchHint = "Search",
                             onActionIconClick = {
                                 if (isMain) {
                                     mainViewModel.clearQuery()
@@ -90,7 +90,7 @@ class MainActivity : ComponentActivity() {
 
                         composable<Graph.Search> {
                             SearchScreen(
-                                searchQuery = query.text,
+                                searchQuery = query.text.toString(),
                                 padding = innerPadding,
                                 onItemClick = { id, type ->
                                     navController.navigate(Graph.Details(id, type))
