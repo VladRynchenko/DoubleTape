@@ -14,7 +14,7 @@ data class NetworkDTO(
     fun mapToDomain(): Network =
         Network(
             id = id,
-            logoPath = logoPath,
+            logoImage = logoPath,
             name = name,
             originCountry = originCountry,
         )

@@ -2,7 +2,8 @@ package com.vroff.data.usecase
 
 import android.util.Log
 import com.vroff.domain.model.NetworkResult
-import com.vroff.domain.model.tmdb.movie.MovieDetail
+import com.vroff.domain.model.tmdb.common.BaseDetails
+import com.vroff.domain.model.tmdb.search.MediaType
 import com.vroff.domain.repository.TMDBRepository
 import java.util.Locale
 import javax.inject.Inject
@@ -12,13 +13,26 @@ class GetShowByIdUseCase
     constructor(
         private val repository: TMDBRepository,
     ) {
-        suspend fun execute(id: Int): NetworkResult<MovieDetail> =
+        suspend fun execute(
+            id: Int,
+            type: MediaType,
+        ): NetworkResult<BaseDetails> =
             try {
-                repository.getMovieDetails(
-                    id,
-                    language = Locale.getDefault().language,
-                    appendToResponse = "credits",
-                )
+                when (type) {
+                    MediaType.MOVIE ->
+                        repository.getMovieDetails(
+                            id,
+                            language = Locale.getDefault().language,
+                            appendToResponse = "credits",
+                        )
+                    MediaType.SERIES ->
+                        repository.getSeriesDetails(
+                            id,
+                            language = Locale.getDefault().language,
+                            appendToResponse = "aggregate_credits",
+                        )
+                    else -> throw IllegalArgumentException("Unknown type")
+                }
             } catch (e: Exception) {
                 Log.e("Mapping", e.message.toString())
                 NetworkResult.Exception(e)

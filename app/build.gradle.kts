@@ -91,6 +91,7 @@ dependencies {
     implementation(project(":core:domain"))
     implementation(project(":core:storage"))
     implementation(project(":feature:search"))
+    implementation(project(":feature:detail"))
     implementation(project(":feature:streaming-availability"))
     implementation(project(":feature:tmdb"))
 

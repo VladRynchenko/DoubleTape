@@ -1,6 +1,8 @@
 package com.vroff.tmdb.entity.search
 
 import com.google.gson.annotations.SerializedName
+import com.vroff.domain.model.BackdropImage
+import com.vroff.domain.model.PosterImage
 import com.vroff.domain.model.tmdb.search.KnownFor
 
 data class KnownForDTO(
@@ -19,14 +21,14 @@ data class KnownForDTO(
     @SerializedName("original_language")
     val originalLanguage: String,
     @SerializedName("genre_ids")
-    val genreIds: List<Long>,
+    val genreIds: List<Int>,
     val popularity: Double,
     @SerializedName("first_air_date")
     val firstAirDate: String?,
     @SerializedName("vote_average")
     val voteAverage: Double,
     @SerializedName("vote_count")
-    val voteCount: Long,
+    val voteCount: Int,
     @SerializedName("origin_country")
     val originCountry: List<String>?,
     val title: String?,
@@ -39,12 +41,12 @@ data class KnownForDTO(
     fun mapToDomain(): KnownFor =
         KnownFor(
             adult = adult,
-            backdropPath = backdropPath,
+            backdropImage = backdropPath?.let { BackdropImage(it) },
             id = id,
             name = name,
             originalName = originalName,
             overview = overview,
-            posterPath = posterPath,
+            posterImage = posterPath?.let { PosterImage(it) },
             mediaType = mediaType,
             originalLanguage = originalLanguage,
             genreIds = genreIds,

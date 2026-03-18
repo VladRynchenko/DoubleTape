@@ -17,6 +17,7 @@ import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
 import coil3.compose.AsyncImage
+import com.vroff.domain.model.Image
 import com.vroff.domain.model.tmdb.search.MediaType
 import com.vroff.domain.model.tmdb.search.typed.MovieSearchResult
 import com.vroff.domain.model.tmdb.search.typed.PersonSearchResult
@@ -66,7 +67,7 @@ fun SearchItem(
 @Composable
 fun SearchBaseCard(
     modifier: Modifier = Modifier,
-    image: Any?,
+    image: Image?,
     title: String,
     subtitle: String? = null,
     date: String? = null,
@@ -89,7 +90,7 @@ fun SearchBaseCard(
             contentScale = ContentScale.Crop,
             modifier =
                 Modifier
-                    .clip(RoundedCornerShape(12.dp))
+                    .clip(RoundedCornerShape(14.dp))
                     .size(120.dp, 160.dp)
                     .background(MaterialTheme.colorScheme.onSurface)
                     .clip(RoundedCornerShape(14.dp))

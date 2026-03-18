@@ -14,7 +14,7 @@ data class ProductionCompanyDTO(
     fun mapToDomain(): ProductionCompany =
         ProductionCompany(
             id = id,
-            logoPath = logoPath,
+            logoImage = logoPath,
             name = name,
             originCountry = originCountry,
         )

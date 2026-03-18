@@ -2,4 +2,5 @@
     <string name="hours_duration">%dh %02dm</string>
     <string name="seasons_and_episodes">%ds %de</string>
     <string name="season">Season %1$s</string>
+    <string name="episodes">%1$d episodes</string>
 </resources>

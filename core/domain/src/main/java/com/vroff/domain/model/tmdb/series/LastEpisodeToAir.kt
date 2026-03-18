@@ -1,7 +1,9 @@
 package com.vroff.domain.model.tmdb.series
 
+import com.vroff.domain.model.StillImage
+
 data class LastEpisodeToAir(
-    val id: Long,
+    val id: Int,
     val name: String,
     val overview: String,
     val voteAverage: Double,
@@ -11,6 +13,6 @@ data class LastEpisodeToAir(
     val productionCode: String,
     val runtime: Long,
     val seasonNumber: Long,
-    val showId: Long,
-    val stillPath: String,
+    val showId: Int,
+    val stillImage: StillImage?,
 )

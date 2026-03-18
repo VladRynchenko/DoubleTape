@@ -1,12 +1,14 @@
 package com.vroff.tmdb.entity.movie
 
 import com.google.gson.annotations.SerializedName
-import com.vroff.domain.model.tmdb.movie.Cast
+import com.vroff.domain.model.ProfileImage
+import com.vroff.domain.model.tmdb.common.Cast
+import com.vroff.domain.model.tmdb.search.Gender
 
 data class CastDTO(
     val adult: Boolean,
-    val gender: Long,
-    val id: Long,
+    val gender: Int,
+    val id: Int,
     @SerializedName("known_for_department")
     val knownForDepartment: String,
     val name: String,
@@ -16,22 +18,22 @@ data class CastDTO(
     @SerializedName("profile_path")
     val profilePath: String?,
     @SerializedName("cast_id")
-    val castId: Long,
+    val castId: Int,
     val character: String,
     @SerializedName("credit_id")
     val creditId: String,
-    val order: Long,
+    val order: Int,
 ) {
     fun mapToDomain(): Cast =
         Cast(
             adult = adult,
-            gender = gender,
+            gender = Gender.entries[gender],
             id = id,
             knownForDepartment = knownForDepartment,
             name = name,
             originalName = originalName,
             popularity = popularity,
-            profilePath = profilePath,
+            profileImage = profilePath?.let { ProfileImage(it) },
             castId = castId,
             character = character,
             creditId = creditId,

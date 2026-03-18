@@ -1,6 +1,7 @@
 package com.vroff.tmdb.entity.movie
 
 import com.google.gson.annotations.SerializedName
+import com.vroff.domain.model.ProfileImage
 import com.vroff.domain.model.tmdb.movie.Crew
 
 data class CrewDTO(
@@ -29,7 +30,7 @@ data class CrewDTO(
             name = name,
             originalName = originalName,
             popularity = popularity,
-            profilePath = profilePath,
+            profileImage = profilePath?.let { ProfileImage(it) },
             creditId = creditId,
             department = department,
             job = job,

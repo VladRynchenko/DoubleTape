@@ -79,7 +79,6 @@ data class SeriesDetailDTO(
             lastAirDate = lastAirDate,
             lastEpisodeToAir = lastEpisodeToAir.mapToDomain(),
             name = name,
-            nextEpisodeToAir = nextEpisodeToAir,
             networks = networks.map { it.mapToDomain() },
             numberOfEpisodes = numberOfEpisodes,
             numberOfSeasons = numberOfSeasons,

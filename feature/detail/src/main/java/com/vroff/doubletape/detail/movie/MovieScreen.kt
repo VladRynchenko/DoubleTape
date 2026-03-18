@@ -1,4 +1,4 @@
-package com.vroff.doubletape.presentation.screens.movie
+package com.vroff.doubletape.detail.movie
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -26,9 +26,10 @@ import coil3.compose.AsyncImage
 import coil3.request.ImageRequest
 import coil3.request.crossfade
 import com.vroff.domain.model.tmdb.search.MediaType
-import com.vroff.doubletape.R
+import com.vroff.ui.R
 import com.vroff.ui.hoursAndMinutesUsingFormat
 import com.vroff.ui.ui.ExpandableText
+import com.vroff.ui.ui.detail.CastWidget
 
 @Composable
 fun MovieScreen(
@@ -76,7 +77,7 @@ private fun ShowDetailsContent(
                     AsyncImage(
                         ImageRequest
                             .Builder(LocalContext.current)
-                            .data(show.poster)
+                            .data(show.posterImage)
                             .crossfade(true)
                             .build(),
                         contentDescription = "Movie poster",
@@ -122,23 +123,22 @@ private fun ShowDetailsContent(
                         )
                     }
                 }
-                item {
-                    Text(
-                        "Top Cast",
-                        style = MaterialTheme.typography.titleLarge,
-                        modifier =
-                            Modifier
-                                .padding(top = 12.dp, start = 12.dp, end = 12.dp),
-                    )
-                    show.credits?.cast?.forEach { actor ->
+                show.credits?.cast?.let {
+                    item {
                         Text(
-                            actor?.name ?: "",
+                            "Top Cast",
+                            style = MaterialTheme.typography.titleLarge,
                             modifier =
                                 Modifier
                                     .padding(top = 12.dp, start = 12.dp, end = 12.dp),
                         )
+                        CastWidget(
+                            modifier = Modifier.padding(horizontal = 12.dp),
+                            cast = it,
+                        )
                     }
                 }
+
 //                item {
 //                    if (show.showType == ShowType.SERIES) {
 //                        show.seasons?.forEachIndexed { index, season ->

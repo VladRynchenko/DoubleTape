@@ -1,10 +1,10 @@
-package com.vroff.doubletape.presentation.screens.movie
+package com.vroff.doubletape.detail.movie
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.vroff.data.usecase.GetShowByIdUseCase
 import com.vroff.domain.model.NetworkResult
-import com.vroff.domain.model.tmdb.movie.MovieDetail
+import com.vroff.domain.model.tmdb.common.BaseDetails
 import com.vroff.domain.model.tmdb.search.MediaType
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -21,12 +21,12 @@ class MovieViewModel
         @Inject
         lateinit var getShowByIdUseCase: GetShowByIdUseCase
 
-        private val tmdbIdStateFlow = MutableStateFlow(-1)
+        private val tmdbIdStateFlow = MutableStateFlow(-1 to MediaType.UNKNOWN)
         val showState =
             tmdbIdStateFlow
-                .filter { it != -1 }
-                .map { id ->
-                    when (val result = getShowByIdUseCase.execute(id)) {
+                .filter { it.first != -1 }
+                .map { (id, type) ->
+                    when (val result = getShowByIdUseCase.execute(id, type)) {
                         is NetworkResult.Success -> ScreenState.Success(data = result.data)
                         is NetworkResult.Error -> ScreenState.Error(result.message)
                         is NetworkResult.Exception -> ScreenState.Error(result.e.message)
@@ -41,12 +41,12 @@ class MovieViewModel
             id: Int,
             type: MediaType,
         ) {
-            tmdbIdStateFlow.tryEmit(id)
+            tmdbIdStateFlow.tryEmit(id to type)
         }
 
         sealed class ScreenState {
             data class Success(
-                val data: MovieDetail,
+                val data: BaseDetails,
             ) : ScreenState()
 
             data class Error(

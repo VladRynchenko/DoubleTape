@@ -3,7 +3,7 @@ package com.vroff.tmdb.entity.movie
 import com.google.gson.annotations.SerializedName
 import com.vroff.domain.model.BackdropImage
 import com.vroff.domain.model.PosterImage
-import com.vroff.domain.model.streamingavailable.Genre
+import com.vroff.domain.model.tmdb.common.Genre
 import com.vroff.domain.model.tmdb.movie.MovieDetail
 import com.vroff.tmdb.entity.common.ProductionCompanyDTO
 import com.vroff.tmdb.entity.common.ProductionCountryDTO
@@ -54,7 +54,6 @@ data class MovieDetailDTO(
         MovieDetail(
             adult = adult,
             backdrop = backdropPath?.let { BackdropImage(it) },
-            belongsToCollection = belongsToCollection,
             budget = budget,
             genres = genres,
             homepage = homepage,
@@ -64,7 +63,7 @@ data class MovieDetailDTO(
             originalTitle = originalTitle,
             overview = overview,
             popularity = popularity,
-            poster = posterPath?.let { PosterImage(it) },
+            posterImage = posterPath?.let { PosterImage(it) },
             productionCompanies = productionCompanies.map { it.mapToDomain() },
             productionCountries = productionCountries.map { it.mapToDomain() },
             releaseDate = releaseDate,

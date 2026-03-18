@@ -1,6 +1,12 @@
 package com.vroff.domain.model.tmdb.series
 
+import com.vroff.domain.model.tmdb.common.BaseCredits
+import com.vroff.domain.model.tmdb.common.SeriesCast
+
 data class AggregateCredits(
-    val cast: List<SeriesCast?>?,
-    val crew: List<SeriesCrew?>?,
-)
+    override val cast: List<SeriesCast>,
+    override val crew: List<SeriesCrew>,
+) : BaseCredits(
+        cast = cast,
+        crew = crew,
+    )

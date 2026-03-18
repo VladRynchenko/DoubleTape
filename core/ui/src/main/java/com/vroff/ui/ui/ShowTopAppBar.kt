@@ -7,7 +7,6 @@ import androidx.compose.animation.fadeOut
 import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
@@ -70,7 +69,6 @@ sealed class NavigationState {
     data object MainScreen : NavigationState()
 }
 
-
 @OptIn(ExperimentalMaterial3Api::class)
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
@@ -92,16 +90,18 @@ fun ShowTopAppBarTest(
 
     TopAppBar(
         modifier = Modifier.padding(12.dp),
-        colors = TopAppBarDefaults.topAppBarColors(
-            containerColor = Color.Transparent,
-            scrolledContainerColor = Color.Transparent,
-        ),
+        colors =
+            TopAppBarDefaults.topAppBarColors(
+                containerColor = Color.Transparent,
+                scrolledContainerColor = Color.Transparent,
+            ),
         actions = { },
         navigationIcon = {
-            val icon = when (state) {
-                NavigationState.MainScreen -> Icons.Filled.AccountCircle
-                else -> Icons.AutoMirrored.Filled.ArrowBack
-            }
+            val icon =
+                when (state) {
+                    NavigationState.MainScreen -> Icons.Filled.AccountCircle
+                    else -> Icons.AutoMirrored.Filled.ArrowBack
+                }
             NavigationTopBarButton(icon, onNavigationIconClick)
         },
         title = {
@@ -111,7 +111,7 @@ fun ShowTopAppBarTest(
                     fadeIn() togetherWith fadeOut() using SizeTransform(clip = false)
                 },
                 label = "ActionsContentAnimation",
-                modifier = Modifier.offset(3.dp)
+                modifier = Modifier.offset(3.dp),
             ) { state ->
                 Box(
                     Modifier.fillMaxWidth(),
@@ -172,16 +172,18 @@ private fun CustomNavigationSearchBar(
         expanded = false,
         onExpandedChange = {},
         placeholder = { Text(searchHint) },
-        colors = TextFieldDefaults.colors(
-            focusedContainerColor = MaterialTheme.colorScheme.surface.copy(0.9f),
-            unfocusedContainerColor = MaterialTheme.colorScheme.surface.copy(0.9f),
-            focusedIndicatorColor = Color.Transparent,
-            unfocusedIndicatorColor = Color.Transparent,
-            disabledIndicatorColor = Color.Transparent,
+        colors =
+            TextFieldDefaults.colors(
+                focusedContainerColor = MaterialTheme.colorScheme.surface.copy(0.9f),
+                unfocusedContainerColor = MaterialTheme.colorScheme.surface.copy(0.9f),
+                focusedIndicatorColor = Color.Transparent,
+                unfocusedIndicatorColor = Color.Transparent,
+                disabledIndicatorColor = Color.Transparent,
             ),
         textStyle = MaterialTheme.typography.bodyLarge,
-        modifier = Modifier
-            .focusRequester(focusRequester)
-            .height(64.dp),
+        modifier =
+            Modifier
+                .focusRequester(focusRequester)
+                .height(64.dp),
     )
 }

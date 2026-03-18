@@ -1,10 +1,11 @@
 package com.vroff.tmdb.entity.series
 
 import com.google.gson.annotations.SerializedName
+import com.vroff.domain.model.StillImage
 import com.vroff.domain.model.tmdb.series.LastEpisodeToAir
 
 data class LastEpisodeToAirDTO(
-    val id: Long,
+    val id: Int,
     val name: String,
     val overview: String,
     @SerializedName("vote_average")
@@ -21,9 +22,9 @@ data class LastEpisodeToAirDTO(
     @SerializedName("season_number")
     val seasonNumber: Long,
     @SerializedName("show_id")
-    val showId: Long,
+    val showId: Int,
     @SerializedName("still_path")
-    val stillPath: String,
+    val stillPath: String?,
 ) {
     fun mapToDomain(): LastEpisodeToAir =
         LastEpisodeToAir(
@@ -38,6 +39,6 @@ data class LastEpisodeToAirDTO(
             runtime = runtime,
             seasonNumber = seasonNumber,
             showId = showId,
-            stillPath = stillPath,
+            stillImage = stillPath?.let { StillImage(it) },
         )
 }

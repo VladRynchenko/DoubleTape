@@ -20,9 +20,9 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.toRoute
+import com.vroff.doubletape.detail.movie.MovieScreen
 import com.vroff.doubletape.presentation.screens.Graph
 import com.vroff.doubletape.presentation.screens.main.WelcomeScreen
-import com.vroff.doubletape.presentation.screens.movie.MovieScreen
 import com.vroff.search.SearchScreen
 import com.vroff.ui.theme.MovieDDTheme
 import com.vroff.ui.ui.NavigationState
@@ -93,7 +93,9 @@ class MainActivity : ComponentActivity() {
                                 searchQuery = query.text.toString(),
                                 padding = innerPadding,
                                 onItemClick = { id, type ->
-                                    navController.navigate(Graph.Details(id, type))
+                                    if (type.isShow) {
+                                        navController.navigate(Graph.Details(id, type))
+                                    }
                                 },
                             )
                         }
