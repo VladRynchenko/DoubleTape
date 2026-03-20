@@ -17,7 +17,7 @@ data class SeasonDTO(
     @SerializedName("season_number")
     val seasonNumber: Int,
     @SerializedName("vote_average")
-    val voteAverage: Double,
+    val voteAverage: Float,
 ) {
     fun mapToDomain(): Season =
         Season(

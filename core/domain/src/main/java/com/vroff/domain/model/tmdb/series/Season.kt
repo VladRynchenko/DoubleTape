@@ -10,5 +10,5 @@ data class Season(
     val overview: String,
     val posterImage: PosterImage?,
     val seasonNumber: Int,
-    val voteAverage: Double,
+    val voteAverage: Float,
 )

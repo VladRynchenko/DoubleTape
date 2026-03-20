@@ -30,9 +30,9 @@ object ShowFormatter {
 
     fun formatSeasonsAndSeries(
         context: Context,
-        seasons: Int?,
-        episodes: Int?,
-        avgRuntime: Int?,
+        seasons: Int? = null,
+        episodes: Int? = null,
+        avgRuntime: Int? = null,
     ): String {
         val s = seasons?.let { context.resources.getQuantityString(R.plurals.count_seasons, it, it) }
         val e = episodes?.let { context.resources.getQuantityString(R.plurals.count_episodes, it, it) }
@@ -43,14 +43,16 @@ object ShowFormatter {
     }
 
     fun formatRealiseDate(
-        input: String,
+        input: String?,
         format: String = FormatConstant.FORMAT_DD_MM_YYYY,
     ): String =
         try {
+            if (input == null) return SymbolConstant.TBA
+            if (input.isBlank()) return SymbolConstant.EMPTY
             val parsedDate = LocalDate.parse(input, DateTimeFormatter.ISO_DATE)
             parsedDate.format(DateTimeFormatter.ofPattern(format))
         } catch (e: Exception) {
-            input
+            SymbolConstant.EMPTY
         }
 
     fun formatOriginRun(
@@ -70,6 +72,8 @@ object ShowFormatter {
         if (amount == 0L) return SymbolConstant.HYPHEN
         val formatter = NumberFormat.getCurrencyInstance()
         formatter.currency = Currency.getInstance("USD")
+        formatter.maximumFractionDigits = 0
+
         return formatter.format(amount)
     }
 

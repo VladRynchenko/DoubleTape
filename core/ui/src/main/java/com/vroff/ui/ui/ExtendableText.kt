@@ -40,6 +40,7 @@ fun ExpandableText(
 
     val expandText = expandText ?: stringResource(R.string.expand_text)
     val collapseText = collapseText ?: stringResource(R.string.collapse_text)
+    var textEllipsized by remember { mutableStateOf(false) }
 
     Column(modifier = modifier) {
         Text(
@@ -47,6 +48,9 @@ fun ExpandableText(
             style = textStyle,
             maxLines = if (expanded) Int.MAX_VALUE else minLines,
             overflow = TextOverflow.Ellipsis,
+            onTextLayout = { textLayoutResult ->
+                textEllipsized = minLines == textLayoutResult.lineCount
+            },
             modifier =
                 Modifier
                     .animateContentSize(animationSpec = tween(durationMillis = 300))
@@ -57,11 +61,10 @@ fun ExpandableText(
                     },
         )
 
-        if (!expanded && text.length > 100) {
+        if (!expanded && textEllipsized) {
             Text(
                 text =
                     buildAnnotatedString {
-                        append("...")
                         withStyle(expandCollapseTextStyle) {
                             append(expandText)
                         }

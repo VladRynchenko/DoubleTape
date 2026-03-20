@@ -33,6 +33,7 @@ import com.vroff.domain.model.tmdb.common.Genre
 import com.vroff.domain.model.tmdb.movie.Credits
 import com.vroff.domain.model.tmdb.movie.MovieDetail
 import com.vroff.domain.model.tmdb.search.MediaType
+import com.vroff.domain.model.tmdb.series.Season
 import com.vroff.domain.model.tmdb.series.SeriesDetail
 import com.vroff.doubletape.detail.R
 import com.vroff.ui.FormatConstant
@@ -46,8 +47,10 @@ import com.vroff.ui.SymbolConstant
 import com.vroff.ui.ui.ErrorScreen
 import com.vroff.ui.ui.ExpandableText
 import com.vroff.ui.ui.LoadingScreen
+import com.vroff.ui.ui.SearchBaseCard
 import com.vroff.ui.ui.detail.CastWidget
 import com.vroff.ui.ui.toRequest
+import java.util.Locale
 import kotlin.math.roundToInt
 
 @Composable
@@ -104,12 +107,42 @@ fun DetailsScreen(
             CastSection(modifier, it)
         }
         SecondaryMetadataSection(modifier, show)
-        OverviewSection(modifier, show.overview)
+        show.seasons?.let {
+            SeasonsSection(modifier, it)
+        }
+        OverviewSection(modifier, overview = show.overview)
         Spacer(
             Modifier
                 .height(padding.calculateBottomPadding())
                 .fillMaxWidth(),
         )
+    }
+}
+
+@Composable
+fun SeasonsSection(
+    modifier: Modifier,
+    seasons: List<Season>,
+) {
+    Text(
+        stringResource(R.string.header_seasons),
+        style = MaterialTheme.typography.titleLarge,
+        modifier = modifier,
+    )
+
+    seasons.forEach { season ->
+        SearchBaseCard(
+            modifier,
+            season.posterImage,
+            season.voteAverage,
+            season.name,
+            date = formatRealiseDate(season.airDate, FormatConstant.FORMAT_YEAR),
+            subtitle =
+                formatSeasonsAndSeries(
+                    LocalContext.current,
+                    episodes = season.episodeCount,
+                ),
+        ) { }
     }
 }
 
@@ -218,7 +251,7 @@ fun MetadataSection(
 @Composable
 fun BaseMetadata(
     modifier: Modifier = Modifier,
-    rating: Float = 8.5f,
+    rating: Float,
     genre: List<Genre> = listOf(),
     status: String,
     runtime: String,
@@ -230,7 +263,7 @@ fun BaseMetadata(
     Column(modifier) {
         AnnotatedMetadata(
             stringResource(R.string.label_rating),
-            FormatConstant.ROUND_ONE_DIGIT.format(rating),
+            FormatConstant.ROUND_ONE_DIGIT.format(Locale.ROOT, rating),
         )
         AnnotatedMetadata(
             stringResource(R.string.label_genre),
@@ -300,10 +333,11 @@ fun CastSection(
 @Composable
 fun OverviewSection(
     modifier: Modifier = Modifier,
+    header: String = stringResource(R.string.header_overview),
     overview: String,
 ) {
     Text(
-        "Overview",
+        header,
         style = MaterialTheme.typography.titleLarge,
         modifier = modifier,
     )

@@ -2,6 +2,7 @@ package com.vroff.ui.ui
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -24,6 +25,7 @@ import com.vroff.domain.model.tmdb.search.typed.PersonSearchResult
 import com.vroff.domain.model.tmdb.search.typed.SeriesSearchResult
 import com.vroff.domain.model.tmdb.search.typed.TypedSearchResult
 import com.vroff.ui.ShowFormatter.formatRealiseDate
+import com.vroff.ui.SymbolConstant
 import com.vroff.ui.preview.SearchItemPreviewProvider
 
 @Preview
@@ -48,6 +50,7 @@ fun SearchItem(
                 title = item.name,
                 subtitle = item.genres.joinToString(", ") { it.name },
                 date = formatRealiseDate(item.firstAirDate),
+                rating = item.voteAverage,
                 modifier = modifier,
                 onClick = { onItemClick(item.id, MediaType.SERIES) },
             )
@@ -58,6 +61,7 @@ fun SearchItem(
                 title = item.title,
                 subtitle = item.genres.joinToString(", ") { it.name },
                 date = formatRealiseDate(item.releaseDate),
+                rating = item.voteAverage,
                 modifier = modifier,
                 onClick = { onItemClick(item.id, MediaType.MOVIE) },
             )
@@ -68,6 +72,7 @@ fun SearchItem(
 fun SearchBaseCard(
     modifier: Modifier = Modifier,
     image: Image?,
+    rating: Float? = null,
     title: String,
     subtitle: String? = null,
     date: String? = null,
@@ -114,17 +119,29 @@ fun SearchBaseCard(
                 },
         )
 
-        date?.let {
-            Text(
-                text = it,
-                style = MaterialTheme.typography.bodySmall,
-                color = MaterialTheme.colorScheme.onPrimary,
-                modifier =
-                    Modifier.constrainAs(dateRef) {
-                        start.linkTo(titleRef.start)
-                        top.linkTo(titleRef.bottom, 4.dp)
-                    },
-            )
+        Row(
+            modifier =
+                Modifier.constrainAs(dateRef) {
+                    start.linkTo(titleRef.start)
+                    top.linkTo(titleRef.bottom, 4.dp)
+                },
+        ) {
+            date?.takeIf { it != SymbolConstant.EMPTY }?.let { date1 ->
+                Text(
+                    text = date1,
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.onPrimary,
+                )
+                Text(
+                    SymbolConstant.MIDDLE_POINT,
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.onPrimary,
+                )
+            }
+
+            rating?.let {
+                RatingWidget(rating)
+            }
         }
 
         subtitle?.let {
@@ -138,7 +155,7 @@ fun SearchBaseCard(
                         start.linkTo(titleRef.start)
                         end.linkTo(titleRef.end)
                         width = Dimension.fillToConstraints
-                        if (!date.isNullOrEmpty()) {
+                        if (!date.isNullOrEmpty() || rating != null) {
                             top.linkTo(dateRef.bottom)
                         } else {
                             top.linkTo(titleRef.bottom, 4.dp)

@@ -48,7 +48,7 @@ val moviePreview =
         popularity = 23.372,
         releaseDate = "2001-11-16",
         video = false,
-        voteAverage = 7.898,
+        voteAverage = 7.898f,
         voteCount = 29255,
     )
 val seriesPreview =
@@ -86,7 +86,7 @@ val seriesPreview =
             ),
         popularity = 20.6261,
         firstAirDate = "2023-12-19",
-        voteAverage = 7.3,
+        voteAverage = 7.3f,
         voteCount = 727,
         originCountry = listOf("US"),
     )

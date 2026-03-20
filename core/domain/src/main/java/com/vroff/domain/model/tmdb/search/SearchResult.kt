@@ -22,7 +22,7 @@ data class SearchResult(
     val genres: List<Genre>,
     val popularity: Double,
     val firstAirDate: String = "",
-    val voteAverage: Double = 0.0,
+    val voteAverage: Float = 0.0f,
     val voteCount: Long = 0,
     val originCountry: List<String>,
     val gender: Gender = Gender.NOT_SET,

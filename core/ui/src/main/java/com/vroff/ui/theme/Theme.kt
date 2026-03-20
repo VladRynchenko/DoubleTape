@@ -18,6 +18,7 @@ private val DarkColorScheme =
         tertiary = Pink80,
         surface = Jet,
         onPrimary = VanillaCream,
+        onSecondary = LightBrown,
         background = Color(0xFF141218),
     )
 
@@ -28,15 +29,16 @@ private val LightColorScheme =
         tertiary = Pink40,
         surface = Paper,
         onPrimary = Asphalt,
+        onSecondary = LightBrown,
         background = Color(0xFFFFFFFF),
-    /* Other default colors to override
-    background = Color(0xFFFFFBFE),
-    onPrimary = Color.White,
-    onSecondary = Color.White,
-    onTertiary = Color.White,
-    onBackground = Color(0xFF1C1B1F),
-    onSurface = Color(0xFF1C1B1F),
-     */
+        /* Other default colors to override
+        background = Color(0xFFFFFBFE),
+        onPrimary = Color.White,
+        onSecondary = Color.White,
+        onTertiary = Color.White,
+        onBackground = Color(0xFF1C1B1F),
+        onSurface = Color(0xFF1C1B1F),
+         */
     )
 
 @Composable

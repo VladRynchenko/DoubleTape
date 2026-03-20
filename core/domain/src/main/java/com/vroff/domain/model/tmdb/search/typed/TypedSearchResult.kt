@@ -31,7 +31,7 @@ data class MovieSearchResult(
     override val popularity: Double,
     val releaseDate: String,
     val video: Boolean,
-    val voteAverage: Double,
+    val voteAverage: Float,
     val voteCount: Long,
     override val mediaType: MediaType = MediaType.MOVIE,
 ) : TypedSearchResult(adult, title, id, posterImage, popularity, mediaType)
@@ -61,7 +61,7 @@ data class SeriesSearchResult(
     val genres: List<Genre>,
     override val popularity: Double,
     val firstAirDate: String,
-    val voteAverage: Double,
+    val voteAverage: Float,
     val voteCount: Long,
     val originCountry: List<String>,
     override val mediaType: MediaType = MediaType.SERIES,

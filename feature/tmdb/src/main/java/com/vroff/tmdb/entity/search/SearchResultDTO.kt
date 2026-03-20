@@ -31,7 +31,7 @@ data class SearchResultDTO(
     @SerializedName("first_air_date")
     val firstAirDate: String?,
     @SerializedName("vote_average")
-    val voteAverage: Double?,
+    val voteAverage: Float?,
     @SerializedName("vote_count")
     val voteCount: Long?,
     @SerializedName("origin_country")
@@ -65,7 +65,7 @@ data class SearchResultDTO(
             genres = genreMapper(genreIds, mediaType),
             popularity = popularity,
             firstAirDate = firstAirDate.orEmpty(),
-            voteAverage = voteAverage ?: 0.0,
+            voteAverage = voteAverage ?: 0.0f,
             voteCount = voteCount ?: 0,
             originCountry = originCountry.orEmpty(),
             gender = Gender.entries[gender],
