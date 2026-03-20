@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="header_details">Details</string>
+    <string name="header_streaming_availability">Where to Watch</string>
+    <string name="header_overview">Overview</string>
+    <string name="label_rating">Rating</string>
+    <string name="label_release_date">Release Date</string>
+    <string name="label_genre">Genre</string>
+    <string name="label_runtime">Runtime</string>
+    <string name="label_status">Status</string>
+    <string name="label_cast">Top Cast</string>
+    <string name="label_creators">Created by</string>
+    <string name="label_directors">Directed by</string>
+    <string name="label_country">Country</string>
+    <string name="label_language">Language</string>
+    <string name="label_authors">Authors</string>
+    <string name="label_original_title">Original Title</string>
+    <string name="label_budget">Budget</string>
+    <string name="label_revenue">Box Office</string>
+    <string name="label_origin_run">Original Run</string>
+    <string name="label_first_air_date">First Air Date</string>
+</resources>

@@ -6,7 +6,7 @@ import com.vroff.domain.model.tmdb.series.Season
 
 data class SeasonDTO(
     @SerializedName("air_date")
-    val airDate: String,
+    val airDate: String?,
     @SerializedName("episode_count")
     val episodeCount: Int,
     val id: Int,

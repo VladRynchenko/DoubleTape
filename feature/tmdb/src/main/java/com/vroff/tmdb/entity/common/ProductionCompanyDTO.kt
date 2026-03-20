@@ -1,6 +1,7 @@
 package com.vroff.tmdb.entity.common
 
 import com.google.gson.annotations.SerializedName
+import com.vroff.domain.model.LogoImage
 import com.vroff.domain.model.tmdb.common.ProductionCompany
 
 data class ProductionCompanyDTO(
@@ -14,7 +15,7 @@ data class ProductionCompanyDTO(
     fun mapToDomain(): ProductionCompany =
         ProductionCompany(
             id = id,
-            logoImage = logoPath,
+            logoImage = logoPath?.let { LogoImage(it) },
             name = name,
             originCountry = originCountry,
         )

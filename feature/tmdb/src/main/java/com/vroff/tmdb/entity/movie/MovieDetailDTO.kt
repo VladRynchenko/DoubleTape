@@ -18,15 +18,15 @@ data class MovieDetailDTO(
     val budget: Long,
     val genres: List<Genre>,
     val homepage: String,
-    val id: Long,
+    val id: Int,
     @SerializedName("imdb_id")
-    val imdbId: String,
+    val imdbId: String?,
     @SerializedName("original_language")
     val originalLanguage: String,
     @SerializedName("original_title")
     val originalTitle: String,
     val overview: String,
-    val popularity: Double,
+    val popularity: Float,
     @SerializedName("poster_path")
     val posterPath: String?,
     @SerializedName("production_companies")
@@ -36,7 +36,7 @@ data class MovieDetailDTO(
     @SerializedName("release_date")
     val releaseDate: String,
     val revenue: Long,
-    val runtime: Long,
+    val runtime: Int,
     @SerializedName("spoken_languages")
     val spokenLanguages: List<SpokenLanguageDTO>,
     val status: String,
@@ -44,9 +44,9 @@ data class MovieDetailDTO(
     val title: String,
     val video: Boolean,
     @SerializedName("vote_average")
-    val voteAverage: Double,
+    val voteAverage: Float,
     @SerializedName("vote_count")
-    val voteCount: Long,
+    val voteCount: Int,
     @SerializedName("credits")
     val credits: CreditsDTO?,
 ) {
@@ -76,6 +76,6 @@ data class MovieDetailDTO(
             video = video,
             voteAverage = voteAverage,
             voteCount = voteCount,
-            credits = credits?.mapToDomainLight(),
+            credits = credits?.mapToDomain(),
         )
 }

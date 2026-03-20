@@ -23,7 +23,7 @@ import com.vroff.domain.model.tmdb.search.typed.MovieSearchResult
 import com.vroff.domain.model.tmdb.search.typed.PersonSearchResult
 import com.vroff.domain.model.tmdb.search.typed.SeriesSearchResult
 import com.vroff.domain.model.tmdb.search.typed.TypedSearchResult
-import com.vroff.ui.formatDate
+import com.vroff.ui.ShowFormatter.formatRealiseDate
 import com.vroff.ui.preview.SearchItemPreviewProvider
 
 @Preview
@@ -47,7 +47,7 @@ fun SearchItem(
                 image = item.image,
                 title = item.name,
                 subtitle = item.genres.joinToString(", ") { it.name },
-                date = formatDate(item.firstAirDate),
+                date = formatRealiseDate(item.firstAirDate),
                 modifier = modifier,
                 onClick = { onItemClick(item.id, MediaType.SERIES) },
             )
@@ -57,7 +57,7 @@ fun SearchItem(
                 image = item.image,
                 title = item.title,
                 subtitle = item.genres.joinToString(", ") { it.name },
-                date = formatDate(item.releaseDate),
+                date = formatRealiseDate(item.releaseDate),
                 modifier = modifier,
                 onClick = { onItemClick(item.id, MediaType.MOVIE) },
             )
@@ -93,7 +93,6 @@ fun SearchBaseCard(
                     .clip(RoundedCornerShape(14.dp))
                     .size(120.dp, 160.dp)
                     .background(MaterialTheme.colorScheme.onSurface)
-                    .clip(RoundedCornerShape(14.dp))
                     .constrainAs(poster) {
                         top.linkTo(parent.top)
                         bottom.linkTo(parent.bottom)

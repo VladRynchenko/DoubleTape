@@ -61,11 +61,12 @@ fun SearchScreen(
             else ->
                 SearchScreenState.Success
         }
-    SearchContent(screenState, pagingFlow, padding, onItemClick)
+    SearchContent(searchQuery, screenState, pagingFlow, padding, onItemClick)
 }
 
 @Composable
 fun SearchContent(
+    searchQuery: String,
     screenState: SearchScreenState,
     pagingFlow: LazyPagingItems<TypedSearchResult>,
     paddings: PaddingValues,
@@ -102,7 +103,7 @@ fun SearchContent(
 
             is SearchScreenState.Success -> {
                 val listState = rememberLazyListState()
-                LaunchedEffect(pagingFlow.itemCount) {
+                LaunchedEffect(searchQuery) {
                     listState.scrollToItem(0)
                 }
                 LazyColumn(

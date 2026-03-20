@@ -3,7 +3,7 @@ package com.vroff.domain.model.tmdb.series
 import com.vroff.domain.model.PosterImage
 
 data class Season(
-    val airDate: String,
+    val airDate: String?,
     val episodeCount: Int,
     val id: Int,
     val name: String,

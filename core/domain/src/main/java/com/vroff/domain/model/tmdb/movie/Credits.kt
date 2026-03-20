@@ -9,4 +9,11 @@ data class Credits(
 ) : BaseCredits(
         cast = cast,
         crew = crew,
-    )
+    ) {
+    fun getKeyCreators(): List<String> =
+        crew
+            .filter { member ->
+                member.job in listOf("Director", "Writer", "Screenplay", "Original Story")
+            }.map { it.name }
+            .distinct()
+}

@@ -4,8 +4,8 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -19,8 +19,14 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.drawBehind
+import androidx.compose.ui.geometry.CornerRadius
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.geometry.Size
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
@@ -91,21 +97,39 @@ fun CastBaseItem(
     episodesCount: Int? = null,
     onClick: () -> Unit,
 ) {
+    val surfaceColor = MaterialTheme.colorScheme.surface
+    val density = LocalDensity.current
+    val cornerRadius = with(density) { 12.dp.toPx() }
+    val imageHeight = 160.dp
+
     Card(
         onClick = onClick,
-        modifier = modifier.width(120.dp),
+        modifier =
+            modifier
+                .width(120.dp)
+                .drawBehind {
+                    val imageHeightPx = (imageHeight / 2).toPx()
+                    drawRoundRect(
+                        color = surfaceColor,
+                        topLeft = Offset(0f, imageHeightPx),
+                        size = Size(size.width, size.height - imageHeightPx),
+                        cornerRadius = CornerRadius(cornerRadius, cornerRadius),
+                    )
+                },
         colors =
             CardDefaults.cardColors().copy(
-                containerColor = MaterialTheme.colorScheme.surface,
+                containerColor = Color.Transparent,
             ),
     ) {
+        val containerHeight = if (episodesCount != null) 68.dp else 48.dp
+
         AsyncImage(
             model = image,
             contentDescription = null,
             contentScale = ContentScale.Crop,
             modifier =
                 Modifier
-                    .clip(RoundedCornerShape(12.dp))
+                    .clip(RoundedCornerShape(14.dp))
                     .size(120.dp, 160.dp)
                     .background(MaterialTheme.colorScheme.onSurface)
                     .clip(RoundedCornerShape(14.dp)),
@@ -114,7 +138,7 @@ fun CastBaseItem(
             modifier =
                 Modifier
                     .padding(8.dp)
-                    .defaultMinSize(minHeight = 58.dp),
+                    .height(containerHeight),
         ) {
             Text(
                 text = name,
@@ -133,7 +157,7 @@ fun CastBaseItem(
             )
             episodesCount?.let {
                 Text(
-                    text = stringResource(R.string.episodes, it),
+                    text = pluralStringResource(R.plurals.count_episodes, it, it),
                     style = MaterialTheme.typography.bodySmall,
                     modifier = Modifier.fillMaxWidth(),
                 )

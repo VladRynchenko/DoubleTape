@@ -1,6 +1,19 @@
 <resources>
-    <string name="hours_duration">%dh %02dm</string>
-    <string name="seasons_and_episodes">%ds %de</string>
-    <string name="season">Season %1$s</string>
-    <string name="episodes">%1$d episodes</string>
+
+    <string name="hours_duration">%1$dh</string>
+    <string name="minutes_duration">%1$dm</string>
+    <string name="minutes_duration_padded">%1$02dm</string>
+
+    <plurals name="count_seasons">
+        <item quantity="one">%d Season</item>
+        <item quantity="other">%d Seasons</item>
+    </plurals>
+
+    <plurals name="count_episodes">
+        <item quantity="one">%d Episode</item>
+        <item quantity="other">%d Episodes</item>
+    </plurals>
+
+    <string name="collapse_text">Read Less</string>
+    <string name="expand_text">Read More</string>
 </resources>

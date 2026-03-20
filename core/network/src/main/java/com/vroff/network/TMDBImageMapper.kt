@@ -15,6 +15,7 @@ class TMDBImageMapper(
         options: Options,
     ): String? {
         val config = config ?: return null
+
         val widthPx = options.size.width.pxOrElse { 1080 }
 
         val bestSize =

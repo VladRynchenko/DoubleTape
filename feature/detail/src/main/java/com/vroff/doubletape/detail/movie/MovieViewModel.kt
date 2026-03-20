@@ -29,7 +29,7 @@ class MovieViewModel
                     when (val result = getShowByIdUseCase.execute(id, type)) {
                         is NetworkResult.Success -> ScreenState.Success(data = result.data)
                         is NetworkResult.Error -> ScreenState.Error(result.message)
-                        is NetworkResult.Exception -> ScreenState.Error(result.e.message)
+                        is NetworkResult.Exception -> ScreenState.Error("${type.type}/$id/ln${result.e.message}")
                     }
                 }.stateIn(
                     viewModelScope,

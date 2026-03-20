@@ -13,6 +13,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.buildAnnotatedString
@@ -20,14 +21,15 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
+import com.vroff.ui.R
 
 @Composable
 fun ExpandableText(
     text: String,
     modifier: Modifier = Modifier,
-    minLines: Int = 3,
-    expandText: String = "Читать дальше...",
-    collapseText: String = "Свернуть",
+    minLines: Int,
+    expandText: String? = null,
+    collapseText: String? = null,
     textStyle: TextStyle = MaterialTheme.typography.bodyMedium,
     expandCollapseTextStyle: SpanStyle =
         SpanStyle(
@@ -35,6 +37,9 @@ fun ExpandableText(
         ),
 ) {
     var expanded by remember { mutableStateOf(false) }
+
+    val expandText = expandText ?: stringResource(R.string.expand_text)
+    val collapseText = collapseText ?: stringResource(R.string.collapse_text)
 
     Column(modifier = modifier) {
         Text(
@@ -56,7 +61,7 @@ fun ExpandableText(
             Text(
                 text =
                     buildAnnotatedString {
-                        append("... ")
+                        append("...")
                         withStyle(expandCollapseTextStyle) {
                             append(expandText)
                         }
