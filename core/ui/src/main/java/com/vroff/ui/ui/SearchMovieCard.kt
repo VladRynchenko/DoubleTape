@@ -19,13 +19,13 @@ import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
 import coil3.compose.AsyncImage
 import com.vroff.domain.model.Image
+import com.vroff.domain.model.constants.SymbolConstant
 import com.vroff.domain.model.tmdb.search.MediaType
 import com.vroff.domain.model.tmdb.search.typed.MovieSearchResult
 import com.vroff.domain.model.tmdb.search.typed.PersonSearchResult
 import com.vroff.domain.model.tmdb.search.typed.SeriesSearchResult
 import com.vroff.domain.model.tmdb.search.typed.TypedSearchResult
 import com.vroff.ui.ShowFormatter.formatRealiseDate
-import com.vroff.ui.SymbolConstant
 import com.vroff.ui.preview.SearchItemPreviewProvider
 
 @Preview

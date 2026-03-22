@@ -1,4 +1,4 @@
-package com.vroff.ui
+package com.vroff.domain.model.constants
 
 object SymbolConstant {
     const val TBA = "TBA"
@@ -6,4 +6,5 @@ object SymbolConstant {
     const val EMPTY = ""
     const val HYPHEN = "–"
     const val COMMA_SPACE = ", "
+    const val COMMA = ","
 }

@@ -18,15 +18,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.SpanStyle
-import androidx.compose.ui.text.buildAnnotatedString
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil3.compose.AsyncImage
 import com.vroff.domain.model.PosterImage
+import com.vroff.domain.model.constants.FormatConstant
+import com.vroff.domain.model.constants.SymbolConstant
 import com.vroff.domain.model.tmdb.common.BaseDetails
 import com.vroff.domain.model.tmdb.common.CastBase
 import com.vroff.domain.model.tmdb.common.Genre
@@ -36,19 +34,19 @@ import com.vroff.domain.model.tmdb.search.MediaType
 import com.vroff.domain.model.tmdb.series.Season
 import com.vroff.domain.model.tmdb.series.SeriesDetail
 import com.vroff.doubletape.detail.R
-import com.vroff.ui.FormatConstant
 import com.vroff.ui.ShowFormatter.formatCurrency
 import com.vroff.ui.ShowFormatter.formatOriginRun
 import com.vroff.ui.ShowFormatter.formatRealiseDate
 import com.vroff.ui.ShowFormatter.formatRuntime
 import com.vroff.ui.ShowFormatter.formatSeasonsAndSeries
 import com.vroff.ui.ShowFormatter.joinWithComma
-import com.vroff.ui.SymbolConstant
+import com.vroff.ui.model.BaseScreenState
+import com.vroff.ui.ui.AnnotatedMetadata
 import com.vroff.ui.ui.ErrorScreen
-import com.vroff.ui.ui.ExpandableText
 import com.vroff.ui.ui.LoadingScreen
 import com.vroff.ui.ui.SearchBaseCard
 import com.vroff.ui.ui.detail.CastWidget
+import com.vroff.ui.ui.section.OverviewSection
 import com.vroff.ui.ui.toRequest
 import java.util.Locale
 import kotlin.math.roundToInt
@@ -58,30 +56,32 @@ fun MovieScreen(
     tmdbId: Int,
     type: MediaType,
     padding: PaddingValues,
+    onCastItemClick: (Int) -> Unit,
 ) {
     val movieViewModel = hiltViewModel<MovieViewModel>()
     movieViewModel.setTMDBId(tmdbId, type)
     val state = movieViewModel.showState.collectAsStateWithLifecycle()
-    ShowDetailsContent(state.value, padding, Modifier.padding(horizontal = 12.dp))
+    ShowDetailsContent(state.value, padding, onCastItemClick, Modifier.padding(horizontal = 12.dp))
 }
 
 @Composable
 private fun ShowDetailsContent(
-    state: MovieViewModel.ScreenState,
+    state: BaseScreenState<BaseDetails>,
     padding: PaddingValues,
+    onCastItemClick: (Int) -> Unit,
     modifier: Modifier,
 ) {
     when (state) {
-        MovieViewModel.ScreenState.Loading -> {
+        is BaseScreenState.Loading -> {
             LoadingScreen()
         }
 
-        is MovieViewModel.ScreenState.Error -> {
+        is BaseScreenState.Error -> {
             ErrorScreen(errorText = state.e.toString())
         }
 
-        is MovieViewModel.ScreenState.Success -> {
-            DetailsScreen(state.data, padding, modifier)
+        is BaseScreenState.Success -> {
+            DetailsScreen(state.data, padding, onCastItemClick, modifier)
         }
     }
 }
@@ -90,6 +90,7 @@ private fun ShowDetailsContent(
 fun DetailsScreen(
     show: BaseDetails,
     padding: PaddingValues,
+    onCastItemClick: (Int) -> Unit,
     modifier: Modifier,
 ) {
     val scrollState = rememberScrollState()
@@ -104,13 +105,13 @@ fun DetailsScreen(
         TitleWidget(show.title, modifier.padding(vertical = 12.dp))
         MetadataSection(show, modifier)
         show.credits?.cast?.takeIf { it.isNotEmpty() }?.let {
-            CastSection(modifier, it)
+            CastSection(modifier, it, onCastItemClick = onCastItemClick)
         }
         SecondaryMetadataSection(modifier, show)
         show.seasons?.let {
             SeasonsSection(modifier, it)
         }
-        OverviewSection(modifier, overview = show.overview)
+        OverviewSection(modifier, header = stringResource(R.string.header_overview), overview = show.overview)
         Spacer(
             Modifier
                 .height(padding.calculateBottomPadding())
@@ -298,54 +299,24 @@ fun BaseMetadata(
 }
 
 @Composable
-fun AnnotatedMetadata(
-    label: String,
-    value: String?,
-    modifier: Modifier = Modifier,
-) {
-    val annotatedString =
-        buildAnnotatedString {
-            withStyle(style = SpanStyle(fontWeight = FontWeight.Bold)) { append("$label: ") }
-            append(value ?: SymbolConstant.HYPHEN)
-        }
-    Text(text = annotatedString, style = MaterialTheme.typography.bodyLarge, modifier = modifier.fillMaxWidth())
-}
-
-@Composable
 fun CastSection(
     modifier: Modifier = Modifier,
     castList: List<CastBase> = listOf(),
     contentPadding: PaddingValues = PaddingValues(12.dp),
+    onCastItemClick: (Int) -> Unit,
 ) {
     Column {
         Text(
-            stringResource(R.string.label_cast),
+            stringResource(R.string.header_cast),
             style = MaterialTheme.typography.titleLarge,
             modifier = modifier,
         )
         CastWidget(
             cast = castList,
             contentPadding = contentPadding,
+            onItemClick = onCastItemClick,
         )
     }
-}
-
-@Composable
-fun OverviewSection(
-    modifier: Modifier = Modifier,
-    header: String = stringResource(R.string.header_overview),
-    overview: String,
-) {
-    Text(
-        header,
-        style = MaterialTheme.typography.titleLarge,
-        modifier = modifier,
-    )
-    ExpandableText(
-        overview,
-        minLines = 4,
-        modifier = modifier,
-    )
 }
 
 @Composable

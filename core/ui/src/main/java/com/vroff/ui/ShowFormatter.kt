@@ -1,6 +1,8 @@
 package com.vroff.ui
 
 import android.content.Context
+import com.vroff.domain.model.constants.FormatConstant
+import com.vroff.domain.model.constants.SymbolConstant
 import java.text.NumberFormat
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
@@ -47,8 +49,20 @@ object ShowFormatter {
         format: String = FormatConstant.FORMAT_DD_MM_YYYY,
     ): String =
         try {
-            if (input == null) return SymbolConstant.TBA
-            if (input.isBlank()) return SymbolConstant.EMPTY
+            if (input == null) return SymbolConstant.HYPHEN
+            if (input.isEmpty()) return SymbolConstant.EMPTY
+            val parsedDate = LocalDate.parse(input, DateTimeFormatter.ISO_DATE)
+            parsedDate.format(DateTimeFormatter.ofPattern(format))
+        } catch (e: Exception) {
+            SymbolConstant.EMPTY
+        }
+
+    fun formatDate(
+        input: String?,
+        format: String = FormatConstant.FORMAT_DD_MM_YYYY,
+    ): String =
+        try {
+            if (input.isNullOrBlank()) return SymbolConstant.HYPHEN
             val parsedDate = LocalDate.parse(input, DateTimeFormatter.ISO_DATE)
             parsedDate.format(DateTimeFormatter.ofPattern(format))
         } catch (e: Exception) {

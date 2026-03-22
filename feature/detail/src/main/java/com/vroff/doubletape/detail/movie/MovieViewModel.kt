@@ -4,8 +4,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.vroff.data.usecase.GetShowByIdUseCase
 import com.vroff.domain.model.NetworkResult
-import com.vroff.domain.model.tmdb.common.BaseDetails
 import com.vroff.domain.model.tmdb.search.MediaType
+import com.vroff.ui.model.BaseScreenState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -27,14 +27,14 @@ class MovieViewModel
                 .filter { it.first != -1 }
                 .map { (id, type) ->
                     when (val result = getShowByIdUseCase.execute(id, type)) {
-                        is NetworkResult.Success -> ScreenState.Success(data = result.data)
-                        is NetworkResult.Error -> ScreenState.Error(result.message)
-                        is NetworkResult.Exception -> ScreenState.Error("${type.type}/$id/ln${result.e.message}")
+                        is NetworkResult.Success -> BaseScreenState.Success(data = result.data)
+                        is NetworkResult.Error -> BaseScreenState.Error(result.message)
+                        is NetworkResult.Exception -> BaseScreenState.Error("${type.type}/$id/ln${result.e.message}")
                     }
                 }.stateIn(
                     viewModelScope,
                     SharingStarted.Lazily,
-                    ScreenState.Loading,
+                    BaseScreenState.Loading,
                 )
 
         fun setTMDBId(
@@ -42,17 +42,5 @@ class MovieViewModel
             type: MediaType,
         ) {
             tmdbIdStateFlow.tryEmit(id to type)
-        }
-
-        sealed class ScreenState {
-            data class Success(
-                val data: BaseDetails,
-            ) : ScreenState()
-
-            data class Error(
-                val e: String?,
-            ) : ScreenState()
-
-            data object Loading : ScreenState()
         }
     }

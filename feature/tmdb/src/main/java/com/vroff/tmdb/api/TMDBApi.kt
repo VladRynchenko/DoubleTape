@@ -5,6 +5,7 @@ import com.vroff.tmdb.Endpoint
 import com.vroff.tmdb.entity.Configuration
 import com.vroff.tmdb.entity.PagerResponse
 import com.vroff.tmdb.entity.movie.MovieDetailDTO
+import com.vroff.tmdb.entity.profile.ProfileDetailDTO
 import com.vroff.tmdb.entity.search.GenresDTO
 import com.vroff.tmdb.entity.search.SearchResultDTO
 import com.vroff.tmdb.entity.series.SeriesDetailDTO
@@ -26,14 +27,14 @@ interface TMDBApi {
     suspend fun getMovieDetails(
         @Path("movie_id") movieId: Int,
         @Query("language") language: String,
-        @Query("append_to_response") appendToResponse: String,
+        @Query("append_to_response") appendToResponse: String?,
     ): NetworkResult<MovieDetailDTO>
 
     @GET(Endpoint.SERIES_DETAILS)
     suspend fun getSerialDetails(
         @Path("series_id") seriesId: Int,
         @Query("language") language: String,
-        @Query("append_to_response") appendToResponse: String,
+        @Query("append_to_response") appendToResponse: String?,
     ): NetworkResult<SeriesDetailDTO>
 
     @GET(Endpoint.MULTI_SEARCH)
@@ -41,7 +42,14 @@ interface TMDBApi {
         @Query("query") query: String,
         @Query("page") page: Int,
         @Query("include_adult") includeAdult: Boolean,
-        @Query("language") language: String = "en-US",
-        @Query("region") region: String = "US",
+        @Query("language") language: String,
+        @Query("region") region: String,
     ): PagerResponse<SearchResultDTO>
+
+    @GET(Endpoint.PROFILE_DETAILS)
+    suspend fun getProfileDetail(
+        @Path("profile_id") profileId: Int,
+        @Query("language") language: String,
+        @Query("append_to_response") appendToResponse: String?,
+    ): NetworkResult<ProfileDetailDTO>
 }

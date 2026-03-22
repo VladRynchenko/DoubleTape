@@ -16,4 +16,9 @@ sealed class Graph {
         val id: Int,
         val type: MediaType,
     ) : Graph()
+
+    @Serializable
+    class Profile(
+        val id: Int,
+    ) : Graph()
 }

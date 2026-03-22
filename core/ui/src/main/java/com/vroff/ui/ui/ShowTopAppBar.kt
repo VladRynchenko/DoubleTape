@@ -1,5 +1,6 @@
 package com.vroff.ui.ui
 
+import androidx.annotation.DrawableRes
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.SizeTransform
 import androidx.compose.animation.fadeIn
@@ -14,11 +15,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.text.input.TextFieldState
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.ArrowBack
-import androidx.compose.material.icons.filled.AccountCircle
-import androidx.compose.material.icons.filled.MoreVert
-import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -37,14 +33,15 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.vroff.ui.R
 
 @Composable
 fun NavigationTopBarButton(
-    icon: ImageVector,
+    @DrawableRes icon: Int,
     onClick: () -> Unit,
 ) = IconButton(
     onClick = onClick,
@@ -55,7 +52,7 @@ fun NavigationTopBarButton(
             .background(MaterialTheme.colorScheme.surface.copy(0.9f), CircleShape),
 ) {
     Icon(
-        imageVector = icon,
+        painter = painterResource(icon),
         contentDescription = "",
         modifier = Modifier.size(32.dp),
     )
@@ -78,7 +75,7 @@ fun ShowTopAppBarTest(
     onNavigationIconClick: () -> Unit = {},
     onActionIconClick: () -> Unit = {},
     searchFinished: () -> Unit = {},
-    state: NavigationState = NavigationState.Search,
+    state: NavigationState = NavigationState.MainScreen,
 ) {
     val keyboard = LocalSoftwareKeyboardController.current
 
@@ -99,8 +96,8 @@ fun ShowTopAppBarTest(
         navigationIcon = {
             val icon =
                 when (state) {
-                    NavigationState.MainScreen -> Icons.Filled.AccountCircle
-                    else -> Icons.AutoMirrored.Filled.ArrowBack
+                    NavigationState.MainScreen -> R.drawable.person_32
+                    else -> R.drawable.keyboard_arrow_left_32
                 }
             NavigationTopBarButton(icon, onNavigationIconClick)
         },
@@ -131,14 +128,14 @@ fun ShowTopAppBarTest(
 
                         NavigationState.MainScreen -> {
                             NavigationTopBarButton(
-                                Icons.Filled.Search,
+                                R.drawable.search_32,
                                 onActionIconClick,
                             )
                         }
 
                         NavigationState.More -> {
                             NavigationTopBarButton(
-                                Icons.Default.MoreVert,
+                                R.drawable.morevert_32,
                                 onActionIconClick,
                             )
                         }

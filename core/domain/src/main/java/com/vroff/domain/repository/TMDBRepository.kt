@@ -3,6 +3,7 @@ package com.vroff.domain.repository
 import androidx.paging.PagingData
 import com.vroff.domain.model.NetworkResult
 import com.vroff.domain.model.tmdb.movie.MovieDetail
+import com.vroff.domain.model.tmdb.profile.ProfileDetail
 import com.vroff.domain.model.tmdb.search.SearchResult
 import com.vroff.domain.model.tmdb.series.SeriesDetail
 import kotlinx.coroutines.flow.Flow
@@ -11,13 +12,13 @@ interface TMDBRepository {
     suspend fun getMovieDetails(
         movieId: Int,
         language: String,
-        appendToResponse: String,
+        appendToResponse: String? = null,
     ): NetworkResult<MovieDetail>
 
     suspend fun getSeriesDetails(
         seriesId: Int,
         language: String,
-        appendToResponse: String,
+        appendToResponse: String? = null,
     ): NetworkResult<SeriesDetail>
 
     suspend fun multiSearch(
@@ -26,4 +27,10 @@ interface TMDBRepository {
         language: String,
         region: String,
     ): Flow<PagingData<SearchResult>>
+
+    suspend fun getProfile(
+        profileId: Int,
+        language: String,
+        appendToResponse: String? = null,
+    ): NetworkResult<ProfileDetail>
 }

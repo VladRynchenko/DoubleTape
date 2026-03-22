@@ -12,3 +12,10 @@ val Jet = Color(0xFF343434)
 val Asphalt = Color(0xFF302F2C)
 val VanillaCream = Color(0xFFF0E7D5)
 val LightBrown = Color(0xFF877474)
+
+// Social media colors
+val Instagram = Color(0xFFE4405F)
+val Facebook = Color(0xFF1877F2)
+val X = Color(0xFF1DA1F2)
+val Youtube = Color(0xFFFF0000)
+val Tiktok = Color(0xFF1877F2)

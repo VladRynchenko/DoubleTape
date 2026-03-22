@@ -17,7 +17,7 @@ import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.vroff.ui.FormatConstant
+import com.vroff.domain.model.constants.FormatConstant
 import com.vroff.ui.R
 import com.vroff.ui.theme.MovieDDTheme
 import java.util.Locale

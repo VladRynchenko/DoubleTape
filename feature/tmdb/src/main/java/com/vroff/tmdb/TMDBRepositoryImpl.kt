@@ -5,6 +5,7 @@ import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import com.vroff.domain.model.NetworkResult
 import com.vroff.domain.model.tmdb.movie.MovieDetail
+import com.vroff.domain.model.tmdb.profile.ProfileDetail
 import com.vroff.domain.model.tmdb.search.SearchResult
 import com.vroff.domain.model.tmdb.series.SeriesDetail
 import com.vroff.domain.repository.TMDBRepository
@@ -23,7 +24,7 @@ class TMDBRepositoryImpl
         override suspend fun getMovieDetails(
             movieId: Int,
             language: String,
-            appendToResponse: String,
+            appendToResponse: String?,
         ): NetworkResult<MovieDetail> =
             api
                 .getMovieDetails(movieId, language, appendToResponse)
@@ -32,7 +33,7 @@ class TMDBRepositoryImpl
         override suspend fun getSeriesDetails(
             seriesId: Int,
             language: String,
-            appendToResponse: String,
+            appendToResponse: String?,
         ): NetworkResult<SeriesDetail> =
             api
                 .getSerialDetails(seriesId, language, appendToResponse)
@@ -55,4 +56,18 @@ class TMDBRepositoryImpl
                     )
                 },
             ).flow
+
+        override suspend fun getProfile(
+            profileId: Int,
+            language: String,
+            appendToResponse: String?,
+        ): NetworkResult<ProfileDetail> =
+            api
+                .getProfileDetail(
+                    profileId,
+                    language,
+                    appendToResponse,
+                ).safeApiCall {
+                    it.mapToDomain()
+                }
     }

@@ -15,6 +15,13 @@ val Typography =
                 fontSize = 32.sp,
                 letterSpacing = 0.sp,
             ),
+        headlineMedium =
+            TextStyle(
+                fontFamily = AppFontFamily,
+                fontWeight = FontWeight.Bold,
+                fontSize = 32.sp,
+                letterSpacing = 0.sp,
+            ),
         titleLarge =
             TextStyle(
                 fontFamily = AppFontFamily,
