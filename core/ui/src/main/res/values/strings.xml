@@ -16,4 +16,8 @@
 
     <string name="collapse_text">Read Less</string>
     <string name="expand_text">Read More</string>
+    <string name="searchHint">Search</string>
+
+    <string name="something_went_wrong">Something went wrong</string>
+    <string name="nothing_found">Nothing found</string>
 </resources>

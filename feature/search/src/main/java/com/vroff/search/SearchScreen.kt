@@ -6,6 +6,7 @@ import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.togetherWith
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
@@ -13,13 +14,14 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.paging.LoadState
@@ -29,8 +31,11 @@ import androidx.paging.compose.itemKey
 import com.vroff.domain.model.streamingavailable.ShowState
 import com.vroff.domain.model.tmdb.search.MediaType
 import com.vroff.domain.model.tmdb.search.typed.TypedSearchResult
+import com.vroff.ui.R.string
+import com.vroff.ui.ui.ErrorScreen
 import com.vroff.ui.ui.SearchItem
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SearchScreen(
     searchQuery: String,
@@ -89,7 +94,7 @@ fun SearchContent(
                     modifier = Modifier.fillMaxSize(),
                     contentAlignment = Alignment.Center,
                 ) {
-                    Text(text = "Waiting")
+                    Text(text = "")
                 }
 
             is SearchScreenState.Empty -> {
@@ -97,7 +102,7 @@ fun SearchContent(
                     modifier = Modifier.fillMaxSize(),
                     contentAlignment = Alignment.Center,
                 ) {
-                    Text(text = "Nothing found")
+                    Text(text = stringResource(string.nothing_found))
                 }
             }
 
@@ -130,21 +135,12 @@ fun SearchContent(
             }
 
             is SearchScreenState.Error -> {
-                Box(
-                    modifier = Modifier.fillMaxSize(),
-                    contentAlignment = Alignment.Center,
-                ) {
-                    Text(state.e, color = MaterialTheme.colorScheme.error)
-                }
-            }
-
-            ShowState.Loading -> {
-                Box(
-                    modifier = Modifier.fillMaxSize(),
-                    contentAlignment = Alignment.Center,
-                ) {
-                    CircularProgressIndicator()
-                }
+                ErrorScreen(
+                    Modifier.background(
+                        color = MaterialTheme.colorScheme.secondary,
+                    ),
+                    errorText = state.e,
+                )
             }
 
             ShowState.Waiting -> {}

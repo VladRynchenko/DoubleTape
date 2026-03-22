@@ -8,7 +8,6 @@ import androidx.paging.filter
 import androidx.paging.map
 import com.vroff.data.usecase.SearchUseCase
 import com.vroff.domain.model.tmdb.search.typed.TypedSearchResult
-import com.vroff.domain.repository.ConfigManager
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
@@ -21,7 +20,6 @@ import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.mapNotNull
 import kotlinx.coroutines.flow.update
-import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @OptIn(FlowPreview::class, ExperimentalCoroutinesApi::class)
@@ -30,14 +28,7 @@ class SearchViewModel
     @Inject
     constructor(
         private val searchUseCase: SearchUseCase,
-        private val configurationManager: ConfigManager,
     ) : ViewModel() {
-        init {
-            viewModelScope.launch {
-                println("Config: ${configurationManager.config}")
-            }
-        }
-
         private val _searchQuery = MutableStateFlow("")
         val searchQuery = _searchQuery.asStateFlow()
 
