@@ -126,7 +126,7 @@ fun ShowTopAppBar(
                         },
                         trailingIcon = {
                             NavigationTopBarButton(
-                                modifier = Modifier.padding(end = 8.dp),
+                                modifier = Modifier.padding(start = 8.dp),
                                 icon = R.drawable.close_32,
                             ) {
                                 query.clearText()

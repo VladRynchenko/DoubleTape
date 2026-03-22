@@ -91,11 +91,10 @@ fun ProfileDetailsScreen(
             HeadSection(profileDetail, Modifier)
         }
 
-        profileDetail.takeIf { it.biography.isNotEmpty() }?.let {
-            item {
-                OverviewSection(Modifier, stringResource(R.string.header_biography), profileDetail.biography)
-            }
+        item {
+            OverviewSection(Modifier, stringResource(R.string.header_biography), profileDetail.biography)
         }
+
 
         profileDetail.combinedCredits?.let { credits ->
             item {

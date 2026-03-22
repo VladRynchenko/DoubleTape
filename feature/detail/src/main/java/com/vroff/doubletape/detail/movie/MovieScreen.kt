@@ -103,7 +103,7 @@ fun DetailsScreen(
     ) {
         PosterImageWidget(show.posterImage)
         TitleWidget(show.title, modifier.padding(vertical = 12.dp))
-        MetadataSection(show, modifier)
+        MetadataSection(modifier, show)
         show.credits?.cast?.takeIf { it.isNotEmpty() }?.let {
             CastSection(modifier, it, onCastItemClick = onCastItemClick)
         }
@@ -209,8 +209,8 @@ fun SecondaryMetadataSection(
 
 @Composable
 fun MetadataSection(
-    show: BaseDetails,
     modifier: Modifier,
+    show: BaseDetails,
 ) {
     val context = LocalContext.current
     when (show) {
@@ -230,8 +230,8 @@ fun MetadataSection(
                             .takeIf { !it.isNaN() }
                             ?.roundToInt(),
                     ),
-                firstAirDate = formatRealiseDate(show.firstAirDate),
-                lastAirDate = show.lastAirDate?.let { formatRealiseDate(it) },
+                firstAirDate = show.firstAirDate,
+                lastAirDate = show.lastAirDate,
                 inProduction = show.inProduction,
             )
         }
@@ -255,7 +255,7 @@ fun BaseMetadata(
     rating: Float,
     genre: List<Genre> = listOf(),
     status: String,
-    runtime: String,
+    runtime: String?,
     releaseDate: String? = null,
     firstAirDate: String? = null,
     lastAirDate: String? = null,
@@ -279,10 +279,10 @@ fun BaseMetadata(
 
         inProduction?.let { inProduction ->
             if (inProduction) {
-                firstAirDate?.takeIf { it.isNotBlank() }?.let {
+                firstAirDate?.takeIf { it.isNotEmpty() }?.let {
                     AnnotatedMetadata(
                         stringResource(R.string.label_first_air_date),
-                        formatRealiseDate(it),
+                        formatRealiseDate(it, FormatConstant.FORMAT_YEAR),
                     )
                 }
             } else {
@@ -293,7 +293,9 @@ fun BaseMetadata(
             }
         }
 
-        AnnotatedMetadata(stringResource(R.string.label_runtime), runtime)
+        runtime?.let {
+            AnnotatedMetadata(stringResource(R.string.label_runtime), it)
+        }
         AnnotatedMetadata(stringResource(R.string.label_status), status)
     }
 }

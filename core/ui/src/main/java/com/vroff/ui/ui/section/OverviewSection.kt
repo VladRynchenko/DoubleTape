@@ -8,16 +8,18 @@ import com.vroff.ui.ui.ExpandableText
 fun OverviewSection(
     modifier: Modifier = Modifier,
     header: String,
-    overview: String,
+    overview: String?,
 ) {
-    BaseSection(
-        modifier,
-        header = header,
-        content = {
-            ExpandableText(
-                overview,
-                minLines = 4,
-            )
-        },
-    )
+    overview?.takeIf { overview.isNotEmpty() }?.let {
+        BaseSection(
+            modifier,
+            header = header,
+            content = {
+                ExpandableText(
+                    it,
+                    minLines = 4,
+                )
+            },
+        )
+    }
 }

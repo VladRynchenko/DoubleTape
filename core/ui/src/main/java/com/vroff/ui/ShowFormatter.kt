@@ -14,8 +14,8 @@ object ShowFormatter {
     fun formatRuntime(
         context: Context,
         totalMinutes: Int?,
-    ): String {
-        if (totalMinutes == null || totalMinutes <= 0) return SymbolConstant.EMPTY
+    ): String? {
+        if (totalMinutes == null || totalMinutes <= 0) return null
         val duration = totalMinutes.toDuration(DurationUnit.MINUTES)
         return duration.toComponents { _, hours, minutes, _, _ ->
 
@@ -40,7 +40,7 @@ object ShowFormatter {
         val e = episodes?.let { context.resources.getQuantityString(R.plurals.count_episodes, it, it) }
         val r = formatRuntime(context, avgRuntime)
 
-        return listOfNotNull(s, e, r.takeIf { it.isNotBlank() })
+        return listOfNotNull(s, e, r.takeIf { it.isNullOrEmpty() })
             .joinToString(" ${SymbolConstant.MIDDLE_POINT} ")
     }
 
@@ -50,7 +50,7 @@ object ShowFormatter {
     ): String =
         try {
             if (input == null) return SymbolConstant.HYPHEN
-            if (input.isEmpty()) return SymbolConstant.EMPTY
+            if (input.isEmpty()) return SymbolConstant.TBA
             val parsedDate = LocalDate.parse(input, DateTimeFormatter.ISO_DATE)
             parsedDate.format(DateTimeFormatter.ofPattern(format))
         } catch (e: Exception) {
@@ -72,9 +72,10 @@ object ShowFormatter {
     fun formatOriginRun(
         firstAirDate: String?,
         lastAirDate: String?,
+        format: String = FormatConstant.FORMAT_YEAR,
     ): String {
-        val yearFirst = firstAirDate?.let { formatRealiseDate(firstAirDate, FormatConstant.FORMAT_YEAR) }
-        val yearLast = lastAirDate?.let { formatRealiseDate(lastAirDate, FormatConstant.FORMAT_YEAR) }
+        val yearFirst = firstAirDate?.let { formatRealiseDate(firstAirDate, format) }
+        val yearLast = lastAirDate?.let { formatRealiseDate(lastAirDate, format) }
         return if (yearFirst == yearLast) {
             yearFirst.orEmpty()
         } else {

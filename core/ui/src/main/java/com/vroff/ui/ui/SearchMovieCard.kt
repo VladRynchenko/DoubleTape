@@ -12,6 +12,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
@@ -33,7 +34,7 @@ import com.vroff.ui.preview.SearchItemPreviewProvider
 fun SearchItem(
     @PreviewParameter(SearchItemPreviewProvider::class) item: TypedSearchResult,
     modifier: Modifier = Modifier,
-    onItemClick: (Int, MediaType) -> Unit = { id, type -> },
+    onItemClick: (Int, MediaType) -> Unit = { _, _ -> },
 ) {
     when (item) {
         is PersonSearchResult ->
@@ -110,6 +111,7 @@ fun SearchBaseCard(
             style = MaterialTheme.typography.titleMedium,
             color = MaterialTheme.colorScheme.onPrimary,
             maxLines = 2,
+            overflow = TextOverflow.Ellipsis,
             modifier =
                 Modifier.constrainAs(titleRef) {
                     start.linkTo(poster.end, 8.dp)
@@ -132,12 +134,14 @@ fun SearchBaseCard(
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onPrimary,
                 )
+            }
+
+            if (date != null && rating != null)
                 Text(
                     SymbolConstant.MIDDLE_POINT,
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onPrimary,
                 )
-            }
 
             rating?.let {
                 RatingWidget(rating)
