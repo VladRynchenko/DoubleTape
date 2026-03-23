@@ -136,12 +136,13 @@ fun SearchBaseCard(
                 )
             }
 
-            if (date != null && rating != null)
+            if (date != null && rating != null) {
                 Text(
                     SymbolConstant.MIDDLE_POINT,
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onPrimary,
                 )
+            }
 
             rating?.let {
                 RatingWidget(rating)

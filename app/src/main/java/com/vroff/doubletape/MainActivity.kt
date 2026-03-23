@@ -81,7 +81,7 @@ class MainActivity : ComponentActivity() {
 
                     NavHost(
                         navController = navController,
-                        startDestination = Graph.Search,
+                        startDestination = Graph.Main,
                     ) {
                         composable<Graph.Main> {
                             WelcomeScreen()
@@ -89,7 +89,7 @@ class MainActivity : ComponentActivity() {
 
                         composable<Graph.Search> {
                             SearchScreen(
-                                searchQuery = query.text.toString(),
+                                searchQuery = query,
                                 padding = innerPadding,
                                 onItemClick = { id, type ->
                                     if (type.isShow) {

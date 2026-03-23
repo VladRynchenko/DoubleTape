@@ -95,7 +95,6 @@ fun ProfileDetailsScreen(
             OverviewSection(Modifier, stringResource(R.string.header_biography), profileDetail.biography)
         }
 
-
         profileDetail.combinedCredits?.let { credits ->
             item {
                 Text(

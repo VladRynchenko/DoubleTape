@@ -1,4 +1,4 @@
-package com.vroff.data.usecase
+package com.vroff.data.usecase.search
 
 import androidx.paging.PagingData
 import com.vroff.domain.model.tmdb.search.SearchResult

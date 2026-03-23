@@ -9,6 +9,10 @@ plugins {
     alias(libs.plugins.kotlin.serialization)
 }
 
+ksp {
+    arg("room.schemaLocation", "$projectDir/schemas")
+}
+
 android {
     namespace = "com.vroff.doubletape.storage"
     compileSdk = BuildConfigs.COMPILE_SDK
@@ -60,6 +64,10 @@ dependencies {
 
     // Data Store
     implementation(libs.androidx.datastore.preferences)
+
+    implementation(libs.androidx.room.runtime)
+    implementation(libs.androidx.room.ktx)
+    ksp(libs.androidx.room.compiler)
 
     implementation(libs.kotlinx.serialization.core)
     implementation(libs.kotlinx.serialization.json)

@@ -28,8 +28,11 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberSearchBarState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.painterResource
@@ -80,6 +83,7 @@ fun ShowTopAppBar(
 ) {
     MovieDDTheme {
         val keyboard = LocalSoftwareKeyboardController.current
+        val focusRequester = remember { FocusRequester() }
 
         LaunchedEffect(state) {
             if (state != TopBarState.Search) {
@@ -96,6 +100,9 @@ fun ShowTopAppBar(
             when (state) {
                 TopBarState.Search -> {
                     val searchBarState = rememberSearchBarState()
+                    LaunchedEffect(query.text.isEmpty()) {
+                        focusRequester.requestFocus()
+                    }
                     SearchBarDefaults.InputField(
                         textFieldState = query,
                         onSearch = searchFinished,
@@ -115,7 +122,8 @@ fun ShowTopAppBar(
                                 .padding(12.dp)
                                 .statusBarsPadding()
                                 .height(64.dp)
-                                .fillMaxWidth(),
+                                .fillMaxWidth()
+                                .focusRequester(focusRequester),
                         leadingIcon = {
                             NavigationTopBarButton(
                                 modifier = Modifier.padding(end = 8.dp),

@@ -18,7 +18,7 @@ data class ProfileDetailDTO(
     @SerializedName("imdb_id")
     val imdbId: String?,
     @SerializedName("known_for_department")
-    val knownForDepartment: String,
+    val knownForDepartment: String?,
     val name: String,
     @SerializedName("place_of_birth")
     val placeOfBirth: String?,

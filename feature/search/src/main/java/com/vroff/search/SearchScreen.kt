@@ -7,50 +7,57 @@ import androidx.compose.animation.fadeOut
 import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.foundation.text.input.TextFieldState
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.paging.LoadState
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
-import androidx.paging.compose.itemKey
 import com.vroff.domain.model.streamingavailable.ShowState
 import com.vroff.domain.model.tmdb.search.MediaType
 import com.vroff.domain.model.tmdb.search.typed.TypedSearchResult
 import com.vroff.ui.R.string
 import com.vroff.ui.ui.ErrorScreen
+import com.vroff.ui.ui.RecentSearchesItem
 import com.vroff.ui.ui.SearchItem
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SearchScreen(
-    searchQuery: String,
+    searchQuery: TextFieldState,
     padding: PaddingValues,
     onItemClick: (Int, MediaType) -> Unit,
 ) {
     val viewModel: SearchViewModel = hiltViewModel()
     val pagingFlow = viewModel.pagingFlow.collectAsLazyPagingItems()
-    LaunchedEffect(searchQuery) {
-        viewModel.setSearchQuery(searchQuery)
+    LaunchedEffect(searchQuery.text) {
+        viewModel.setSearchQuery(searchQuery.text.toString())
     }
     val screenState =
         when {
-            searchQuery.length < 2 ->
-                SearchScreenState.Waiting
+            searchQuery.text.length < 2 ->
+                SearchScreenState.Waiting(viewModel.recentSearches.collectAsState().value)
 
             pagingFlow.loadState.refresh is LoadState.Error ->
                 SearchScreenState.Error(
@@ -59,42 +66,92 @@ fun SearchScreen(
                         .orEmpty(),
                 )
 
-            pagingFlow.loadState.append.endOfPaginationReached &&
+            pagingFlow.loadState.refresh is LoadState.NotLoading &&
+                pagingFlow.loadState.append.endOfPaginationReached &&
                 pagingFlow.itemCount == 0 ->
                 SearchScreenState.Empty
 
             else ->
                 SearchScreenState.Success
         }
-    SearchContent(searchQuery, screenState, pagingFlow, padding, onItemClick)
+    SearchContent(
+        screenState,
+        pagingFlow,
+        padding,
+        itemClick = { id, type ->
+            viewModel.addRecentSearch(searchQuery.text.toString())
+            onItemClick(id, type)
+        },
+        {
+            viewModel.addRecentSearch(it)
+            searchQuery.edit { replace(0, length, it) }
+        },
+        onRecentSearchClearClick = viewModel::clearRecentSearches,
+    )
 }
 
 @Composable
 fun SearchContent(
-    searchQuery: String,
     screenState: SearchScreenState,
     pagingFlow: LazyPagingItems<TypedSearchResult>,
     paddings: PaddingValues,
     itemClick: (Int, MediaType) -> Unit,
+    onRecentSearchItemClick: (String) -> Unit,
+    onRecentSearchClearClick: () -> Unit,
 ) {
     AnimatedContent(
         screenState,
         transitionSpec = {
-            (
-                fadeIn(tween(220)) +
-                    slideInVertically { it / 4 }
-            ) togetherWith
+            (fadeIn(tween(220)) + slideInVertically { it / 4 }) togetherWith
                 (fadeOut(tween(90)))
         },
         label = "screen_state",
     ) { state ->
         when (state) {
             is SearchScreenState.Waiting ->
-                Box(
-                    modifier = Modifier.fillMaxSize(),
-                    contentAlignment = Alignment.Center,
+                LazyColumn(
+                    Modifier
+                        .fillMaxSize()
+                        .padding(horizontal = 12.dp),
+                    verticalArrangement = Arrangement.spacedBy(12.dp),
+                    contentPadding = paddings,
                 ) {
-                    Text(text = "")
+                    state.list?.let {
+                        if (state.list.isNotEmpty()) {
+                            item {
+                                Text(
+                                    stringResource(R.string.clear_recent_searches),
+                                    style = MaterialTheme.typography.titleSmall,
+                                    textAlign = TextAlign.End,
+                                    modifier =
+                                        Modifier
+                                            .fillMaxSize()
+                                            .padding(horizontal = 12.dp)
+                                            .clickable(onClick = onRecentSearchClearClick),
+                                )
+                            }
+                            items(state.list) { query ->
+                                RecentSearchesItem(
+                                    modifier = Modifier.height(48.dp),
+                                    searchQuery = query,
+                                ) {
+                                    onRecentSearchItemClick(query)
+                                }
+                            }
+                        } else {
+                            item {
+                                Text(
+                                    stringResource(R.string.no_recent_searches),
+                                    style = MaterialTheme.typography.titleMedium,
+                                    modifier =
+                                        Modifier
+                                            .fillMaxWidth()
+                                            .padding(vertical = 48.dp),
+                                    textAlign = TextAlign.Center,
+                                )
+                            }
+                        }
+                    }
                 }
 
             is SearchScreenState.Empty -> {
@@ -108,9 +165,7 @@ fun SearchContent(
 
             is SearchScreenState.Success -> {
                 val listState = rememberLazyListState()
-                LaunchedEffect(searchQuery) {
-                    listState.scrollToItem(0)
-                }
+
                 LazyColumn(
                     modifier =
                         Modifier
@@ -122,7 +177,6 @@ fun SearchContent(
                 ) {
                     items(
                         count = pagingFlow.itemCount,
-                        key = pagingFlow.itemKey { item -> "${item.mediaType.name}/${item.id}" },
                     ) { index ->
                         pagingFlow[index]?.let {
                             SearchItem(
