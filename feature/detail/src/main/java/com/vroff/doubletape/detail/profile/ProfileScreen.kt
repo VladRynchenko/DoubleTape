@@ -2,7 +2,6 @@ package com.vroff.doubletape.detail.profile
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
@@ -34,7 +33,8 @@ import com.vroff.ui.model.BaseScreenState
 import com.vroff.ui.ui.AnnotatedMetadata
 import com.vroff.ui.ui.ErrorScreen
 import com.vroff.ui.ui.LoadingScreen
-import com.vroff.ui.ui.SearchBaseCard
+import com.vroff.ui.ui.LocalInnerPadding
+import com.vroff.ui.ui.item.SearchBaseCard
 import com.vroff.ui.ui.section.ExternalIdSection
 import com.vroff.ui.ui.section.OverviewSection
 import com.vroff.ui.ui.toRequest
@@ -43,20 +43,18 @@ import com.vroff.ui.ui.toRequest
 fun ProfileScreen(
     modifier: Modifier = Modifier,
     profileId: Int,
-    padding: PaddingValues = PaddingValues(12.dp),
     onShowClick: (Int, MediaType) -> Unit = { _, _ -> },
 ) {
     val profileViewModel = hiltViewModel<ProfileViewModel>()
     profileViewModel.setProfileId(profileId)
     val state = profileViewModel.state.collectAsStateWithLifecycle()
 
-    ProfileContent(state.value, padding, modifier.padding(horizontal = 12.dp), onShowClick)
+    ProfileContent(state.value, modifier.padding(horizontal = 12.dp), onShowClick)
 }
 
 @Composable
 private fun ProfileContent(
     state: BaseScreenState<ProfileDetail>,
-    padding: PaddingValues,
     modifier: Modifier,
     onShowClick: (Int, MediaType) -> Unit,
 ) {
@@ -70,7 +68,7 @@ private fun ProfileContent(
         }
 
         is BaseScreenState.Success -> {
-            ProfileDetailsScreen(state.data, padding, modifier, onShowClick)
+            ProfileDetailsScreen(state.data, modifier, onShowClick)
         }
     }
 }
@@ -78,10 +76,10 @@ private fun ProfileContent(
 @Composable
 fun ProfileDetailsScreen(
     profileDetail: ProfileDetail,
-    padding: PaddingValues,
     modifier: Modifier,
     onShowClick: (Int, MediaType) -> Unit,
 ) {
+    val padding = LocalInnerPadding.current
     LazyColumn(
         modifier = modifier.fillMaxSize(),
         contentPadding = padding,

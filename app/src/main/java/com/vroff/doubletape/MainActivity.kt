@@ -7,6 +7,7 @@ import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -27,10 +28,11 @@ import androidx.navigation.toRoute
 import com.vroff.domain.model.tmdb.search.MediaType
 import com.vroff.doubletape.detail.movie.MovieScreen
 import com.vroff.doubletape.detail.profile.ProfileScreen
+import com.vroff.doubletape.home.MainScreen
 import com.vroff.doubletape.presentation.screens.Graph
-import com.vroff.doubletape.presentation.screens.main.WelcomeScreen
 import com.vroff.search.SearchScreen
 import com.vroff.ui.theme.MovieDDTheme
+import com.vroff.ui.ui.LocalInnerPadding
 import com.vroff.ui.ui.ShowTopAppBar
 import com.vroff.ui.ui.TopBarState
 import dagger.hilt.android.AndroidEntryPoint
@@ -78,49 +80,51 @@ class MainActivity : ComponentActivity() {
                     },
                     modifier = Modifier.fillMaxSize(),
                 ) { innerPadding ->
-
-                    NavHost(
-                        navController = navController,
-                        startDestination = Graph.Main,
-                    ) {
-                        composable<Graph.Main> {
-                            WelcomeScreen()
-                        }
-
-                        composable<Graph.Search> {
-                            SearchScreen(
-                                searchQuery = query,
-                                padding = innerPadding,
-                                onItemClick = { id, type ->
+                    CompositionLocalProvider(LocalInnerPadding provides innerPadding) {
+                        NavHost(
+                            navController = navController,
+                            startDestination = Graph.Main,
+                        ) {
+                            composable<Graph.Main> {
+                                MainScreen { id, type ->
                                     if (type.isShow) {
                                         navController.navigate(Graph.Details(id, type))
-                                    } else if (type == MediaType.PERSON) {
-                                        navController.navigate(Graph.Profile(id))
                                     }
-                                },
-                            )
-                        }
+                                }
+                            }
 
-                        composable<Graph.Details> { backStackEntry ->
-                            val details = backStackEntry.toRoute<Graph.Details>()
-                            MovieScreen(
-                                tmdbId = details.id,
-                                type = details.type,
-                                padding = innerPadding,
-                                onCastItemClick = {
-                                    navController.navigate(Graph.Profile(it))
-                                },
-                            )
-                        }
-                        composable<Graph.Profile> { backStackEntry ->
-                            val details = backStackEntry.toRoute<Graph.Profile>()
-                            ProfileScreen(
-                                profileId = details.id,
-                                padding = innerPadding,
-                                onShowClick = { id, type ->
-                                    navController.navigate(Graph.Details(id, type))
-                                },
-                            )
+                            composable<Graph.Search> {
+                                SearchScreen(
+                                    searchQuery = query,
+                                    onItemClick = { id, type ->
+                                        if (type.isShow) {
+                                            navController.navigate(Graph.Details(id, type))
+                                        } else if (type == MediaType.PERSON) {
+                                            navController.navigate(Graph.Profile(id))
+                                        }
+                                    },
+                                )
+                            }
+
+                            composable<Graph.Details> { backStackEntry ->
+                                val details = backStackEntry.toRoute<Graph.Details>()
+                                MovieScreen(
+                                    tmdbId = details.id,
+                                    type = details.type,
+                                    onCastItemClick = {
+                                        navController.navigate(Graph.Profile(it))
+                                    },
+                                )
+                            }
+                            composable<Graph.Profile> { backStackEntry ->
+                                val details = backStackEntry.toRoute<Graph.Profile>()
+                                ProfileScreen(
+                                    profileId = details.id,
+                                    onShowClick = { id, type ->
+                                        navController.navigate(Graph.Details(id, type))
+                                    },
+                                )
+                            }
                         }
                     }
                 }

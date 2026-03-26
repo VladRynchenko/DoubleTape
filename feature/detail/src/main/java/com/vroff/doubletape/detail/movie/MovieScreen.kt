@@ -21,7 +21,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import coil3.compose.AsyncImage
+import coil3.compose.SubcomposeAsyncImage
 import com.vroff.domain.model.PosterImage
 import com.vroff.domain.model.constants.FormatConstant
 import com.vroff.domain.model.constants.SymbolConstant
@@ -43,9 +43,12 @@ import com.vroff.ui.ShowFormatter.joinWithComma
 import com.vroff.ui.model.BaseScreenState
 import com.vroff.ui.ui.AnnotatedMetadata
 import com.vroff.ui.ui.ErrorScreen
+import com.vroff.ui.ui.HeaderText
 import com.vroff.ui.ui.LoadingScreen
-import com.vroff.ui.ui.SearchBaseCard
+import com.vroff.ui.ui.LocalInnerPadding
+import com.vroff.ui.ui.ShimmerPlaceHolder
 import com.vroff.ui.ui.detail.CastWidget
+import com.vroff.ui.ui.item.SearchBaseCard
 import com.vroff.ui.ui.section.OverviewSection
 import com.vroff.ui.ui.toRequest
 import java.util.Locale
@@ -55,19 +58,17 @@ import kotlin.math.roundToInt
 fun MovieScreen(
     tmdbId: Int,
     type: MediaType,
-    padding: PaddingValues,
     onCastItemClick: (Int) -> Unit,
 ) {
     val movieViewModel = hiltViewModel<MovieViewModel>()
     movieViewModel.setTMDBId(tmdbId, type)
     val state = movieViewModel.showState.collectAsStateWithLifecycle()
-    ShowDetailsContent(state.value, padding, onCastItemClick, Modifier.padding(horizontal = 12.dp))
+    ShowDetailsContent(state.value, onCastItemClick, Modifier.padding(horizontal = 12.dp))
 }
 
 @Composable
 private fun ShowDetailsContent(
     state: BaseScreenState<BaseDetails>,
-    padding: PaddingValues,
     onCastItemClick: (Int) -> Unit,
     modifier: Modifier,
 ) {
@@ -81,7 +82,7 @@ private fun ShowDetailsContent(
         }
 
         is BaseScreenState.Success -> {
-            DetailsScreen(state.data, padding, onCastItemClick, modifier)
+            DetailsScreen(state.data, onCastItemClick, modifier)
         }
     }
 }
@@ -89,11 +90,11 @@ private fun ShowDetailsContent(
 @Composable
 fun DetailsScreen(
     show: BaseDetails,
-    padding: PaddingValues,
     onCastItemClick: (Int) -> Unit,
     modifier: Modifier,
 ) {
     val scrollState = rememberScrollState()
+    val padding = LocalInnerPadding.current
     Column(
         modifier =
             Modifier
@@ -308,10 +309,9 @@ fun CastSection(
     onCastItemClick: (Int) -> Unit,
 ) {
     Column {
-        Text(
-            stringResource(R.string.header_cast),
-            style = MaterialTheme.typography.titleLarge,
+        HeaderText(
             modifier = modifier,
+            headerText = stringResource(R.string.header_cast),
         )
         CastWidget(
             cast = castList,
@@ -336,9 +336,10 @@ fun TitleWidget(
 
 @Composable
 fun PosterImageWidget(posterImage: PosterImage?) {
-    AsyncImage(
-        posterImage?.toRequest() ?: com.vroff.ui.R.drawable.placeholder,
+    SubcomposeAsyncImage(
+        posterImage?.toRequest(),
         contentDescription = "Movie poster",
+        loading = { ShimmerPlaceHolder(modifier = Modifier.matchParentSize()) },
         contentScale = ContentScale.Crop,
         modifier =
             Modifier

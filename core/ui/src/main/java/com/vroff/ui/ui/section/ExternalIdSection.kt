@@ -17,13 +17,13 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.vroff.domain.model.tmdb.profile.ExternalIds
 import com.vroff.ui.R
+import com.vroff.ui.model.SocialMedia
+import com.vroff.ui.model.SocialMediaBaseURL
 import com.vroff.ui.theme.Facebook
 import com.vroff.ui.theme.Instagram
 import com.vroff.ui.theme.Tiktok
 import com.vroff.ui.theme.X
 import com.vroff.ui.theme.Youtube
-import com.vroff.ui.ui.SocialMedia
-import com.vroff.ui.ui.SocialMediaBaseURL
 
 @Composable
 fun ExternalIdSection(externalIds: ExternalIds) {

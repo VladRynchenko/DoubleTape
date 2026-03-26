@@ -1,10 +1,10 @@
-package com.vroff.ui.ui
+package com.vroff.ui.ui.item
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -18,26 +18,26 @@ import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
-import coil3.compose.AsyncImage
 import com.vroff.domain.model.Image
 import com.vroff.domain.model.constants.SymbolConstant
 import com.vroff.domain.model.tmdb.search.MediaType
-import com.vroff.domain.model.tmdb.search.typed.MovieSearchResult
-import com.vroff.domain.model.tmdb.search.typed.PersonSearchResult
-import com.vroff.domain.model.tmdb.search.typed.SeriesSearchResult
-import com.vroff.domain.model.tmdb.search.typed.TypedSearchResult
+import com.vroff.domain.model.tmdb.search.typed.MovieMediaItem
+import com.vroff.domain.model.tmdb.search.typed.PersonMediaItem
+import com.vroff.domain.model.tmdb.search.typed.SeriesMediaItem
+import com.vroff.domain.model.tmdb.search.typed.TypedMediaItem
 import com.vroff.ui.ShowFormatter.formatRealiseDate
 import com.vroff.ui.preview.SearchItemPreviewProvider
+import com.vroff.ui.ui.RatingWidget
 
 @Preview
 @Composable
 fun SearchItem(
-    @PreviewParameter(SearchItemPreviewProvider::class) item: TypedSearchResult,
+    @PreviewParameter(SearchItemPreviewProvider::class) item: TypedMediaItem,
     modifier: Modifier = Modifier,
     onItemClick: (Int, MediaType) -> Unit = { _, _ -> },
 ) {
     when (item) {
-        is PersonSearchResult ->
+        is PersonMediaItem ->
             SearchBaseCard(
                 image = item.image,
                 title = item.name,
@@ -45,7 +45,7 @@ fun SearchItem(
                 onClick = { onItemClick(item.id, MediaType.PERSON) },
             )
 
-        is SeriesSearchResult ->
+        is SeriesMediaItem ->
             SearchBaseCard(
                 image = item.image,
                 title = item.name,
@@ -56,7 +56,7 @@ fun SearchItem(
                 onClick = { onItemClick(item.id, MediaType.SERIES) },
             )
 
-        is MovieSearchResult ->
+        is MovieMediaItem ->
             SearchBaseCard(
                 image = item.image,
                 title = item.title,
@@ -90,26 +90,22 @@ fun SearchBaseCard(
     ) {
         val (poster, titleRef, subtitleRef, dateRef) = createRefs()
 
-        AsyncImage(
+        SmallImageWidget(
             model = image,
             contentDescription = null,
             contentScale = ContentScale.Crop,
             modifier =
-                Modifier
-                    .clip(RoundedCornerShape(14.dp))
-                    .size(120.dp, 160.dp)
-                    .background(MaterialTheme.colorScheme.onSurface)
-                    .constrainAs(poster) {
-                        top.linkTo(parent.top)
-                        bottom.linkTo(parent.bottom)
-                        start.linkTo(parent.start)
-                    },
+                Modifier.constrainAs(poster) {
+                    top.linkTo(parent.top)
+                    bottom.linkTo(parent.bottom)
+                    start.linkTo(parent.start)
+                },
         )
 
         Text(
             text = title,
             style = MaterialTheme.typography.titleMedium,
-            color = MaterialTheme.colorScheme.onPrimary,
+            color = MaterialTheme.colorScheme.onSurface,
             maxLines = 2,
             overflow = TextOverflow.Ellipsis,
             modifier =
@@ -132,7 +128,7 @@ fun SearchBaseCard(
                 Text(
                     text = date1,
                     style = MaterialTheme.typography.bodySmall,
-                    color = MaterialTheme.colorScheme.onPrimary,
+                    color = MaterialTheme.colorScheme.onSurface,
                 )
             }
 
@@ -140,7 +136,7 @@ fun SearchBaseCard(
                 Text(
                     SymbolConstant.MIDDLE_POINT,
                     style = MaterialTheme.typography.bodySmall,
-                    color = MaterialTheme.colorScheme.onPrimary,
+                    color = MaterialTheme.colorScheme.onSurface,
                 )
             }
 
@@ -153,7 +149,7 @@ fun SearchBaseCard(
             Text(
                 text = it,
                 style = MaterialTheme.typography.bodySmall,
-                color = MaterialTheme.colorScheme.onPrimary,
+                color = MaterialTheme.colorScheme.onSurface,
                 maxLines = 2,
                 modifier =
                     Modifier.constrainAs(subtitleRef) {

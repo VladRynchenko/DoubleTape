@@ -5,6 +5,7 @@ import com.vroff.network.BuildConfig.TMDB_API_HOST
 import com.vroff.network.Constants
 import com.vroff.network.TMDB
 import com.vroff.tmdb.api.TMDBApi
+import com.vroff.tmdb.api.TrendingApi
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -39,7 +40,15 @@ object TMDBModule {
             }.build()
 
     @Provides
-    fun provideStreamingAvailability(
+    fun provideTMDBApi(
         @TMDB retrofit: Retrofit,
     ): TMDBApi = retrofit.create(TMDBApi::class.java)
+
+    @Provides
+    fun provideTrendingApi(
+        @TMDB retrofit: Retrofit,
+    ): TrendingApi =
+        retrofit.create(
+            TrendingApi::class.java,
+        )
 }

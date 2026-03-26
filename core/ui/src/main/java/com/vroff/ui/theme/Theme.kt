@@ -19,17 +19,20 @@ private val DarkColorScheme =
         surface = Jet,
         onPrimary = VanillaCream,
         onSecondary = LightBrown,
+        onTertiary = LightBrown,
         background = Color(0xFF141218),
     )
 
 private val LightColorScheme =
     lightColorScheme(
         primary = Jet,
-        secondary = PurpleGrey40,
+        secondary = White,
         tertiary = Pink40,
         surface = Paper,
-        onPrimary = Asphalt,
-        onSecondary = LightBrown,
+        onSurface = Asphalt,
+        onPrimary = White,
+        onSecondary = Asphalt,
+        onTertiary = LightBrown,
         background = Color(0xFFFFFFFF),
         /* Other default colors to override
         background = Color(0xFFFFFBFE),

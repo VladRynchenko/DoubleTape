@@ -80,6 +80,7 @@ dependencies {
     implementation(libs.converter.gson)
     implementation(libs.retrofit)
     implementation(libs.logging.interceptor)
+    implementation(libs.androidx.paging.common)
 
     // Hilt
     implementation(libs.hilt.android)

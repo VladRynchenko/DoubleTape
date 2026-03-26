@@ -6,10 +6,11 @@ import androidx.paging.PagingData
 import com.vroff.domain.model.NetworkResult
 import com.vroff.domain.model.tmdb.movie.MovieDetail
 import com.vroff.domain.model.tmdb.profile.ProfileDetail
-import com.vroff.domain.model.tmdb.search.SearchResult
+import com.vroff.domain.model.tmdb.search.TMDBMediaItem
 import com.vroff.domain.model.tmdb.series.SeriesDetail
 import com.vroff.domain.repository.TMDBRepository
 import com.vroff.domain.util.safeApiCall
+import com.vroff.network.paging.BasePagingSource
 import com.vroff.tmdb.api.TMDBApi
 import com.vroff.tmdb.entity.common.GenreMapper
 import kotlinx.coroutines.flow.Flow
@@ -39,12 +40,12 @@ class TMDBRepositoryImpl
                 .getSerialDetails(seriesId, language, appendToResponse)
                 .safeApiCall { it.mapToDomain() }
 
-        override suspend fun multiSearch(
+        override fun multiSearch(
             query: String,
             includeAdult: Boolean,
             language: String,
             region: String,
-        ): Flow<PagingData<SearchResult>> =
+        ): Flow<PagingData<TMDBMediaItem>> =
             Pager(
                 config = PagingConfig(20),
                 pagingSourceFactory = {

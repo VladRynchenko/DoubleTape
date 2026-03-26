@@ -7,6 +7,8 @@ val Pink80 = Color(0xFFEFB8C8)
 val PurpleGrey40 = Color(0xFF625b71)
 val Pink40 = Color(0xFF7D5260)
 
+val White = Color(0xFFFFFFFF)
+
 val Paper = Color(0xB3F8F4E2)
 val Jet = Color(0xFF343434)
 val Asphalt = Color(0xFF302F2C)

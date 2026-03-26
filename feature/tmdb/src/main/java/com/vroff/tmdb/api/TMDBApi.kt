@@ -1,13 +1,13 @@
 package com.vroff.tmdb.api
 
 import com.vroff.domain.model.NetworkResult
+import com.vroff.network.paging.PagerResponse
 import com.vroff.tmdb.Endpoint
 import com.vroff.tmdb.entity.Configuration
-import com.vroff.tmdb.entity.PagerResponse
 import com.vroff.tmdb.entity.movie.MovieDetailDTO
 import com.vroff.tmdb.entity.profile.ProfileDetailDTO
 import com.vroff.tmdb.entity.search.GenresDTO
-import com.vroff.tmdb.entity.search.SearchResultDTO
+import com.vroff.tmdb.entity.search.MediaItemDTO
 import com.vroff.tmdb.entity.series.SeriesDetailDTO
 import retrofit2.http.GET
 import retrofit2.http.Path
@@ -44,7 +44,7 @@ interface TMDBApi {
         @Query("include_adult") includeAdult: Boolean,
         @Query("language") language: String,
         @Query("region") region: String,
-    ): PagerResponse<SearchResultDTO>
+    ): PagerResponse<MediaItemDTO>
 
     @GET(Endpoint.PROFILE_DETAILS)
     suspend fun getProfileDetail(

@@ -10,7 +10,6 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -36,17 +35,17 @@ import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.vroff.domain.model.streamingavailable.ShowState
 import com.vroff.domain.model.tmdb.search.MediaType
-import com.vroff.domain.model.tmdb.search.typed.TypedSearchResult
+import com.vroff.domain.model.tmdb.search.typed.TypedMediaItem
 import com.vroff.ui.R.string
 import com.vroff.ui.ui.ErrorScreen
-import com.vroff.ui.ui.RecentSearchesItem
-import com.vroff.ui.ui.SearchItem
+import com.vroff.ui.ui.LocalInnerPadding
+import com.vroff.ui.ui.item.RecentSearchesItem
+import com.vroff.ui.ui.item.SearchItem
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SearchScreen(
     searchQuery: TextFieldState,
-    padding: PaddingValues,
     onItemClick: (Int, MediaType) -> Unit,
 ) {
     val viewModel: SearchViewModel = hiltViewModel()
@@ -77,7 +76,6 @@ fun SearchScreen(
     SearchContent(
         screenState,
         pagingFlow,
-        padding,
         itemClick = { id, type ->
             viewModel.addRecentSearch(searchQuery.text.toString())
             onItemClick(id, type)
@@ -93,12 +91,12 @@ fun SearchScreen(
 @Composable
 fun SearchContent(
     screenState: SearchScreenState,
-    pagingFlow: LazyPagingItems<TypedSearchResult>,
-    paddings: PaddingValues,
+    pagingFlow: LazyPagingItems<TypedMediaItem>,
     itemClick: (Int, MediaType) -> Unit,
     onRecentSearchItemClick: (String) -> Unit,
     onRecentSearchClearClick: () -> Unit,
 ) {
+    val paddings = LocalInnerPadding.current
     AnimatedContent(
         screenState,
         transitionSpec = {

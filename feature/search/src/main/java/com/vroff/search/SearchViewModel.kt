@@ -9,7 +9,7 @@ import com.vroff.data.usecase.search.AddRecentSearchUseCase
 import com.vroff.data.usecase.search.CleanRecentSearchUseCase
 import com.vroff.data.usecase.search.GetRecentSearchUseCase
 import com.vroff.data.usecase.search.SearchUseCase
-import com.vroff.domain.model.tmdb.search.typed.TypedSearchResult
+import com.vroff.domain.model.tmdb.search.typed.TypedMediaItem
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
@@ -21,7 +21,6 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.flatMapLatest
-import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.mapNotNull
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
@@ -46,20 +45,16 @@ class SearchViewModel
                 .invoke()
                 .stateIn(viewModelScope, SharingStarted.Lazily, null)
 
-        val pagingFlow: Flow<PagingData<TypedSearchResult>> =
+        val pagingFlow: Flow<PagingData<TypedMediaItem>> =
             searchQuery
-                .debounce(500)
+                .debounce(200)
                 .distinctUntilChanged()
                 .flatMapLatest { query ->
-                    if (query.length < 2) {
-                        flowOf(PagingData.empty())
-                    } else {
-                        searchUseCase
-                            .execute(query)
-                            .mapNotNull { item ->
-                                item.map { it.mapToTypedResult() as TypedSearchResult }
-                            }
-                    }
+                    searchUseCase
+                        .execute(query)
+                        .mapNotNull { item ->
+                            item.map { it.mapToTypedResult() as TypedMediaItem }
+                        }
                 }.cachedIn(viewModelScope)
 
         fun setSearchQuery(searchQuery: String) {

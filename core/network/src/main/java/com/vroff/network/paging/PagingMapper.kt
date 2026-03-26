@@ -1,4 +1,4 @@
-package com.vroff.network
+package com.vroff.network.paging
 
 import androidx.paging.PagingData
 import androidx.paging.map

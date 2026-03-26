@@ -9,7 +9,7 @@ import com.vroff.domain.model.tmdb.search.Gender
 import com.vroff.domain.model.tmdb.search.KnownFor
 import com.vroff.domain.model.tmdb.search.MediaType
 
-sealed class TypedSearchResult(
+sealed class TypedMediaItem(
     open val adult: Boolean,
     open val name: String,
     open val id: Int,
@@ -18,7 +18,7 @@ sealed class TypedSearchResult(
     open val mediaType: MediaType,
 )
 
-data class MovieSearchResult(
+data class MovieMediaItem(
     override val adult: Boolean,
     val backdropImage: BackdropImage?,
     override val id: Int,
@@ -34,9 +34,9 @@ data class MovieSearchResult(
     val voteAverage: Float,
     val voteCount: Long,
     override val mediaType: MediaType = MediaType.MOVIE,
-) : TypedSearchResult(adult, title, id, posterImage, popularity, mediaType)
+) : TypedMediaItem(adult, title, id, posterImage, popularity, mediaType)
 
-data class PersonSearchResult(
+data class PersonMediaItem(
     override val adult: Boolean,
     override val id: Int,
     override val name: String,
@@ -47,9 +47,9 @@ data class PersonSearchResult(
     val profileImage: ProfileImage?,
     val knownFor: List<KnownFor>,
     override val mediaType: MediaType = MediaType.PERSON,
-) : TypedSearchResult(adult, name, id, profileImage, popularity, mediaType)
+) : TypedMediaItem(adult, name, id, profileImage, popularity, mediaType)
 
-data class SeriesSearchResult(
+data class SeriesMediaItem(
     override val adult: Boolean,
     val backdropImage: BackdropImage?,
     override val id: Int,
@@ -65,4 +65,4 @@ data class SeriesSearchResult(
     val voteCount: Long,
     val originCountry: List<String>,
     override val mediaType: MediaType = MediaType.SERIES,
-) : TypedSearchResult(adult, name, id, posterImage, popularity, mediaType)
+) : TypedMediaItem(adult, name, id, posterImage, popularity, mediaType)

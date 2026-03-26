@@ -32,13 +32,15 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
-import coil3.compose.AsyncImage
+import coil3.compose.SubcomposeAsyncImage
 import com.vroff.domain.model.Image
 import com.vroff.domain.model.tmdb.common.Cast
 import com.vroff.domain.model.tmdb.common.CastBase
 import com.vroff.domain.model.tmdb.common.SeriesCast
 import com.vroff.ui.R
 import com.vroff.ui.preview.CastItemPreviewProvider
+import com.vroff.ui.ui.ShimmerPlaceHolder
+import com.vroff.ui.ui.toRequest
 
 @Composable
 fun CastWidget(
@@ -123,8 +125,9 @@ fun CastBaseItem(
     ) {
         val containerHeight = if (episodesCount != null) 68.dp else 48.dp
 
-        AsyncImage(
-            model = image,
+        SubcomposeAsyncImage(
+            model = image.toRequest(),
+            loading = { ShimmerPlaceHolder(modifier.matchParentSize()) },
             contentDescription = null,
             contentScale = ContentScale.Crop,
             modifier =

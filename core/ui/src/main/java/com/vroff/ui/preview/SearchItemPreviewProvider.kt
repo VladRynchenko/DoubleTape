@@ -8,21 +8,21 @@ import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import com.vroff.domain.model.BackdropImage
 import com.vroff.domain.model.PosterImage
 import com.vroff.domain.model.tmdb.common.Genre
-import com.vroff.domain.model.tmdb.search.typed.MovieSearchResult
-import com.vroff.domain.model.tmdb.search.typed.SeriesSearchResult
-import com.vroff.domain.model.tmdb.search.typed.TypedSearchResult
+import com.vroff.domain.model.tmdb.search.typed.MovieMediaItem
+import com.vroff.domain.model.tmdb.search.typed.SeriesMediaItem
+import com.vroff.domain.model.tmdb.search.typed.TypedMediaItem
 import com.vroff.ui.theme.MovieDDTheme
-import com.vroff.ui.ui.SearchItem
+import com.vroff.ui.ui.item.SearchItem
 
-class SearchItemPreviewProvider : PreviewParameterProvider<TypedSearchResult> {
-    override val values: Sequence<TypedSearchResult>
+class SearchItemPreviewProvider : PreviewParameterProvider<TypedMediaItem> {
+    override val values: Sequence<TypedMediaItem>
         get() = sequenceOf(moviePreview, seriesPreview)
 }
 
 @Preview(uiMode = UI_MODE_NIGHT_NO)
 @Composable
 fun SearchItemPreview(
-    @PreviewParameter(SearchItemPreviewProvider::class) item: TypedSearchResult,
+    @PreviewParameter(SearchItemPreviewProvider::class) item: TypedMediaItem,
 ) {
     MovieDDTheme {
         SearchItem(item = item)
@@ -30,7 +30,7 @@ fun SearchItemPreview(
 }
 
 val moviePreview =
-    MovieSearchResult(
+    MovieMediaItem(
         adult = false,
         backdropImage = BackdropImage(""),
         id = 0,
@@ -52,7 +52,7 @@ val moviePreview =
         voteCount = 29255,
     )
 val seriesPreview =
-    SeriesSearchResult(
+    SeriesMediaItem(
         adult = false,
         backdropImage = BackdropImage("/danN2NzJTMouaBEkDWTnyDjDxUt.jpg"),
         id = 103540,

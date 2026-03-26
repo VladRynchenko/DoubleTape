@@ -13,8 +13,7 @@ import com.vroff.ui.R
 fun Image?.toRequest() =
     ImageRequest
         .Builder(LocalContext.current)
-        .data(this)
-//    .placeholder(R.drawable.placeholder)
+        .data(this ?: R.drawable.placeholder)
         .error(R.drawable.placeholder)
         .crossfade(true)
         .build()

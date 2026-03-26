@@ -16,8 +16,15 @@
 
     <string name="collapse_text">Read Less</string>
     <string name="expand_text">Read More</string>
+
+    <string name="see_more">See More</string>
     <string name="searchHint">Search</string>
 
     <string name="something_went_wrong">Something went wrong</string>
     <string name="nothing_found">Nothing found</string>
+
+    <string name="now_playing_movie">Now Playing</string>
+    <string name="popular_movie">Popular</string>
+    <string name="upcoming_movie">Upcoming</string>
+
 </resources>

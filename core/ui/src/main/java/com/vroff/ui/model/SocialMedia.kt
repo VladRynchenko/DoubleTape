@@ -1,4 +1,4 @@
-package com.vroff.ui.ui
+package com.vroff.ui.model
 
 import androidx.compose.ui.graphics.Color
 

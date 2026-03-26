@@ -7,10 +7,10 @@ import com.vroff.domain.model.ProfileImage
 import com.vroff.domain.model.tmdb.common.Genre
 import com.vroff.domain.model.tmdb.search.Gender
 import com.vroff.domain.model.tmdb.search.MediaType
-import com.vroff.domain.model.tmdb.search.SearchResult
+import com.vroff.domain.model.tmdb.search.TMDBMediaItem
 import kotlin.text.orEmpty
 
-data class SearchResultDTO(
+data class MediaItemDTO(
     val adult: Boolean,
     @SerializedName("backdrop_path")
     val backdropPath: String?,
@@ -22,7 +22,7 @@ data class SearchResultDTO(
     @SerializedName("poster_path")
     val posterPath: String?,
     @SerializedName("media_type")
-    val mediaType: String,
+    val mediaType: String?,
     @SerializedName("original_language")
     val originalLanguage: String?,
     @SerializedName("genre_ids")
@@ -50,9 +50,12 @@ data class SearchResultDTO(
     val releaseDate: String?,
     val video: Boolean?,
 ) {
-    fun mapToDomain(genreMapper: (List<Long>?, MediaType) -> List<Genre>): SearchResult {
-        val mediaType = MediaType.entries.associateBy { it.type }[mediaType] ?: MediaType.UNKNOWN
-        return SearchResult(
+    fun mapToDomain(
+        genreMapper: (List<Long>?, MediaType) -> List<Genre>,
+        selectedMediaType: MediaType? = null,
+    ): TMDBMediaItem {
+        val mediaType = selectedMediaType ?: MediaType.entries.associateBy { it.type }[mediaType] ?: MediaType.UNKNOWN
+        return TMDBMediaItem(
             adult = adult,
             backdropImage = backdropPath?.let { BackdropImage(it) },
             id = id,

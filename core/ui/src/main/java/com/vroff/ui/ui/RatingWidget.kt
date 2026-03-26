@@ -38,13 +38,13 @@ fun RatingWidget(
             modifier = Modifier.size(textHeight),
             painter = painterResource(id = R.drawable.star_32),
             contentDescription = null,
-            tint = MaterialTheme.colorScheme.onSecondary,
+            tint = MaterialTheme.colorScheme.onTertiary,
         )
 
         Text(
             FormatConstant.ROUND_ONE_DIGIT.format(Locale.ROOT, rating),
             style = MaterialTheme.typography.bodySmall,
-            color = MaterialTheme.colorScheme.onSecondary,
+            color = MaterialTheme.colorScheme.onTertiary,
             onTextLayout = { textLayoutResult ->
                 textHeight =
                     with(density) {
