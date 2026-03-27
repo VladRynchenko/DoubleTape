@@ -14,6 +14,7 @@ val Jet = Color(0xFF343434)
 val Asphalt = Color(0xFF302F2C)
 val VanillaCream = Color(0xFFF0E7D5)
 val LightBrown = Color(0xFF877474)
+val LightPaper = Color(0xFFFFFFF3)
 
 // Social media colors
 val Instagram = Color(0xFFE4405F)

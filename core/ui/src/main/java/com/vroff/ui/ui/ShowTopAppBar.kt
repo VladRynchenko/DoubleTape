@@ -58,6 +58,7 @@ fun NavigationTopBarButton(
 ) {
     Icon(
         painter = painterResource(icon),
+        tint = MaterialTheme.colorScheme.primary,
         contentDescription = "",
         modifier = Modifier.size(32.dp),
     )
@@ -111,6 +112,10 @@ fun ShowTopAppBar(
                             TextFieldDefaults.colors(
                                 focusedContainerColor = MaterialTheme.colorScheme.surface.copy(0.9f),
                                 unfocusedContainerColor = MaterialTheme.colorScheme.surface.copy(0.9f),
+                                focusedTextColor = MaterialTheme.colorScheme.primary,
+                                unfocusedTextColor = MaterialTheme.colorScheme.primary,
+                                unfocusedSupportingTextColor = MaterialTheme.colorScheme.primary,
+                                focusedSupportingTextColor = MaterialTheme.colorScheme.primary,
                                 focusedIndicatorColor = Color.Transparent,
                                 unfocusedIndicatorColor = Color.Transparent,
                                 disabledIndicatorColor = Color.Transparent,

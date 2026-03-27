@@ -21,7 +21,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import coil3.compose.SubcomposeAsyncImage
 import com.vroff.domain.model.PosterImage
 import com.vroff.domain.model.constants.FormatConstant
 import com.vroff.domain.model.constants.SymbolConstant
@@ -42,11 +41,11 @@ import com.vroff.ui.ShowFormatter.formatSeasonsAndSeries
 import com.vroff.ui.ShowFormatter.joinWithComma
 import com.vroff.ui.model.BaseScreenState
 import com.vroff.ui.ui.AnnotatedMetadata
+import com.vroff.ui.ui.AppAsyncImage
 import com.vroff.ui.ui.ErrorScreen
 import com.vroff.ui.ui.HeaderText
 import com.vroff.ui.ui.LoadingScreen
 import com.vroff.ui.ui.LocalInnerPadding
-import com.vroff.ui.ui.ShimmerPlaceHolder
 import com.vroff.ui.ui.detail.CastWidget
 import com.vroff.ui.ui.item.SearchBaseCard
 import com.vroff.ui.ui.section.OverviewSection
@@ -336,10 +335,9 @@ fun TitleWidget(
 
 @Composable
 fun PosterImageWidget(posterImage: PosterImage?) {
-    SubcomposeAsyncImage(
+    AppAsyncImage(
         posterImage?.toRequest(),
         contentDescription = "Movie poster",
-        loading = { ShimmerPlaceHolder(modifier = Modifier.matchParentSize()) },
         contentScale = ContentScale.Crop,
         modifier =
             Modifier

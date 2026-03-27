@@ -5,7 +5,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
@@ -100,7 +100,7 @@ fun SocialIcon(
             modifier =
                 Modifier
                     .size(32.dp)
-                    .clip(RoundedCornerShape(100))
+                    .clip(CircleShape)
                     .clickable(
                         onClick = { onClick("${platform.baseUrl.baseURL}$id") },
                     ),

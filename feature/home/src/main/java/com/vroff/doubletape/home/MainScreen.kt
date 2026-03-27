@@ -1,6 +1,5 @@
 package com.vroff.doubletape.home
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -13,22 +12,27 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
+import com.vroff.domain.model.constants.SymbolConstant
 import com.vroff.domain.model.home.MainScreenContent
 import com.vroff.domain.model.tmdb.search.MediaType
 import com.vroff.ui.R
+import com.vroff.ui.ShowFormatter.formatRealiseDate
+import com.vroff.ui.ui.AppAsyncImage
 import com.vroff.ui.ui.BackdropImage
 import com.vroff.ui.ui.HeaderText
 import com.vroff.ui.ui.LocalInnerPadding
-import com.vroff.ui.ui.item.SmallImageWidget
+import com.vroff.ui.ui.item.BackdropItem
 
 @Composable
 fun MainScreen(onItemClicked: (Int, MediaType) -> Unit) {
@@ -52,17 +56,13 @@ fun MainScreenContent(
         data?.nowPlayingMovie?.first()?.let {
             item {
                 BackdropImage(
-                    modifier =
-                        Modifier
-                            .background(Color.Gray)
-                            .fillMaxWidth()
-                            .aspectRatio(16f / 9f)
-                            .clickable(onClick = { onItemClicked(it.id, it.mediaType) }),
+                    modifier = Modifier.clickable(onClick = { onItemClicked(it.id, it.mediaType) }),
                     it.backdropImage,
                 ) {
                     Text(
                         it.name,
-                        style = MaterialTheme.typography.titleMedium,
+                        style = MaterialTheme.typography.titleLarge,
+                        fontWeight = FontWeight.Bold,
                         color = MaterialTheme.colorScheme.onPrimary,
                         modifier = Modifier.padding(12.dp),
                     )
@@ -86,11 +86,17 @@ fun MainScreenContent(
                         horizontalArrangement = Arrangement.spacedBy(14.dp),
                     ) {
                         items(nowPlaying, key = { it.id }) {
-                            SmallImageWidget(
-                                model = it.posterImage,
-                                contentDescription = "Poster Image",
-                                modifier = Modifier.clickable(onClick = { onItemClicked(it.id, it.mediaType) }),
-                            )
+                            BackdropItem(
+                                modifier =
+                                    Modifier
+                                        .width(312.dp)
+                                        .clip(RoundedCornerShape(14.dp)),
+                                image = it.backdropImage,
+                                title = it.title,
+                                date = formatRealiseDate(it.releaseDate),
+                                rating = it.voteAverage,
+                                subtitle = it.genres.joinToString(SymbolConstant.MIDDLE_POINT) { genre -> genre.name },
+                            ) { onItemClicked(it.id, it.mediaType) }
                         }
                     }
                 }
@@ -112,12 +118,14 @@ fun MainScreenContent(
                         horizontalArrangement = Arrangement.spacedBy(14.dp),
                     ) {
                         items(popularMovie, key = { it.id }) {
-                            SmallImageWidget(
+                            AppAsyncImage(
                                 model = it.posterImage,
                                 contentDescription = "Poster Image",
                                 modifier =
                                     Modifier
                                         .width(112.dp)
+                                        .aspectRatio(2f / 3f)
+                                        .clip(RoundedCornerShape(14.dp))
                                         .clickable(onClick = { onItemClicked(it.id, it.mediaType) }),
                             )
                         }
@@ -141,12 +149,14 @@ fun MainScreenContent(
                         horizontalArrangement = Arrangement.spacedBy(14.dp),
                     ) {
                         items(upcomingMovie, key = { it.id }) {
-                            SmallImageWidget(
+                            AppAsyncImage(
                                 model = it.posterImage,
                                 contentDescription = "Poster Image",
                                 modifier =
                                     Modifier
                                         .width(112.dp)
+                                        .aspectRatio(2f / 3f)
+                                        .clip(RoundedCornerShape(14.dp))
                                         .clickable(onClick = { onItemClicked(it.id, it.mediaType) }),
                             )
                         }

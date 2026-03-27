@@ -58,6 +58,7 @@ dependencies {
     implementation(libs.hilt.android)
     implementation(libs.androidx.paging.runtime)
     implementation(libs.androidx.paging.compose)
+    implementation(libs.androidx.compose.foundation)
     ksp(libs.hilt.android.compiler)
     implementation(libs.coil.compose)
 

@@ -3,6 +3,7 @@ package com.vroff.ui.ui.item
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -27,6 +28,7 @@ import com.vroff.domain.model.tmdb.search.typed.SeriesMediaItem
 import com.vroff.domain.model.tmdb.search.typed.TypedMediaItem
 import com.vroff.ui.ShowFormatter.formatRealiseDate
 import com.vroff.ui.preview.SearchItemPreviewProvider
+import com.vroff.ui.ui.AppAsyncImage
 import com.vroff.ui.ui.RatingWidget
 
 @Preview
@@ -90,16 +92,20 @@ fun SearchBaseCard(
     ) {
         val (poster, titleRef, subtitleRef, dateRef) = createRefs()
 
-        SmallImageWidget(
+        AppAsyncImage(
             model = image,
             contentDescription = null,
             contentScale = ContentScale.Crop,
             modifier =
-                Modifier.constrainAs(poster) {
-                    top.linkTo(parent.top)
-                    bottom.linkTo(parent.bottom)
-                    start.linkTo(parent.start)
-                },
+                Modifier
+                    .width(120.dp)
+                    .aspectRatio(2f / 3f)
+                    .clip(RoundedCornerShape(14.dp))
+                    .constrainAs(poster) {
+                        top.linkTo(parent.top)
+                        bottom.linkTo(parent.bottom)
+                        start.linkTo(parent.start)
+                    },
         )
 
         Text(

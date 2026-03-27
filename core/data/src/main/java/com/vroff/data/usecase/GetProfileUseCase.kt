@@ -12,11 +12,12 @@ class GetProfileUseCase
     @Inject
     constructor(
         private val profileRepository: TMDBRepository,
+        private val locale: Locale,
     ) {
         suspend fun execute(profileId: Int): NetworkResult<ProfileDetail> =
             profileRepository.getProfile(
                 profileId,
-                Locale.getDefault().language,
+                locale.language,
                 appendToResponse =
                     buildAppendQuery(
                         PersonAppendToResponse.EXTERNAL_IDS,

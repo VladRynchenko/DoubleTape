@@ -17,6 +17,8 @@ private val DarkColorScheme =
         secondary = PurpleGrey80,
         tertiary = Pink80,
         surface = Jet,
+        surfaceVariant = Asphalt,
+        onSurface = White,
         onPrimary = VanillaCream,
         onSecondary = LightBrown,
         onTertiary = LightBrown,
@@ -25,10 +27,11 @@ private val DarkColorScheme =
 
 private val LightColorScheme =
     lightColorScheme(
-        primary = Jet,
+        primary = LightBrown,
         secondary = White,
         tertiary = Pink40,
         surface = Paper,
+        surfaceVariant = LightPaper,
         onSurface = Asphalt,
         onPrimary = White,
         onSecondary = Asphalt,
