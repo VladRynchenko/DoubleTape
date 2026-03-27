@@ -31,17 +31,19 @@ Unlike traditional nested scrollable components, DoubleTape uses a flattened Laz
 
 3. Clean Architecture
 The project is strictly modularized:
+
 	• :core:ui: Centralized design system, common composables (TopBars, Cards, Shimmers), and Theme definitions.
-	• :domain: Pure Kotlin module containing business logic, repositories, and models (no Android dependencies).
-	• :data: Implementation of repositories, API services, and data mappers.
+
+    • :domain: Pure Kotlin module containing business logic, repositories, and models (no Android dependencies).
+	
+    • :data: Implementation of repositories, API services, and data mappers.
 
 ## 🏗 Setup
 
-1.Clone the repository:
-
-Shell Script
+1. Clone the repository:
+    Shell Script
 	
-	git clone https://github.com/vroff/DoubleTape.git
+	    git clone https://github.com/vroff/DoubleTape.git
 
 2. Obtain an API key from TMDB.
 
