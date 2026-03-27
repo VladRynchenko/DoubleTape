@@ -1,6 +1,4 @@
 <resources>
-    <string name="hours_duration">%dh %02dm</string>
-    <string name="seasons_and_episodes">%ds %de</string>
-    <string name="season">Season %1$s</string>
     <string name="app_name">DoubleTape</string>
+    <string name="search_hint">Search</string>
 </resources>

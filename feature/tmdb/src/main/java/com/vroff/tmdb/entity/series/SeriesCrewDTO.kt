@@ -1,10 +1,11 @@
 package com.vroff.tmdb.entity.series
 
 import com.google.gson.annotations.SerializedName
+import com.vroff.domain.model.ProfileImage
 import com.vroff.domain.model.tmdb.series.SeriesCrew
 import com.vroff.tmdb.entity.common.JobDTO
 
-data class SeriesCrewDTO (
+data class SeriesCrewDTO(
     val adult: Boolean,
     val gender: Long,
     val id: Long,
@@ -19,10 +20,10 @@ data class SeriesCrewDTO (
     val jobs: List<JobDTO>,
     val department: String,
     @SerializedName("total_episode_count")
-    val totalEpisodeCount: Long,
+    val totalEpisodeCount: Int,
 ) {
-    fun mapToDomain(): SeriesCrew {
-        return SeriesCrew(
+    fun mapToDomain(): SeriesCrew =
+        SeriesCrew(
             adult = adult,
             gender = gender,
             id = id,
@@ -30,10 +31,9 @@ data class SeriesCrewDTO (
             name = name,
             originalName = originalName,
             popularity = popularity,
-            profilePath = profilePath,
+            profileImage = profilePath?.let { ProfileImage(it) },
             jobs = jobs.map { it.mapToDomain() },
             department = department,
             totalEpisodeCount = totalEpisodeCount,
         )
-    }
 }

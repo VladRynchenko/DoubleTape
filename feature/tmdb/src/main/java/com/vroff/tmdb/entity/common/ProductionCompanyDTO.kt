@@ -1,6 +1,7 @@
 package com.vroff.tmdb.entity.common
 
 import com.google.gson.annotations.SerializedName
+import com.vroff.domain.model.LogoImage
 import com.vroff.domain.model.tmdb.common.ProductionCompany
 
 data class ProductionCompanyDTO(
@@ -10,13 +11,12 @@ data class ProductionCompanyDTO(
     val name: String,
     @SerializedName("origin_country")
     val originCountry: String,
-){
-    fun mapToDomain(): ProductionCompany {
-        return ProductionCompany(
+) {
+    fun mapToDomain(): ProductionCompany =
+        ProductionCompany(
             id = id,
-            logoPath = logoPath,
+            logoImage = logoPath?.let { LogoImage(it) },
             name = name,
             originCountry = originCountry,
         )
-    }
 }

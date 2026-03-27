@@ -6,6 +6,7 @@ plugins {
     alias(libs.plugins.kotlin.compose)
     alias(libs.plugins.hilt.android)
     alias(libs.plugins.google.devtools.ksp)
+    alias(libs.plugins.kotlin.serialization)
 }
 
 android {
@@ -28,7 +29,7 @@ android {
             isShrinkResources = true
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
-                "proguard-rules.pro"
+                "proguard-rules.pro",
             )
         }
     }
@@ -60,6 +61,7 @@ dependencies {
     implementation(libs.androidx.constraintlayout.compose)
     implementation(libs.androidx.compose.activity)
     implementation(libs.androidx.lifecycle.viewmodel.compose)
+    implementation(libs.androidx.navigation.compose)
     implementation(libs.androidx.hilt.navigation.compose)
     implementation(libs.androidx.animation)
     implementation(libs.androidx.animation.core)
@@ -80,13 +82,17 @@ dependencies {
     // --- Core & Utils ---
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
+    implementation(libs.kotlinx.serialization.json)
 
     // --- Internal Modules ---
     implementation(project(":core:ui"))
     implementation(project(":core:data"))
     implementation(project(":core:network"))
     implementation(project(":core:domain"))
+    implementation(project(":core:storage"))
+    implementation(project(":feature:home"))
     implementation(project(":feature:search"))
+    implementation(project(":feature:detail"))
     implementation(project(":feature:streaming-availability"))
     implementation(project(":feature:tmdb"))
 

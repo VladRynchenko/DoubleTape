@@ -1,9 +1,10 @@
 package com.vroff.domain.model.tmdb.series
 
+import com.vroff.domain.model.LogoImage
 
 data class Network(
     val id: Long,
-    val logoPath: String,
+    val logoImage: LogoImage?,
     val name: String,
     val originCountry: String,
 )

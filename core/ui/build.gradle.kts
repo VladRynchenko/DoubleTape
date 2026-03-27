@@ -27,7 +27,7 @@ android {
             isMinifyEnabled = false
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
-                "proguard-rules.pro"
+                "proguard-rules.pro",
             )
         }
     }
@@ -42,7 +42,7 @@ android {
     }
 }
 
-dependencies{
+dependencies {
     implementation(project(":core:domain"))
 
     // Compose BOM
@@ -53,10 +53,10 @@ dependencies{
     implementation(libs.androidx.ui.graphics)
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.material3)
-    implementation(libs.androidx.compose.material.icons.extended)
     implementation(libs.androidx.constraintlayout.compose)
 
 // Compose Navigation + Lifecycle
+    implementation(libs.androidx.navigation.compose)
     implementation(libs.androidx.hilt.navigation.compose)
     implementation(libs.androidx.lifecycle.viewmodel.compose)
     implementation(libs.androidx.compose.activity)
@@ -64,6 +64,7 @@ dependencies{
 // Compose Animation
     implementation(libs.androidx.animation)
     implementation(libs.androidx.animation.core)
+    implementation(libs.androidx.compose.material3)
 
 // Compose Tooling (debug only)
     debugImplementation(libs.androidx.ui.tooling)

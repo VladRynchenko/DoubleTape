@@ -1,13 +1,13 @@
 package com.vroff.streamingmovie.mapper
 
-import com.vroff.domain.model.streaming_available.Episode
-import com.vroff.domain.model.streaming_available.Genre
-import com.vroff.domain.model.streaming_available.HorizontalPoster
-import com.vroff.domain.model.streaming_available.ImageSet
-import com.vroff.domain.model.streaming_available.Season
-import com.vroff.domain.model.streaming_available.Show
-import com.vroff.domain.model.streaming_available.ShowType
-import com.vroff.domain.model.streaming_available.VerticalPoster
+import com.vroff.domain.model.streamingavailable.Episode
+import com.vroff.domain.model.streamingavailable.Genre
+import com.vroff.domain.model.streamingavailable.HorizontalPoster
+import com.vroff.domain.model.streamingavailable.ImageSet
+import com.vroff.domain.model.streamingavailable.Season
+import com.vroff.domain.model.streamingavailable.Show
+import com.vroff.domain.model.streamingavailable.ShowType
+import com.vroff.domain.model.streamingavailable.VerticalPoster
 import com.vroff.streamingmovie.entity.EpisodeDTO
 import com.vroff.streamingmovie.entity.GenreDTO
 import com.vroff.streamingmovie.entity.HorizontalPosterDTO
@@ -18,13 +18,14 @@ import com.vroff.streamingmovie.entity.VerticalPosterDTO
 
 fun ShowDTO.toShow(): Show {
     val id = this.id
-    val showType = when (this.showType) {
-        "series" -> ShowType.SERIES
-        "movie" -> ShowType.MOVIE
-        else -> {
-            throw IllegalArgumentException("Item type cannot be null")
+    val showType =
+        when (this.showType) {
+            "series" -> ShowType.SERIES
+            "movie" -> ShowType.MOVIE
+            else -> {
+                throw IllegalArgumentException("Item type cannot be null")
+            }
         }
-    }
     val imdbId = this.imdbId
     val tmdbId = this.tmdbId
     val title = this.title
@@ -57,43 +58,37 @@ fun ShowDTO.toShow(): Show {
         seasonCount = this.seasonCount,
         episodeCount = this.episodeCount,
         seasons = seasons,
-        runtime = runtime
+        runtime = runtime,
     )
 }
 
-private fun ImageSetDTO.toImageSet(): ImageSet {
-    return ImageSet(
+private fun ImageSetDTO.toImageSet(): ImageSet =
+    ImageSet(
         verticalPoster = this.verticalPoster.toVerticalPoster(),
         horizontalPoster = this.horizontalPoster.toHorizontalPoster(),
         verticalBackdrop = this.verticalBackdrop?.toVerticalPoster(),
         horizontalBackdrop = this.horizontalBackdrop?.toHorizontalPoster(),
     )
 
-}
-
-private fun HorizontalPosterDTO.toHorizontalPoster(): HorizontalPoster {
-    return HorizontalPoster(
-        w360, w480, w720, w1080, w1440
+private fun HorizontalPosterDTO.toHorizontalPoster(): HorizontalPoster =
+    HorizontalPoster(
+        w360,
+        w480,
+        w720,
+        w1080,
+        w1440,
     )
-}
 
-private fun VerticalPosterDTO.toVerticalPoster(): VerticalPoster {
-    return VerticalPoster(w240, w360, w480, w600, w720)
+private fun VerticalPosterDTO.toVerticalPoster(): VerticalPoster = VerticalPoster(w240, w360, w480, w600, w720)
 
-}
+private fun SeasonDTO.toSeason(): Season = Season(title, firstAirYear, lastAirYear, episodes.map { it.toEpisode() })
 
-private fun SeasonDTO.toSeason(): Season {
-    return Season(title, firstAirYear, lastAirYear, episodes.map { it.toEpisode() })
-}
-
-private fun EpisodeDTO.toEpisode(): Episode {
-    return Episode(
+private fun EpisodeDTO.toEpisode(): Episode =
+    Episode(
         title,
         overview,
         airYear,
     )
-}
-
 
 fun GenreDTO.toGenre(): Genre {
     val id = this.id ?: ""

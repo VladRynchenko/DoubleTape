@@ -10,11 +10,10 @@ data class RoleDTO(
     @SerializedName("episode_count")
     val episodeCount: Long,
 ) {
-    fun mapToDomain(): Role {
-        return Role(
+    fun mapToDomain(): Role =
+        Role(
             creditId = creditId,
             character = character,
             episodeCount = episodeCount,
         )
-    }
 }

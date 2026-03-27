@@ -13,6 +13,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.buildAnnotatedString
@@ -20,20 +21,26 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
+import com.vroff.ui.R
 
 @Composable
 fun ExpandableText(
     text: String,
     modifier: Modifier = Modifier,
-    minLines: Int = 3,
-    expandText: String = "Читать дальше...",
-    collapseText: String = "Свернуть",
+    minLines: Int,
+    expandText: String? = null,
+    collapseText: String? = null,
     textStyle: TextStyle = MaterialTheme.typography.bodyMedium,
-    expandCollapseTextStyle: SpanStyle = SpanStyle(
-        fontWeight = FontWeight.Bold
-    )
+    expandCollapseTextStyle: SpanStyle =
+        SpanStyle(
+            fontWeight = FontWeight.Bold,
+        ),
 ) {
     var expanded by remember { mutableStateOf(false) }
+
+    val expandText = expandText ?: stringResource(R.string.expand_text)
+    val collapseText = collapseText ?: stringResource(R.string.collapse_text)
+    var textEllipsized by remember { mutableStateOf(false) }
 
     Column(modifier = modifier) {
         Text(
@@ -41,39 +48,46 @@ fun ExpandableText(
             style = textStyle,
             maxLines = if (expanded) Int.MAX_VALUE else minLines,
             overflow = TextOverflow.Ellipsis,
-            modifier = Modifier
-                .animateContentSize(animationSpec = tween(durationMillis = 300))
-                .clickable(
-                    enabled = true
-                ) {
-                    expanded = !expanded
-                }
+            onTextLayout = { textLayoutResult ->
+                textEllipsized = minLines == textLayoutResult.lineCount
+            },
+            modifier =
+                Modifier
+                    .animateContentSize(animationSpec = tween(durationMillis = 300))
+                    .clickable(
+                        enabled = true,
+                    ) {
+                        expanded = !expanded
+                    },
         )
 
-        if (!expanded && text.length > 100) {
+        if (!expanded && textEllipsized) {
             Text(
-                text = buildAnnotatedString {
-                    append("... ")
-                    withStyle(expandCollapseTextStyle) {
-                        append(expandText)
-                    }
-                },
-                modifier = Modifier
-                    .clickable { expanded = true }
-                    .padding(top = 4.dp),
-                style = textStyle
+                text =
+                    buildAnnotatedString {
+                        withStyle(expandCollapseTextStyle) {
+                            append(expandText)
+                        }
+                    },
+                modifier =
+                    Modifier
+                        .clickable { expanded = true }
+                        .padding(top = 4.dp),
+                style = textStyle,
             )
         } else if (expanded && text.length > 100) {
             Text(
-                text = buildAnnotatedString {
-                    withStyle(expandCollapseTextStyle) {
-                        append(collapseText)
-                    }
-                },
-                modifier = Modifier
-                    .clickable { expanded = false }
-                    .padding(top = 4.dp),
-                style = textStyle
+                text =
+                    buildAnnotatedString {
+                        withStyle(expandCollapseTextStyle) {
+                            append(collapseText)
+                        }
+                    },
+                modifier =
+                    Modifier
+                        .clickable { expanded = false }
+                        .padding(top = 4.dp),
+                style = textStyle,
             )
         }
     }

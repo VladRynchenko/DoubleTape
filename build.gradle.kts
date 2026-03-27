@@ -7,4 +7,19 @@ plugins {
     alias(libs.plugins.google.devtools.ksp) apply false
     alias(libs.plugins.jetbrains.kotlin.jvm) apply false
     alias(libs.plugins.android.library) apply false
+    alias(libs.plugins.ktlint)
+}
+
+subprojects {
+    apply(plugin = "org.jlleitschuh.gradle.ktlint")
+    extensions.configure<org.jlleitschuh.gradle.ktlint.KtlintExtension> {
+        outputToConsole.set(true)
+        ignoreFailures.set(false)
+    }
+}
+
+tasks.named("ktlintFormat").configure {
+    dependsOn(
+        subprojects.mapNotNull { it.tasks.findByName("ktlintFormat") },
+    )
 }

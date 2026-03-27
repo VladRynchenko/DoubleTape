@@ -3,7 +3,7 @@ import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.hilt.android)
-    alias (libs.plugins.google.devtools.ksp)
+    alias(libs.plugins.google.devtools.ksp)
 }
 
 android {
@@ -22,7 +22,7 @@ android {
             isMinifyEnabled = false
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
-                "proguard-rules.pro"
+                "proguard-rules.pro",
             )
         }
     }
@@ -52,9 +52,9 @@ dependencies {
     implementation(libs.logging.interceptor)
     implementation(libs.converter.gson)
 
-
     implementation(project(":core:ui"))
     implementation(project(":core:network"))
     implementation(project(":core:domain"))
     implementation(project(":core:data"))
+    implementation(project(":core:storage"))
 }

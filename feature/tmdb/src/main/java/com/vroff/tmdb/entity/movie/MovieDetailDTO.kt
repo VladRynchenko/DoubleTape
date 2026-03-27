@@ -1,9 +1,10 @@
 package com.vroff.tmdb.entity.movie
 
 import com.google.gson.annotations.SerializedName
+import com.vroff.domain.model.BackdropImage
+import com.vroff.domain.model.PosterImage
+import com.vroff.domain.model.tmdb.common.Genre
 import com.vroff.domain.model.tmdb.movie.MovieDetail
-import com.vroff.domain.model.streaming_available.Genre
-import com.vroff.tmdb.entity.series.AggregateCreditsDTO
 import com.vroff.tmdb.entity.common.ProductionCompanyDTO
 import com.vroff.tmdb.entity.common.ProductionCountryDTO
 import com.vroff.tmdb.entity.common.SpokenLanguageDTO
@@ -11,23 +12,23 @@ import com.vroff.tmdb.entity.common.SpokenLanguageDTO
 data class MovieDetailDTO(
     val adult: Boolean,
     @SerializedName("backdrop_path")
-    val backdropPath: String,
+    val backdropPath: String?,
     @SerializedName("belongs_to_collection")
     val belongsToCollection: Any?,
     val budget: Long,
     val genres: List<Genre>,
     val homepage: String,
-    val id: Long,
+    val id: Int,
     @SerializedName("imdb_id")
-    val imdbId: String,
+    val imdbId: String?,
     @SerializedName("original_language")
     val originalLanguage: String,
     @SerializedName("original_title")
     val originalTitle: String,
     val overview: String,
-    val popularity: Double,
+    val popularity: Float,
     @SerializedName("poster_path")
-    val posterPath: String,
+    val posterPath: String?,
     @SerializedName("production_companies")
     val productionCompanies: List<ProductionCompanyDTO>,
     @SerializedName("production_countries")
@@ -35,7 +36,7 @@ data class MovieDetailDTO(
     @SerializedName("release_date")
     val releaseDate: String,
     val revenue: Long,
-    val runtime: Long,
+    val runtime: Int,
     @SerializedName("spoken_languages")
     val spokenLanguages: List<SpokenLanguageDTO>,
     val status: String,
@@ -43,17 +44,16 @@ data class MovieDetailDTO(
     val title: String,
     val video: Boolean,
     @SerializedName("vote_average")
-    val voteAverage: Double,
+    val voteAverage: Float,
     @SerializedName("vote_count")
-    val voteCount: Long,
+    val voteCount: Int,
     @SerializedName("credits")
     val credits: CreditsDTO?,
 ) {
-    fun mapToDomain(): MovieDetail {
-        return MovieDetail(
+    fun mapToDomain(): MovieDetail =
+        MovieDetail(
             adult = adult,
-            backdropPath = backdropPath,
-            belongsToCollection = belongsToCollection,
+            backdrop = backdropPath?.let { BackdropImage(it) },
             budget = budget,
             genres = genres,
             homepage = homepage,
@@ -63,7 +63,7 @@ data class MovieDetailDTO(
             originalTitle = originalTitle,
             overview = overview,
             popularity = popularity,
-            posterPath = posterPath,
+            posterImage = posterPath?.let { PosterImage(it) },
             productionCompanies = productionCompanies.map { it.mapToDomain() },
             productionCountries = productionCountries.map { it.mapToDomain() },
             releaseDate = releaseDate,
@@ -76,7 +76,6 @@ data class MovieDetailDTO(
             video = video,
             voteAverage = voteAverage,
             voteCount = voteCount,
-            credits = credits?.mapToDomainLight(),
+            credits = credits?.mapToDomain(),
         )
-    }
 }

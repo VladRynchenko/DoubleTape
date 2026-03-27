@@ -6,19 +6,17 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import coil3.ImageLoader
-import com.vroff.domain.model.streaming_available.Show
+import com.vroff.domain.model.streamingavailable.Show
 
 @Composable
 fun MovieList(
     modifier: Modifier = Modifier,
     showList: List<Show>? = listOf(),
-    imageLoader: ImageLoader,
-    onItemClick: (String) -> Unit
+    onItemClick: (String) -> Unit,
 ) {
     LazyRow(
         modifier = modifier,
-        horizontalArrangement = Arrangement.spacedBy(12.dp)
+        horizontalArrangement = Arrangement.spacedBy(12.dp),
     ) {
         if (showList == null) {
             items(4) {
@@ -28,8 +26,7 @@ fun MovieList(
             items(showList) { item ->
                 MovieCard(
                     show = item,
-                    imageLoader = imageLoader,
-                    onClick = onItemClick
+                    onClick = onItemClick,
                 )
             }
         }

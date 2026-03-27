@@ -14,8 +14,6 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.KeyboardArrowRight
 import androidx.compose.material3.Card
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -30,74 +28,79 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.vroff.ui.R.drawable.keyboard_arrow_left_32
 
 @Composable
 fun HideableItem(
     modifier: Modifier = Modifier,
     initialExtended: Boolean = false,
     title: @Composable () -> Unit,
-    content: @Composable () -> Unit
+    content: @Composable () -> Unit,
 ) {
     var extended by rememberSaveable { mutableStateOf(initialExtended) }
     val indicationSource = remember { MutableInteractionSource() }
     val rotationAngle by animateFloatAsState(
         targetValue = if (extended) 90f else 0f,
-        animationSpec = tween(durationMillis = 300), label = "ArrowRotation"
+        animationSpec = tween(durationMillis = 300),
+        label = "ArrowRotation",
     )
 
     Card(
-        modifier = modifier
-            .fillMaxWidth()
-            .clickable(
-                interactionSource = indicationSource,
-                indication = null,
-                true,
-            ) {
-                extended = !extended
-            },
-        shape = RoundedCornerShape(12.dp)
+        modifier =
+            modifier
+                .fillMaxWidth()
+                .clickable(
+                    interactionSource = indicationSource,
+                    indication = null,
+                    true,
+                ) {
+                    extended = !extended
+                },
+        shape = RoundedCornerShape(12.dp),
     ) {
         Row(
-            modifier = Modifier
-                .padding(12.dp),
-            verticalAlignment = Alignment.CenterVertically
+            modifier =
+                Modifier
+                    .padding(12.dp),
+            verticalAlignment = Alignment.CenterVertically,
         ) {
             Icon(
-                imageVector = Icons.AutoMirrored.Filled.KeyboardArrowRight,
+                painter = painterResource(keyboard_arrow_left_32),
                 contentDescription = if (extended) "Свернуть" else "Развернуть",
                 tint = MaterialTheme.colorScheme.onSurface,
-                modifier = Modifier.graphicsLayer(rotationZ = rotationAngle)
+                modifier = Modifier.graphicsLayer(rotationZ = rotationAngle),
             )
 
             title.invoke()
         }
         AnimatedVisibility(
-            modifier = Modifier
-                .fillMaxWidth().padding(horizontal = 12.dp),
+            modifier =
+                Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 12.dp),
             visible = extended,
             enter = expandVertically(animationSpec = tween(300)) + fadeIn(animationSpec = tween(300)),
-            exit = shrinkVertically(animationSpec = tween(300)) + fadeOut(animationSpec = tween(300))
+            exit = shrinkVertically(animationSpec = tween(300)) + fadeOut(animationSpec = tween(300)),
         ) {
             content.invoke()
         }
     }
-
 }
 
 @Preview(showBackground = true)
 @Composable
 fun PreviewHideableItem() {
-
     Surface(Modifier.padding(vertical = 40.dp)) {
         HideableItem(
             title = {
                 Text("Title")
             },
-            initialExtended = true
+            initialExtended = true,
         ) {
-            Column() {
+            Column {
                 repeat(7) {
                     Text("Episode $it")
                 }

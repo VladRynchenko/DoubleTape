@@ -1,6 +1,7 @@
 package com.vroff.tmdb.entity.movie
 
 import com.google.gson.annotations.SerializedName
+import com.vroff.domain.model.ProfileImage
 import com.vroff.domain.model.tmdb.movie.Crew
 
 data class CrewDTO(
@@ -20,8 +21,8 @@ data class CrewDTO(
     val department: String,
     val job: String,
 ) {
-    fun mapToDomain(): Crew {
-        return Crew(
+    fun mapToDomain(): Crew =
+        Crew(
             adult = adult,
             gender = gender,
             id = id,
@@ -29,10 +30,9 @@ data class CrewDTO(
             name = name,
             originalName = originalName,
             popularity = popularity,
-            profilePath = profilePath,
+            profileImage = profilePath?.let { ProfileImage(it) },
             creditId = creditId,
             department = department,
             job = job,
         )
-    }
 }

@@ -1,6 +1,8 @@
 package com.vroff.tmdb.entity.series
 
 import com.google.gson.annotations.SerializedName
+import com.vroff.domain.model.BackdropImage
+import com.vroff.domain.model.PosterImage
 import com.vroff.domain.model.tmdb.series.SeriesDetail
 import com.vroff.tmdb.entity.common.GenreDTO
 import com.vroff.tmdb.entity.common.ProductionCompanyDTO
@@ -10,31 +12,31 @@ import com.vroff.tmdb.entity.common.SpokenLanguageDTO
 data class SeriesDetailDTO(
     val adult: Boolean,
     @SerializedName("backdrop_path")
-    val backdropPath: String,
+    val backdropPath: String?,
     @SerializedName("created_by")
     val createdBy: List<CreatedByDTO>,
     @SerializedName("episode_run_time")
-    val episodeRunTime: List<Long>,
+    val episodeRunTime: List<Int>,
     @SerializedName("first_air_date")
     val firstAirDate: String,
     val genres: List<GenreDTO>,
     val homepage: String,
-    val id: Long,
+    val id: Int,
     @SerializedName("in_production")
     val inProduction: Boolean,
     val languages: List<String>,
     @SerializedName("last_air_date")
-    val lastAirDate: String,
+    val lastAirDate: String?,
     @SerializedName("last_episode_to_air")
-    val lastEpisodeToAir: LastEpisodeToAirDTO,
+    val lastEpisodeToAir: LastEpisodeToAirDTO?,
     val name: String,
     @SerializedName("next_episode_to_air")
     val nextEpisodeToAir: Any?,
     val networks: List<NetworkDTO>,
     @SerializedName("number_of_episodes")
-    val numberOfEpisodes: Long,
+    val numberOfEpisodes: Int,
     @SerializedName("number_of_seasons")
-    val numberOfSeasons: Long,
+    val numberOfSeasons: Int,
     @SerializedName("origin_country")
     val originCountry: List<String>,
     @SerializedName("original_language")
@@ -42,9 +44,9 @@ data class SeriesDetailDTO(
     @SerializedName("original_name")
     val originalName: String,
     val overview: String,
-    val popularity: Double,
+    val popularity: Float,
     @SerializedName("poster_path")
-    val posterPath: String,
+    val posterPath: String?,
     @SerializedName("production_companies")
     val productionCompanies: List<ProductionCompanyDTO>,
     @SerializedName("production_countries")
@@ -56,16 +58,16 @@ data class SeriesDetailDTO(
     val tagline: String,
     val type: String,
     @SerializedName("vote_average")
-    val voteAverage: Double,
+    val voteAverage: Float,
     @SerializedName("vote_count")
-    val voteCount: Long,
+    val voteCount: Int,
     @SerializedName("aggregate_credits")
     val aggregateCredits: AggregateCreditsDTO,
 ) {
-    fun mapToDomain(): SeriesDetail {
-        return SeriesDetail(
+    fun mapToDomain(): SeriesDetail =
+        SeriesDetail(
             adult = adult,
-            backdropPath = backdropPath,
+            backdropImage = backdropPath?.let { BackdropImage(it) },
             createdBy = createdBy.map { it.mapToDomain() },
             episodeRunTime = episodeRunTime,
             firstAirDate = firstAirDate,
@@ -75,9 +77,8 @@ data class SeriesDetailDTO(
             inProduction = inProduction,
             languages = languages,
             lastAirDate = lastAirDate,
-            lastEpisodeToAir = lastEpisodeToAir.mapToDomain(),
+            lastEpisodeToAir = lastEpisodeToAir?.mapToDomain(),
             name = name,
-            nextEpisodeToAir = nextEpisodeToAir,
             networks = networks.map { it.mapToDomain() },
             numberOfEpisodes = numberOfEpisodes,
             numberOfSeasons = numberOfSeasons,
@@ -86,7 +87,7 @@ data class SeriesDetailDTO(
             originalName = originalName,
             overview = overview,
             popularity = popularity,
-            posterPath = posterPath,
+            posterImage = posterPath?.let { PosterImage(it) },
             productionCompanies = productionCompanies.map { it.mapToDomain() },
             productionCountries = productionCountries.map { it.mapToDomain() },
             seasons = seasons.map { it.mapToDomain() },
@@ -98,5 +99,4 @@ data class SeriesDetailDTO(
             voteCount = voteCount,
             aggregateCredits = aggregateCredits.mapToDomain(),
         )
-    }
 }

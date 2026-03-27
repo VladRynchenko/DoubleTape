@@ -10,11 +10,10 @@ data class SpokenLanguageDTO(
     val iso6391: String,
     val name: String,
 ) {
-    fun mapToDomain(): SpokenLanguage {
-        return SpokenLanguage(
+    fun mapToDomain(): SpokenLanguage =
+        SpokenLanguage(
             englishName = englishName,
             iso6391 = iso6391,
             name = name,
         )
-    }
 }
