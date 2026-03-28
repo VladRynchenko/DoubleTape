@@ -35,14 +35,14 @@ The project is strictly modularized:
 	• :core:ui: Centralized design system, common composables (TopBars, Cards, Shimmers), and Theme definitions.
 
     • :domain: Pure Kotlin module containing business logic, repositories, and models (no Android dependencies).
-	
+
     • :data: Implementation of repositories, API services, and data mappers.
 
 ## 🏗 Setup
 
 1. Clone the repository:
     Shell Script
-	
+
 	    git clone https://github.com/vroff/DoubleTape.git
 
 2. Obtain an API key from TMDB.
@@ -59,3 +59,9 @@ DoubleTape is a project by vroff. I am currently looking for new opportunities t
 • LinkedIn: [https://www.linkedin.com/in/vladyslav-rynchenko/]
 
 • Email: [rynchenko.vlad1408@gmail.com]
+
+## License
+
+This project is licensed under the Creative Commons Attribution-NonCommercial 4.0 International License (CC BY-NC 4.0).
+
+https://creativecommons.org/licenses/by-nc/4.0/
