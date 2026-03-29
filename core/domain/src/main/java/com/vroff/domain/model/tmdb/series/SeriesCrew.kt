@@ -2,11 +2,12 @@ package com.vroff.domain.model.tmdb.series
 
 import com.vroff.domain.model.ProfileImage
 import com.vroff.domain.model.tmdb.common.BaseCrew
+import com.vroff.domain.model.tmdb.search.Gender
 
 data class SeriesCrew(
     override val adult: Boolean,
-    override val gender: Long,
-    override val id: Long,
+    override val gender: Gender,
+    override val id: Int,
     override val knownForDepartment: String,
     override val name: String,
     override val originalName: String,

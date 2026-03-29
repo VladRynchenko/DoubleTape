@@ -9,10 +9,12 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import androidx.navigation.navigation
 import androidx.navigation.toRoute
+import com.vroff.doubletape.detail.Credits
 import com.vroff.doubletape.detail.Details
 import com.vroff.doubletape.detail.DetailsGraph
 import com.vroff.doubletape.detail.Profile
 import com.vroff.doubletape.detail.Video
+import com.vroff.doubletape.detail.movie.credits.FullCreditsScreen
 import com.vroff.doubletape.detail.movie.video.VideoScreen
 
 fun NavGraphBuilder.movieGraph(navController: NavController) {
@@ -27,6 +29,9 @@ fun NavGraphBuilder.movieGraph(navController: NavController) {
                 },
                 onVideoClick = {
                     navController.navigate(Video)
+                },
+                onFullCreditsClick = {
+                    navController.navigate(Credits)
                 },
             )
         }
@@ -43,6 +48,24 @@ fun NavGraphBuilder.movieGraph(navController: NavController) {
             val videos by viewModel.videoStateFlow.collectAsState()
 
             VideoScreen(videos)
+        }
+
+        composable<Credits> { backStackEntry ->
+            val parentEntry =
+                remember(backStackEntry) {
+                    navController.getBackStackEntry(Details::class)
+                }
+            val viewModel: MovieViewModel =
+                hiltViewModel(parentEntry)
+
+            val credits by viewModel.creditsStateFlow.collectAsState()
+
+            FullCreditsScreen(
+                credits,
+                onPersonItemClick = {
+                    navController.navigate(Profile(it))
+                },
+            )
         }
     }
 }

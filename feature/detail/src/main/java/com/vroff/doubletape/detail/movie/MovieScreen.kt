@@ -64,6 +64,7 @@ fun MovieScreen(
     type: MediaType,
     onCastItemClick: (Int) -> Unit,
     onVideoClick: () -> Unit,
+    onFullCreditsClick: () -> Unit,
 ) {
     val movieViewModel = hiltViewModel<MovieViewModel>()
     movieViewModel.setTMDBId(tmdbId, type)
@@ -72,6 +73,7 @@ fun MovieScreen(
         state = state,
         onCastItemClick = onCastItemClick,
         onVideoClick = onVideoClick,
+        onFullCreditsClick = onFullCreditsClick,
         modifier = Modifier.padding(horizontal = 12.dp),
     )
 }
@@ -82,6 +84,7 @@ private fun ShowDetailsContent(
     onCastItemClick: (Int) -> Unit,
     onVideoClick: () -> Unit,
     modifier: Modifier,
+    onFullCreditsClick: () -> Unit,
 ) {
     when (state) {
         is BaseScreenState.Loading -> {
@@ -93,7 +96,7 @@ private fun ShowDetailsContent(
         }
 
         is BaseScreenState.Success -> {
-            DetailsScreen(state.data, onCastItemClick, onVideoClick, modifier)
+            DetailsScreen(state.data, onCastItemClick, onVideoClick, onFullCreditsClick, modifier)
         }
     }
 }
@@ -103,6 +106,7 @@ fun DetailsScreen(
     show: BaseDetails,
     onCastItemClick: (Int) -> Unit,
     onVideoClick: () -> Unit,
+    onFullCreditsClick: () -> Unit,
     modifier: Modifier,
 ) {
     val scrollState = rememberScrollState()
@@ -118,8 +122,13 @@ fun DetailsScreen(
         TitleWidget(show.title, modifier.padding(vertical = 8.dp))
         MetadataSection(modifier, show)
         ActionSection(modifier = modifier.height(60.dp), show, onVideoClick = onVideoClick)
-        show.credits?.cast?.takeIf { it.isNotEmpty() }?.let {
-            CastSection(modifier, it, onCastItemClick = onCastItemClick)
+        show.credits?.cast?.takeIf { it.isNotEmpty() }?.take(20)?.let {
+            CastSection(
+                modifier,
+                it,
+                onCastItemClick = onCastItemClick,
+                onFullCreditsClick = onFullCreditsClick,
+            )
         }
         SecondaryMetadataSection(modifier, show)
         show.seasons?.let {
@@ -143,7 +152,10 @@ fun ActionSection(
     if (show.videos?.isNotEmpty() == true) {
         Row(modifier) {
             WideButton(
-                modifier = Modifier.fillMaxHeight().weight(1f),
+                modifier =
+                    Modifier
+                        .fillMaxHeight()
+                        .weight(1f),
                 icon = Icon.Play,
                 onClick = onVideoClick,
             )
@@ -337,11 +349,14 @@ fun CastSection(
     castList: List<CastBase> = listOf(),
     contentPadding: PaddingValues = PaddingValues(12.dp),
     onCastItemClick: (Int) -> Unit,
+    onFullCreditsClick: () -> Unit,
 ) {
     Column {
         HeaderText(
             modifier = modifier,
             headerText = stringResource(R.string.header_cast),
+            isSeeMore = true,
+            onMoreClicked = onFullCreditsClick,
         )
         CastWidget(
             cast = castList,

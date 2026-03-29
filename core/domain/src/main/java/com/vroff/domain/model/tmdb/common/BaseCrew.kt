@@ -1,12 +1,13 @@
 package com.vroff.domain.model.tmdb.common
 
 import com.vroff.domain.model.ProfileImage
+import com.vroff.domain.model.tmdb.search.Gender
 import com.vroff.domain.model.tmdb.series.Job
 
 open class BaseCrew(
     open val adult: Boolean,
-    open val gender: Long,
-    open val id: Long,
+    open val gender: Gender,
+    open val id: Int,
     open val knownForDepartment: String,
     open val name: String,
     open val originalName: String,

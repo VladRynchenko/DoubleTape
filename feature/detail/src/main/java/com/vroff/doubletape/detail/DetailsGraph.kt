@@ -19,3 +19,6 @@ data class Profile(
 
 @Serializable
 object Video
+
+@Serializable
+object Credits

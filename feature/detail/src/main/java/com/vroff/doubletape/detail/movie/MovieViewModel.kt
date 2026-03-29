@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.vroff.data.usecase.detail.GetShowByIdUseCase
 import com.vroff.domain.model.NetworkResult
+import com.vroff.domain.model.tmdb.common.BaseCredits
 import com.vroff.domain.model.tmdb.common.VideoData
 import com.vroff.domain.model.tmdb.search.MediaType
 import com.vroff.ui.model.BaseScreenState
@@ -32,8 +33,10 @@ class MovieViewModel
                         is NetworkResult.Success -> {
                             BaseScreenState.Success(data = result.data).also {
                                 videoStateFlow.update { result.data.videos ?: emptyList() }
+                                creditsStateFlow.update { result.data.credits ?: BaseCredits(emptyList(), emptyList()) }
                             }
                         }
+
                         is NetworkResult.Error -> BaseScreenState.Error(result.message)
                         is NetworkResult.Exception -> BaseScreenState.Error("${type.type}/$id/ln${result.e.message}")
                     }
@@ -44,6 +47,7 @@ class MovieViewModel
                 )
 
         val videoStateFlow = MutableStateFlow<List<VideoData>>(emptyList())
+        val creditsStateFlow = MutableStateFlow(BaseCredits(emptyList(), emptyList()))
 
         fun setTMDBId(
             id: Int,
