@@ -1,4 +1,4 @@
-package com.vroff.data.usecase
+package com.vroff.data.usecase.detail
 
 import android.util.Log
 import com.vroff.domain.model.NetworkResult
@@ -29,6 +29,7 @@ class GetShowByIdUseCase
                             appendToResponse =
                                 buildAppendQuery(
                                     MovieAppendedToResponse.CREDITS,
+                                    MovieAppendedToResponse.VIDEOS,
                                 ),
                         )
 
@@ -39,6 +40,7 @@ class GetShowByIdUseCase
                             appendToResponse =
                                 buildAppendQuery(
                                     SeriesAppendedToResponse.AGGREGATE_CREDITS,
+                                    SeriesAppendedToResponse.VIDEOS,
                                 ),
                         )
 

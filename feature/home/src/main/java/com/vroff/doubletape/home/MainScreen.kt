@@ -29,7 +29,7 @@ import com.vroff.domain.model.tmdb.search.MediaType
 import com.vroff.ui.R
 import com.vroff.ui.ShowFormatter.formatRealiseDate
 import com.vroff.ui.ui.AppAsyncImage
-import com.vroff.ui.ui.BackdropImage
+import com.vroff.ui.ui.BackdropImageWidget
 import com.vroff.ui.ui.HeaderText
 import com.vroff.ui.ui.LocalInnerPadding
 import com.vroff.ui.ui.item.BackdropItem
@@ -55,7 +55,7 @@ fun MainScreenContent(
     ) {
         data?.nowPlayingMovie?.first()?.let {
             item {
-                BackdropImage(
+                BackdropImageWidget(
                     modifier = Modifier.clickable(onClick = { onItemClicked(it.id, it.mediaType) }),
                     it.backdropImage,
                 ) {

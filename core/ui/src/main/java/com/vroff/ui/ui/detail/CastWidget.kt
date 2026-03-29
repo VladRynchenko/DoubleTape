@@ -1,6 +1,5 @@
 package com.vroff.ui.ui.detail
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -132,7 +131,6 @@ fun CastBaseItem(
                 Modifier
                     .clip(RoundedCornerShape(14.dp))
                     .size(120.dp, 160.dp)
-                    .background(MaterialTheme.colorScheme.onSurface)
                     .clip(RoundedCornerShape(14.dp)),
         )
         Column(

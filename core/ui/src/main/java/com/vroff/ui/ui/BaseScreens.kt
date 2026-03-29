@@ -8,6 +8,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import com.vroff.ui.R
@@ -17,12 +18,13 @@ import com.vroff.ui.R
 fun ErrorScreen(
     modifier: Modifier = Modifier,
     errorText: String = stringResource(R.string.something_went_wrong),
+    colorText: Color = MaterialTheme.colorScheme.error,
 ) {
     Box(
         modifier = modifier.fillMaxSize(),
         contentAlignment = Alignment.Center,
     ) {
-        Text(errorText, color = MaterialTheme.colorScheme.error)
+        Text(errorText, color = colorText)
     }
 }
 

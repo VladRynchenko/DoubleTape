@@ -26,7 +26,9 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.toRoute
 import com.vroff.domain.model.tmdb.search.MediaType
-import com.vroff.doubletape.detail.movie.MovieScreen
+import com.vroff.doubletape.detail.Details
+import com.vroff.doubletape.detail.Profile
+import com.vroff.doubletape.detail.movie.movieGraph
 import com.vroff.doubletape.detail.profile.ProfileScreen
 import com.vroff.doubletape.home.MainScreen
 import com.vroff.doubletape.presentation.screens.Graph
@@ -88,7 +90,7 @@ class MainActivity : ComponentActivity() {
                             composable<Graph.Main> {
                                 MainScreen { id, type ->
                                     if (type.isShow) {
-                                        navController.navigate(Graph.Details(id, type))
+                                        navController.navigate(Details(id, type))
                                     }
                                 }
                             }
@@ -98,33 +100,24 @@ class MainActivity : ComponentActivity() {
                                     searchQuery = query,
                                     onItemClick = { id, type ->
                                         if (type.isShow) {
-                                            navController.navigate(Graph.Details(id, type))
+                                            navController.navigate(Details(id, type))
                                         } else if (type == MediaType.PERSON) {
-                                            navController.navigate(Graph.Profile(id))
+                                            navController.navigate(Profile(id))
                                         }
                                     },
                                 )
                             }
 
-                            composable<Graph.Details> { backStackEntry ->
-                                val details = backStackEntry.toRoute<Graph.Details>()
-                                MovieScreen(
-                                    tmdbId = details.id,
-                                    type = details.type,
-                                    onCastItemClick = {
-                                        navController.navigate(Graph.Profile(it))
-                                    },
-                                )
-                            }
-                            composable<Graph.Profile> { backStackEntry ->
-                                val details = backStackEntry.toRoute<Graph.Profile>()
+                            composable<Profile> { backStackEntry ->
+                                val details = backStackEntry.toRoute<Profile>()
                                 ProfileScreen(
                                     profileId = details.id,
                                     onShowClick = { id, type ->
-                                        navController.navigate(Graph.Details(id, type))
+                                        navController.navigate(Details(id, type))
                                     },
                                 )
                             }
+                            movieGraph(navController)
                         }
                     }
                 }

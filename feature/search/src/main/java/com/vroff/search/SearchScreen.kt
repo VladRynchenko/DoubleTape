@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -110,7 +111,8 @@ fun SearchContent(
                 LazyColumn(
                     Modifier
                         .fillMaxSize()
-                        .padding(horizontal = 12.dp),
+                        .padding(horizontal = 12.dp)
+                        .imePadding(),
                     verticalArrangement = Arrangement.spacedBy(12.dp),
                     contentPadding = paddings,
                 ) {
@@ -154,7 +156,10 @@ fun SearchContent(
 
             is SearchScreenState.Empty -> {
                 Box(
-                    modifier = Modifier.fillMaxSize(),
+                    modifier =
+                        Modifier
+                            .fillMaxSize()
+                            .imePadding(),
                     contentAlignment = Alignment.Center,
                 ) {
                     Text(text = stringResource(string.nothing_found))
@@ -168,7 +173,8 @@ fun SearchContent(
                     modifier =
                         Modifier
                             .padding(horizontal = 12.dp)
-                            .fillMaxSize(),
+                            .fillMaxSize()
+                            .imePadding(),
                     verticalArrangement = Arrangement.spacedBy(12.dp),
                     contentPadding = paddings,
                     state = listState,
@@ -188,9 +194,9 @@ fun SearchContent(
 
             is SearchScreenState.Error -> {
                 ErrorScreen(
-                    Modifier.background(
-                        color = MaterialTheme.colorScheme.secondary,
-                    ),
+                    Modifier
+                        .background(color = MaterialTheme.colorScheme.secondary)
+                        .imePadding(),
                     errorText = state.e,
                 )
             }

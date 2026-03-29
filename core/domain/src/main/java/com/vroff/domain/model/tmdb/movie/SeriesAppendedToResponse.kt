@@ -6,4 +6,5 @@ enum class SeriesAppendedToResponse(
     override val value: String,
 ) : AppendableResponse {
     AGGREGATE_CREDITS("aggregate_credits"),
+    VIDEOS("videos"),
 }

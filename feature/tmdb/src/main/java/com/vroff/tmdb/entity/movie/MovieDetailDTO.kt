@@ -8,6 +8,7 @@ import com.vroff.domain.model.tmdb.movie.MovieDetail
 import com.vroff.tmdb.entity.common.ProductionCompanyDTO
 import com.vroff.tmdb.entity.common.ProductionCountryDTO
 import com.vroff.tmdb.entity.common.SpokenLanguageDTO
+import com.vroff.tmdb.entity.common.VideoResponse
 
 data class MovieDetailDTO(
     val adult: Boolean,
@@ -49,6 +50,7 @@ data class MovieDetailDTO(
     val voteCount: Int,
     @SerializedName("credits")
     val credits: CreditsDTO?,
+    val videos: VideoResponse?,
 ) {
     fun mapToDomain(): MovieDetail =
         MovieDetail(
@@ -77,5 +79,6 @@ data class MovieDetailDTO(
             voteAverage = voteAverage,
             voteCount = voteCount,
             credits = credits?.mapToDomain(),
+            videos = videos?.mapToDomain(),
         )
 }

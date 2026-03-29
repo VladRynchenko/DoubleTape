@@ -7,6 +7,7 @@ import com.vroff.domain.model.tmdb.common.Genre
 import com.vroff.domain.model.tmdb.common.ProductionCompany
 import com.vroff.domain.model.tmdb.common.ProductionCountry
 import com.vroff.domain.model.tmdb.common.SpokenLanguage
+import com.vroff.domain.model.tmdb.common.VideoData
 
 data class SeriesDetail(
     override val adult: Boolean,
@@ -41,6 +42,7 @@ data class SeriesDetail(
     override val voteAverage: Float,
     override val voteCount: Int,
     val aggregateCredits: AggregateCredits,
+    override val videos: List<VideoData>,
 ) : BaseDetails(
         adult = adult,
         backdropImage = backdropImage,
@@ -74,4 +76,5 @@ data class SeriesDetail(
         voteAverage = voteAverage,
         voteCount = voteCount,
         credits = aggregateCredits,
+        videos = videos,
     )

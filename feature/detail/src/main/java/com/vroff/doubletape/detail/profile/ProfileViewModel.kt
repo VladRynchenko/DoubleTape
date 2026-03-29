@@ -2,7 +2,7 @@ package com.vroff.doubletape.detail.profile
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.vroff.data.usecase.GetProfileUseCase
+import com.vroff.data.usecase.detail.GetProfileUseCase
 import com.vroff.domain.model.NetworkResult
 import com.vroff.ui.model.BaseScreenState
 import dagger.hilt.android.lifecycle.HiltViewModel

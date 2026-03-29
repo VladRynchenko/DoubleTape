@@ -45,23 +45,25 @@ import com.vroff.ui.theme.MovieDDTheme
 @Composable
 fun NavigationTopBarButton(
     modifier: Modifier = Modifier,
-    @DrawableRes icon: Int,
+    @DrawableRes icon: Int?,
     onClick: () -> Unit,
-) = IconButton(
-    onClick = onClick,
-    modifier =
-        Modifier
-            .then(modifier)
-            .size(56.dp)
-            .clip(CircleShape)
-            .background(MaterialTheme.colorScheme.surface.copy(0.9f), CircleShape),
-) {
-    Icon(
-        painter = painterResource(icon),
-        tint = MaterialTheme.colorScheme.primary,
-        contentDescription = "",
-        modifier = Modifier.size(32.dp),
-    )
+) = icon?.let {
+    IconButton(
+        onClick = onClick,
+        modifier =
+            Modifier
+                .then(modifier)
+                .size(56.dp)
+                .clip(CircleShape)
+                .background(MaterialTheme.colorScheme.surface.copy(0.9f), CircleShape),
+    ) {
+        Icon(
+            painter = painterResource(icon),
+            tint = MaterialTheme.colorScheme.primary,
+            contentDescription = "",
+            modifier = Modifier.size(32.dp),
+        )
+    }
 }
 
 sealed interface TopBarState {
@@ -160,7 +162,7 @@ fun ShowTopAppBar(
                         navigationIcon = {
                             val icon =
                                 when (state) {
-                                    TopBarState.Default -> R.drawable.person_32
+                                    TopBarState.Default -> null
                                     else -> R.drawable.keyboard_arrow_left_32
                                 }
                             NavigationTopBarButton(icon = icon, onClick = onNavigationIconClick)

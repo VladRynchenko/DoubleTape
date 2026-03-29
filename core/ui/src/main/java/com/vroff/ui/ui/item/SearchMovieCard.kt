@@ -30,6 +30,7 @@ import com.vroff.ui.ShowFormatter.formatRealiseDate
 import com.vroff.ui.preview.SearchItemPreviewProvider
 import com.vroff.ui.ui.AppAsyncImage
 import com.vroff.ui.ui.RatingWidget
+import com.vroff.ui.ui.toRequest
 
 @Preview
 @Composable
@@ -93,7 +94,7 @@ fun SearchBaseCard(
         val (poster, titleRef, subtitleRef, dateRef) = createRefs()
 
         AppAsyncImage(
-            model = image,
+            model = image.toRequest(),
             contentDescription = null,
             contentScale = ContentScale.Crop,
             modifier =

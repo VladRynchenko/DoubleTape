@@ -7,6 +7,7 @@ import com.vroff.domain.model.tmdb.common.Genre
 import com.vroff.domain.model.tmdb.common.ProductionCompany
 import com.vroff.domain.model.tmdb.common.ProductionCountry
 import com.vroff.domain.model.tmdb.common.SpokenLanguage
+import com.vroff.domain.model.tmdb.common.VideoData
 
 data class MovieDetail(
     override val adult: Boolean,
@@ -34,30 +35,32 @@ data class MovieDetail(
     override val voteAverage: Float,
     override val voteCount: Int,
     override val credits: Credits?,
+    override val videos: List<VideoData>?,
 ) : BaseDetails(
         adult = adult,
-        backdrop = backdrop,
-        budget = budget,
-        genres = genres,
         homepage = homepage,
         id = id,
-        imdbId = imdbId,
         originalLanguage = originalLanguage,
-        originalTitle = originalTitle,
         overview = overview,
         popularity = popularity,
-        posterImage = posterImage,
         productionCompanies = productionCompanies,
         productionCountries = productionCountries,
-        releaseDate = releaseDate,
-        revenue = revenue,
-        runtime = runtime,
+        genres = genres,
+        voteAverage = voteAverage,
+        voteCount = voteCount,
         spokenLanguages = spokenLanguages,
         status = status,
         tagline = tagline,
         title = title,
         video = video,
-        voteAverage = voteAverage,
-        voteCount = voteCount,
         credits = credits,
+        backdrop = backdrop,
+        budget = budget,
+        originalTitle = originalTitle,
+        posterImage = posterImage,
+        imdbId = imdbId,
+        releaseDate = releaseDate,
+        revenue = revenue,
+        runtime = runtime,
+        videos = videos,
     )

@@ -8,6 +8,7 @@ import com.vroff.tmdb.entity.common.GenreDTO
 import com.vroff.tmdb.entity.common.ProductionCompanyDTO
 import com.vroff.tmdb.entity.common.ProductionCountryDTO
 import com.vroff.tmdb.entity.common.SpokenLanguageDTO
+import com.vroff.tmdb.entity.common.VideoResponse
 
 data class SeriesDetailDTO(
     val adult: Boolean,
@@ -63,6 +64,7 @@ data class SeriesDetailDTO(
     val voteCount: Int,
     @SerializedName("aggregate_credits")
     val aggregateCredits: AggregateCreditsDTO,
+    val videos: VideoResponse,
 ) {
     fun mapToDomain(): SeriesDetail =
         SeriesDetail(
@@ -98,5 +100,6 @@ data class SeriesDetailDTO(
             voteAverage = voteAverage,
             voteCount = voteCount,
             aggregateCredits = aggregateCredits.mapToDomain(),
+            videos = videos.mapToDomain(),
         )
 }
