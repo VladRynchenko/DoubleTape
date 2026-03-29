@@ -3,11 +3,12 @@ package com.vroff.tmdb.entity.movie
 import com.google.gson.annotations.SerializedName
 import com.vroff.domain.model.ProfileImage
 import com.vroff.domain.model.tmdb.movie.Crew
+import com.vroff.domain.model.tmdb.search.Gender
 
 data class CrewDTO(
     val adult: Boolean,
-    val gender: Long,
-    val id: Long,
+    val gender: Int,
+    val id: Int,
     @SerializedName("known_for_department")
     val knownForDepartment: String,
     val name: String,
@@ -24,7 +25,7 @@ data class CrewDTO(
     fun mapToDomain(): Crew =
         Crew(
             adult = adult,
-            gender = gender,
+            gender = Gender.entries[gender],
             id = id,
             knownForDepartment = knownForDepartment,
             name = name,

@@ -23,7 +23,7 @@ fun SeeMoreText(
     modifier: Modifier = Modifier,
     text: String,
     color: Color = MaterialTheme.colorScheme.onSurface,
-    icon: Painter? = painterResource(R.drawable.keyboard_arrow_right),
+    icon: Painter?,
     onClick: () -> Unit,
 ) {
     Row(
@@ -39,13 +39,11 @@ fun SeeMoreText(
             modifier = modifier.padding(start = 8.dp),
             style = MaterialTheme.typography.titleSmall,
         )
-        icon?.let {
-            Icon(
-                icon,
-                modifier = Modifier.size(24.dp),
-                tint = color,
-                contentDescription = text,
-            )
-        }
+        Icon(
+            icon ?: painterResource(R.drawable.keyboard_arrow_right),
+            modifier = Modifier.size(24.dp),
+            tint = color,
+            contentDescription = text,
+        )
     }
 }

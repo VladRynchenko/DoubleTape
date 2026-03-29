@@ -11,6 +11,7 @@ import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import javax.inject.Inject
@@ -43,24 +44,31 @@ class ProfileViewModel
         private val _isExpanded = MutableStateFlow(false)
         val isExpanded = _isExpanded.asStateFlow()
 
-        // Available tabs is derived from the profile data
         val availableTabs: StateFlow<List<CreditType>> =
             state
                 .map { screenState ->
                     if (screenState is BaseScreenState.Success) {
                         val credits = screenState.data.combinedCredits
                         buildList {
-                            if (credits?.cast?.isNotEmpty() == true) add(CreditType.Cast)
-                            if (credits?.crew?.isNotEmpty() == true) add(CreditType.Crew)
+                            if (credits?.cast?.isNotEmpty() == true) {
+                                add(CreditType.Cast)
+                            }
+                            if (credits?.crew?.isNotEmpty() == true) {
+                                add(CreditType.Crew)
+                            }
                         }
                     } else {
                         emptyList()
+                    }
+                }.onEach { tabs ->
+                    if (tabs.isNotEmpty() && _selectedTab.value !in tabs) {
+                        _selectedTab.value = tabs.first()
                     }
                 }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), emptyList())
 
         fun onTabSelected(tab: CreditType) {
             _selectedTab.value = tab
-            _isExpanded.value = false // Reset expansion when switching tabs
+            _isExpanded.value = false
         }
 
         fun toggleExpanded() {
