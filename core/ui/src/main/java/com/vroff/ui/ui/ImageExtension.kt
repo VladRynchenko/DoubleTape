@@ -1,6 +1,5 @@
 package com.vroff.ui.ui
 
-import androidx.compose.animation.core.copy
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
@@ -38,14 +37,14 @@ fun ImagePlaceholder() {
         modifier =
             Modifier
                 .fillMaxSize()
-                .background(Color.LightGray),
+                .background(MaterialTheme.colorScheme.onSurface),
         contentAlignment = Alignment.Center,
     ) {
         Icon(
             painter = painterResource(id = R.drawable.gallery_slash),
             contentDescription = null,
             modifier = Modifier.size(48.dp),
-            tint = MaterialTheme.colorScheme.onPrimary.copy(alpha = 0.5f),
+            tint = Color.LightGray,
         )
     }
 }

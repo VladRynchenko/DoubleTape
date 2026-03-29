@@ -6,4 +6,5 @@ enum class MovieAppendedToResponse(
     override val value: String,
 ) : AppendableResponse {
     CREDITS("credits"),
+    VIDEOS("videos"),
 }

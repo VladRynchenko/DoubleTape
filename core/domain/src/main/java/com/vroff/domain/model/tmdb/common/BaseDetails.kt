@@ -47,4 +47,5 @@ open class BaseDetails(
     open val releaseDate: String? = null,
     open val revenue: Long? = null,
     open val runtime: Int? = null,
+    open val videos: List<VideoData>? = null,
 )

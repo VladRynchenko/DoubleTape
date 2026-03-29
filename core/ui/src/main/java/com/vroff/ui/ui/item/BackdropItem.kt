@@ -12,7 +12,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.vroff.domain.model.BackdropImage
 import com.vroff.domain.model.constants.SymbolConstant
-import com.vroff.ui.ui.BackdropImage
+import com.vroff.ui.ui.BackdropImageWidget
 import com.vroff.ui.ui.RatingWidget
 
 @Composable
@@ -25,7 +25,7 @@ fun BackdropItem(
     subtitle: String?,
     onItemClicked: () -> Unit,
 ) {
-    BackdropImage(
+    BackdropImageWidget(
         modifier =
             modifier
                 .clickable(onClick = onItemClicked),
@@ -47,7 +47,7 @@ fun BackdropItem(
                         Text(
                             text = it,
                             style = MaterialTheme.typography.bodySmall,
-                            color = MaterialTheme.colorScheme.onSurface,
+                            color = MaterialTheme.colorScheme.onPrimary,
                             overflow = TextOverflow.Ellipsis,
                         )
                     }
@@ -55,7 +55,7 @@ fun BackdropItem(
                         Text(
                             SymbolConstant.MIDDLE_POINT,
                             style = MaterialTheme.typography.bodySmall,
-                            color = MaterialTheme.colorScheme.onSurface,
+                            color = MaterialTheme.colorScheme.onPrimary,
                         )
                     }
 

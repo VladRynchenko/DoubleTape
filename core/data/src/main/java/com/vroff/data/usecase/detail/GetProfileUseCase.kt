@@ -1,4 +1,4 @@
-package com.vroff.data.usecase
+package com.vroff.data.usecase.detail
 
 import com.vroff.domain.model.NetworkResult
 import com.vroff.domain.model.tmdb.common.buildAppendQuery

@@ -16,6 +16,8 @@ val VanillaCream = Color(0xFFF0E7D5)
 val LightBrown = Color(0xFF877474)
 val LightPaper = Color(0xFFFFFFF3)
 
+val Gold = Color(0xFFF9CA6D)
+
 // Social media colors
 val Instagram = Color(0xFFE4405F)
 val Facebook = Color(0xFF1877F2)

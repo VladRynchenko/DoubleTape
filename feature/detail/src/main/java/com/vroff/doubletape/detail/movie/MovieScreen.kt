@@ -3,8 +3,10 @@ package com.vroff.doubletape.detail.movie
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -14,6 +16,7 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
@@ -50,6 +53,8 @@ import com.vroff.ui.ui.detail.CastWidget
 import com.vroff.ui.ui.item.SearchBaseCard
 import com.vroff.ui.ui.section.OverviewSection
 import com.vroff.ui.ui.toRequest
+import com.vroff.ui.ui.widget.Icon
+import com.vroff.ui.ui.widget.WideButton
 import java.util.Locale
 import kotlin.math.roundToInt
 
@@ -58,17 +63,24 @@ fun MovieScreen(
     tmdbId: Int,
     type: MediaType,
     onCastItemClick: (Int) -> Unit,
+    onVideoClick: () -> Unit,
 ) {
     val movieViewModel = hiltViewModel<MovieViewModel>()
     movieViewModel.setTMDBId(tmdbId, type)
-    val state = movieViewModel.showState.collectAsStateWithLifecycle()
-    ShowDetailsContent(state.value, onCastItemClick, Modifier.padding(horizontal = 12.dp))
+    val state by movieViewModel.showState.collectAsStateWithLifecycle()
+    ShowDetailsContent(
+        state = state,
+        onCastItemClick = onCastItemClick,
+        onVideoClick = onVideoClick,
+        modifier = Modifier.padding(horizontal = 12.dp),
+    )
 }
 
 @Composable
 private fun ShowDetailsContent(
     state: BaseScreenState<BaseDetails>,
     onCastItemClick: (Int) -> Unit,
+    onVideoClick: () -> Unit,
     modifier: Modifier,
 ) {
     when (state) {
@@ -81,7 +93,7 @@ private fun ShowDetailsContent(
         }
 
         is BaseScreenState.Success -> {
-            DetailsScreen(state.data, onCastItemClick, modifier)
+            DetailsScreen(state.data, onCastItemClick, onVideoClick, modifier)
         }
     }
 }
@@ -90,6 +102,7 @@ private fun ShowDetailsContent(
 fun DetailsScreen(
     show: BaseDetails,
     onCastItemClick: (Int) -> Unit,
+    onVideoClick: () -> Unit,
     modifier: Modifier,
 ) {
     val scrollState = rememberScrollState()
@@ -102,8 +115,9 @@ fun DetailsScreen(
         verticalArrangement = Arrangement.spacedBy(15.dp),
     ) {
         PosterImageWidget(show.posterImage)
-        TitleWidget(show.title, modifier.padding(vertical = 12.dp))
+        TitleWidget(show.title, modifier.padding(vertical = 8.dp))
         MetadataSection(modifier, show)
+        ActionSection(modifier = modifier.height(60.dp), show, onVideoClick = onVideoClick)
         show.credits?.cast?.takeIf { it.isNotEmpty() }?.let {
             CastSection(modifier, it, onCastItemClick = onCastItemClick)
         }
@@ -117,6 +131,23 @@ fun DetailsScreen(
                 .height(padding.calculateBottomPadding())
                 .fillMaxWidth(),
         )
+    }
+}
+
+@Composable
+fun ActionSection(
+    modifier: Modifier = Modifier,
+    show: BaseDetails,
+    onVideoClick: () -> Unit,
+) {
+    if (show.videos?.isNotEmpty() == true) {
+        Row(modifier) {
+            WideButton(
+                modifier = Modifier.fillMaxHeight().weight(1f),
+                icon = Icon.Play,
+                onClick = onVideoClick,
+            )
+        }
     }
 }
 
