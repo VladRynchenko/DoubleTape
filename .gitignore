@@ -25,6 +25,9 @@ local.properties
 google-services.json
 firebase-crashlytics-config.json
 
+app/src/debug/google-services.json
+app/src/release/google-services.json
+
 *.apk
 *.aab
 *.bundle
@@ -42,3 +45,4 @@ desktop.ini
 
 .test-results/
 /test-reports/
+/app/src/release/google-services.json

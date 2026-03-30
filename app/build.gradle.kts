@@ -7,6 +7,8 @@ plugins {
     alias(libs.plugins.hilt.android)
     alias(libs.plugins.google.devtools.ksp)
     alias(libs.plugins.kotlin.serialization)
+    alias(libs.plugins.google.service)
+    alias(libs.plugins.google.crashlytics)
 }
 
 android {
@@ -54,6 +56,7 @@ kotlin {
 dependencies {
     // --- Jetpack Compose ---
     implementation(platform(libs.androidx.compose.bom))
+    implementation(platform(libs.firebase.bom))
     implementation(libs.androidx.compose.ui)
     implementation(libs.androidx.ui.graphics)
     implementation(libs.androidx.ui.tooling.preview)
@@ -65,6 +68,8 @@ dependencies {
     implementation(libs.androidx.hilt.navigation.compose)
     implementation(libs.androidx.animation)
     implementation(libs.androidx.animation.core)
+    implementation(libs.firebase.analytics)
+    implementation(libs.firebase.crashlytics)
 
     // --- Dependency Injection (Hilt) ---
     implementation(libs.hilt.android)
