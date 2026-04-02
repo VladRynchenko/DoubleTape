@@ -3,20 +3,23 @@ package com.vroff.doubletape.detail.movie
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.vroff.data.usecase.detail.GetShowByIdUseCase
-import com.vroff.domain.model.NetworkResult
 import com.vroff.domain.model.tmdb.common.BaseCredits
 import com.vroff.domain.model.tmdb.common.VideoData
 import com.vroff.domain.model.tmdb.search.MediaType
 import com.vroff.ui.model.BaseScreenState
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.filter
-import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.flatMapLatest
+import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import javax.inject.Inject
 
+@OptIn(ExperimentalCoroutinesApi::class)
 @HiltViewModel
 class MovieViewModel
     @Inject
@@ -28,17 +31,21 @@ class MovieViewModel
         val showState =
             tmdbIdStateFlow
                 .filter { it.first != -1 }
-                .map { (id, type) ->
-                    when (val result = getShowByIdUseCase.execute(id, type)) {
-                        is NetworkResult.Success -> {
-                            BaseScreenState.Success(data = result.data).also {
-                                videoStateFlow.update { result.data.videos ?: emptyList() }
-                                creditsStateFlow.update { result.data.credits ?: BaseCredits(emptyList(), emptyList()) }
-                            }
-                        }
-
-                        is NetworkResult.Error -> BaseScreenState.Error(result.message)
-                        is NetworkResult.Exception -> BaseScreenState.Error("${type.type}/$id/ln${result.e.message}")
+                .flatMapLatest { (id, type) ->
+                    flow {
+                        val result = getShowByIdUseCase.execute(id, type)
+                        emit(
+                            result.fold(
+                                onSuccess = { BaseScreenState.Success(it) },
+                                onFailure = { BaseScreenState.Error(it.message) },
+                            ),
+                        )
+                    }
+                }.onEach { state ->
+                    if (state is BaseScreenState.Success) {
+                        val data = state.data
+                        videoStateFlow.update { data.videos ?: emptyList() }
+                        creditsStateFlow.update { data.credits ?: BaseCredits(emptyList(), emptyList()) }
                     }
                 }.stateIn(
                     viewModelScope,

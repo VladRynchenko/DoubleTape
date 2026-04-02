@@ -4,10 +4,10 @@ import com.vroff.domain.model.tmdb.common.Genre
 import com.vroff.domain.util.capitalizeFirst
 
 data class GenreDTO(
-    val id: Long,
+    val id: Int,
     val name: String,
 ) {
-    fun mapToDomain(): Genre =
+    fun toDomain(): Genre =
         Genre(
             id = id,
             name = name.capitalizeFirst(),

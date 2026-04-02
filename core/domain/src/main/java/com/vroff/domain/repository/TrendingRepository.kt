@@ -1,7 +1,6 @@
 package com.vroff.domain.repository
 
 import androidx.paging.PagingData
-import com.vroff.domain.model.NetworkResult
 import com.vroff.domain.model.tmdb.search.typed.MovieMediaItem
 import kotlinx.coroutines.flow.Flow
 
@@ -9,7 +8,7 @@ interface TrendingRepository {
     suspend fun getNowPlayingMoviePreview(
         language: String?,
         region: String?,
-    ): NetworkResult<List<MovieMediaItem>>
+    ): Result<List<MovieMediaItem>>
 
     fun getNowPlayingMovie(
         language: String?,
@@ -19,10 +18,10 @@ interface TrendingRepository {
     suspend fun getUpcomingMoviePreview(
         language: String?,
         region: String?,
-    ): NetworkResult<List<MovieMediaItem>>
+    ): Result<List<MovieMediaItem>>
 
     suspend fun getPopularMoviePreview(
         language: String?,
         region: String?,
-    ): NetworkResult<List<MovieMediaItem>>
+    ): Result<List<MovieMediaItem>>
 }

@@ -3,7 +3,6 @@ package com.vroff.tmdb
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
-import com.vroff.domain.model.NetworkResult
 import com.vroff.domain.model.tmdb.search.typed.MovieMediaItem
 import com.vroff.domain.repository.TrendingRepository
 import com.vroff.domain.util.getOrNull
@@ -23,7 +22,7 @@ class TrendingRepositoryImpl
         override suspend fun getNowPlayingMoviePreview(
             language: String?,
             region: String?,
-        ): NetworkResult<List<MovieMediaItem>> =
+        ): Result<List<MovieMediaItem>> =
             trendingApi.getNowPlayingMovie(1, language, region).safeApiCall { pagedData ->
                 pagedData.results.map {
                     it.mapToDomain(genreMapper::map).toMovie()
@@ -51,7 +50,7 @@ class TrendingRepositoryImpl
         override suspend fun getUpcomingMoviePreview(
             language: String?,
             region: String?,
-        ): NetworkResult<List<MovieMediaItem>> =
+        ): Result<List<MovieMediaItem>> =
             trendingApi.getUpcomingMovie(1, language, region).safeApiCall { pagedData ->
                 pagedData.results.map { it.mapToDomain(genreMapper::map).toMovie() }
             }
@@ -59,7 +58,7 @@ class TrendingRepositoryImpl
         override suspend fun getPopularMoviePreview(
             language: String?,
             region: String?,
-        ): NetworkResult<List<MovieMediaItem>> =
+        ): Result<List<MovieMediaItem>> =
             trendingApi.getPopularMovie(1, language, region).safeApiCall { pagedData ->
                 pagedData.results.map { it.mapToDomain(genreMapper::map).toMovie() }
             }

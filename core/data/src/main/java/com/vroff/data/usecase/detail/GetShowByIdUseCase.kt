@@ -1,7 +1,5 @@
 package com.vroff.data.usecase.detail
 
-import android.util.Log
-import com.vroff.domain.model.NetworkResult
 import com.vroff.domain.model.tmdb.common.BaseDetails
 import com.vroff.domain.model.tmdb.common.buildAppendQuery
 import com.vroff.domain.model.tmdb.movie.MovieAppendedToResponse
@@ -19,35 +17,32 @@ class GetShowByIdUseCase
         suspend fun execute(
             id: Int,
             type: MediaType,
-        ): NetworkResult<BaseDetails> =
-            try {
-                when (type) {
-                    MediaType.MOVIE ->
-                        repository.getMovieDetails(
-                            id,
-                            language = Locale.getDefault().language,
-                            appendToResponse =
-                                buildAppendQuery(
-                                    MovieAppendedToResponse.CREDITS,
-                                    MovieAppendedToResponse.VIDEOS,
-                                ),
-                        )
+        ): Result<BaseDetails> =
+            when (type) {
+                MediaType.MOVIE ->
+                    repository.getMovieDetails(
+                        id,
+                        language = Locale.getDefault().language,
+                        appendToResponse =
+                            listOf(
+                                MovieAppendedToResponse.CREDITS,
+                                MovieAppendedToResponse.VIDEOS,
+                            ),
+                    )
 
-                    MediaType.SERIES ->
-                        repository.getSeriesDetails(
-                            id,
-                            language = Locale.getDefault().language,
-                            appendToResponse =
-                                buildAppendQuery(
+                MediaType.SERIES ->
+                    repository.getSeriesDetails(
+                        id,
+                        language = Locale.getDefault().language,
+                        appendToResponse =
+                            buildAppendQuery(
+                                listOf(
                                     SeriesAppendedToResponse.AGGREGATE_CREDITS,
                                     SeriesAppendedToResponse.VIDEOS,
                                 ),
-                        )
+                            ),
+                    )
 
-                    else -> throw IllegalArgumentException("Unknown type")
-                }
-            } catch (e: Exception) {
-                Log.e("Mapping", e.message.toString())
-                NetworkResult.Exception(e)
+                else -> Result.failure(IllegalArgumentException("Unknown type"))
             }
     }

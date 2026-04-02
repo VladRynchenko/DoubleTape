@@ -26,7 +26,7 @@ data class MediaItemDTO(
     @SerializedName("original_language")
     val originalLanguage: String?,
     @SerializedName("genre_ids")
-    val genreIds: List<Long>?,
+    val genreIds: List<Int>?,
     val popularity: Double,
     @SerializedName("first_air_date")
     val firstAirDate: String?,
@@ -51,7 +51,7 @@ data class MediaItemDTO(
     val video: Boolean?,
 ) {
     fun mapToDomain(
-        genreMapper: (List<Long>?, MediaType) -> List<Genre>,
+        genreMapper: (List<Int>?, MediaType) -> List<Genre>,
         selectedMediaType: MediaType? = null,
     ): TMDBMediaItem {
         val mediaType = selectedMediaType ?: MediaType.entries.associateBy { it.type }[mediaType] ?: MediaType.UNKNOWN

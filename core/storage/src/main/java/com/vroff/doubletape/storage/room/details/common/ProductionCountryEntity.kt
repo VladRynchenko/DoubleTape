@@ -1,10 +1,12 @@
-package com.vroff.tmdb.entity.common
+package com.vroff.doubletape.storage.room.details.common
 
-import com.google.gson.annotations.SerializedName
+import androidx.room.Entity
+import androidx.room.PrimaryKey
 import com.vroff.domain.model.tmdb.common.ProductionCountry
 
-data class ProductionCountryDTO(
-    @SerializedName("iso_3166_1")
+@Entity(tableName = "production_countries")
+data class ProductionCountryEntity(
+    @PrimaryKey
     val iso31661: String,
     val name: String,
 ) {

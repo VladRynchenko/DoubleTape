@@ -1,11 +1,9 @@
 package com.vroff.tmdb.manager
 
-import com.vroff.domain.model.NetworkResult
 import com.vroff.domain.model.tmdb.TMDBConfiguration
 import com.vroff.domain.repository.ConfigManager
 import com.vroff.domain.storage.DoubleTapeDataStore
 import com.vroff.domain.util.safeApiCall
-import com.vroff.domain.util.saveToDataStore
 import com.vroff.tmdb.api.TMDBApi
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
@@ -27,16 +25,14 @@ class ConfigManagerImpl
                         api
                             .getConfiguration()
                             .safeApiCall { it.mapToDomain() }
-                            .saveToDataStore {
+                            .onSuccess {
                                 storage.save(DoubleTapeDataStore.Keys.Configuration, it)
                             }
                     } else {
-                        NetworkResult.Success(configuration)
+                        Result.success(configuration)
                     }
                 }.collect {
-                    if (it is NetworkResult.Success) {
-                        config = it.data
-                    }
+                    config = it.getOrNull()
                 }
         }
 

@@ -1,6 +1,5 @@
 package com.vroff.data.usecase.detail
 
-import com.vroff.domain.model.NetworkResult
 import com.vroff.domain.model.tmdb.common.buildAppendQuery
 import com.vroff.domain.model.tmdb.profile.PersonAppendToResponse
 import com.vroff.domain.model.tmdb.profile.ProfileDetail
@@ -14,14 +13,16 @@ class GetProfileUseCase
         private val profileRepository: TMDBRepository,
         private val locale: Locale,
     ) {
-        suspend fun execute(profileId: Int): NetworkResult<ProfileDetail> =
+        suspend fun execute(profileId: Int): Result<ProfileDetail> =
             profileRepository.getProfile(
                 profileId,
                 locale.language,
                 appendToResponse =
                     buildAppendQuery(
-                        PersonAppendToResponse.EXTERNAL_IDS,
-                        PersonAppendToResponse.COMBINED_CREDITS,
+                        listOf(
+                            PersonAppendToResponse.EXTERNAL_IDS,
+                            PersonAppendToResponse.COMBINED_CREDITS,
+                        ),
                     ),
             )
     }

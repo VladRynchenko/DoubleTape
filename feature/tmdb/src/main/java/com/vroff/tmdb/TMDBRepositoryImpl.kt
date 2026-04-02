@@ -3,12 +3,15 @@ package com.vroff.tmdb
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
-import com.vroff.domain.model.NetworkResult
+import com.vroff.domain.model.tmdb.common.buildAppendQuery
+import com.vroff.domain.model.tmdb.movie.MovieAppendedToResponse
 import com.vroff.domain.model.tmdb.movie.MovieDetail
 import com.vroff.domain.model.tmdb.profile.ProfileDetail
 import com.vroff.domain.model.tmdb.search.TMDBMediaItem
 import com.vroff.domain.model.tmdb.series.SeriesDetail
+import com.vroff.domain.repository.CacheRepository
 import com.vroff.domain.repository.TMDBRepository
+import com.vroff.domain.util.onSuccessCatching
 import com.vroff.domain.util.safeApiCall
 import com.vroff.network.paging.BasePagingSource
 import com.vroff.tmdb.api.TMDBApi
@@ -21,21 +24,31 @@ class TMDBRepositoryImpl
     constructor(
         private val api: TMDBApi,
         private val genreMapper: GenreMapper,
+        private val cacheRepository: CacheRepository,
     ) : TMDBRepository {
         override suspend fun getMovieDetails(
             movieId: Int,
             language: String,
-            appendToResponse: String?,
-        ): NetworkResult<MovieDetail> =
-            api
-                .getMovieDetails(movieId, language, appendToResponse)
-                .safeApiCall { it.mapToDomain() }
+            appendToResponse: List<MovieAppendedToResponse>,
+        ): Result<MovieDetail> {
+            val cachedMovie = cacheRepository.getMovie(movieId, language).getOrNull()
+            if (cachedMovie != null && isMovieComplete(cachedMovie, appendToResponse)) {
+                return Result.success(cachedMovie)
+            }
+
+            val api =
+                api
+                    .getMovieDetails(movieId, language, buildAppendQuery(appendToResponse))
+                    .onSuccessCatching { cacheRepository.saveMovieToCache(it.toDomain(), language) }
+                    .safeApiCall { it.toDomain() }
+            return api
+        }
 
         override suspend fun getSeriesDetails(
             seriesId: Int,
             language: String,
             appendToResponse: String?,
-        ): NetworkResult<SeriesDetail> =
+        ): Result<SeriesDetail> =
             api
                 .getSerialDetails(seriesId, language, appendToResponse)
                 .safeApiCall { it.mapToDomain() }
@@ -62,7 +75,7 @@ class TMDBRepositoryImpl
             profileId: Int,
             language: String,
             appendToResponse: String?,
-        ): NetworkResult<ProfileDetail> =
+        ): Result<ProfileDetail> =
             api
                 .getProfileDetail(
                     profileId,
@@ -71,4 +84,15 @@ class TMDBRepositoryImpl
                 ).safeApiCall {
                     it.mapToDomain()
                 }
+
+        private fun isMovieComplete(
+            movie: MovieDetail,
+            required: List<MovieAppendedToResponse>,
+        ): Boolean =
+            required.all { type ->
+                when (type) {
+                    MovieAppendedToResponse.CREDITS -> movie.credits != null
+                    MovieAppendedToResponse.VIDEOS -> movie.videos != null
+                }
+            }
     }
