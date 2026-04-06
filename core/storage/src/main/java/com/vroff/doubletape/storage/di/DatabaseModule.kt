@@ -3,10 +3,10 @@ package com.vroff.doubletape.storage.di
 import android.content.Context
 import androidx.room.Room
 import com.vroff.domain.repository.RecentSearchRepository
-import com.vroff.doubletape.storage.RecentSearchRepositoryImpl
 import com.vroff.doubletape.storage.room.AppDatabase
-import com.vroff.doubletape.storage.room.CacheDao
-import com.vroff.doubletape.storage.room.SearchDao
+import com.vroff.doubletape.storage.room.details.dao.CacheDao
+import com.vroff.doubletape.storage.room.details.dao.SearchDao
+import com.vroff.doubletape.storage.room.search.RecentSearchRepositoryImpl
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

@@ -3,6 +3,7 @@ package com.vroff.domain.repository
 import androidx.paging.PagingData
 import com.vroff.domain.model.tmdb.movie.MovieAppendedToResponse
 import com.vroff.domain.model.tmdb.movie.MovieDetail
+import com.vroff.domain.model.tmdb.movie.SeriesAppendedToResponse
 import com.vroff.domain.model.tmdb.profile.ProfileDetail
 import com.vroff.domain.model.tmdb.search.TMDBMediaItem
 import com.vroff.domain.model.tmdb.series.SeriesDetail
@@ -18,7 +19,7 @@ interface TMDBRepository {
     suspend fun getSeriesDetails(
         seriesId: Int,
         language: String,
-        appendToResponse: String? = null,
+        appendToResponse: List<SeriesAppendedToResponse> = emptyList(),
     ): Result<SeriesDetail>
 
     fun multiSearch(

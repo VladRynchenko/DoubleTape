@@ -5,6 +5,7 @@ import androidx.room.Junction
 import androidx.room.Relation
 import com.vroff.domain.model.BackdropImage
 import com.vroff.domain.model.PosterImage
+import com.vroff.domain.model.tmdb.common.VideoData
 import com.vroff.domain.model.tmdb.movie.Credits
 import com.vroff.domain.model.tmdb.movie.MovieDetail
 import com.vroff.doubletape.storage.room.details.common.GenreEntity
@@ -12,6 +13,15 @@ import com.vroff.doubletape.storage.room.details.common.ProductionCompanyEntity
 import com.vroff.doubletape.storage.room.details.common.ProductionCountryEntity
 import com.vroff.doubletape.storage.room.details.common.SpokenLanguageEntity
 import com.vroff.doubletape.storage.room.details.common.VideoEntity
+import com.vroff.doubletape.storage.room.details.movie.crossrefs.MovieGenreCrossRef
+import com.vroff.doubletape.storage.room.details.movie.crossrefs.MovieProductionCompanyCrossRef
+import com.vroff.doubletape.storage.room.details.movie.crossrefs.MovieProductionCountryCrossRef
+import com.vroff.doubletape.storage.room.details.movie.crossrefs.MovieSpokenLanguageCrossRef
+import com.vroff.doubletape.storage.room.details.movie.crossrefs.MovieVideoCrossRef
+import com.vroff.doubletape.storage.room.details.movie.entity.BelongsToCollectionEntity
+import com.vroff.doubletape.storage.room.details.movie.entity.CastEntity
+import com.vroff.doubletape.storage.room.details.movie.entity.CrewEntity
+import com.vroff.doubletape.storage.room.details.movie.entity.MovieEntity
 
 data class MovieWithDetails(
     @Embedded
@@ -27,6 +37,11 @@ data class MovieWithDetails(
             ),
     )
     val genres: List<GenreEntity>,
+    @Relation(
+        parentColumn = "id",
+        entityColumn = "movieId",
+    )
+    val belongsToCollection: BelongsToCollectionEntity?,
     @Relation(
         parentColumn = "id",
         entityColumn = "iso6391",
@@ -72,11 +87,20 @@ data class MovieWithDetails(
     val crew: List<CrewEntity>?,
     @Relation(
         parentColumn = "id",
-        entityColumn = "movieId",
+        entityColumn = "id",
+        associateBy =
+            Junction(
+                value = MovieVideoCrossRef::class,
+                parentColumn = "movieId",
+                entityColumn = "videoId",
+            ),
     )
     val videos: List<VideoEntity>?,
 ) {
-    fun toDomain(): MovieDetail =
+    fun toDomain(
+        credits: Credits?,
+        videos: List<VideoData>?,
+    ): MovieDetail =
         MovieDetail(
             adult = movie.adult,
             backdrop = movie.backdrop?.let { BackdropImage(it) },
@@ -102,11 +126,8 @@ data class MovieWithDetails(
             voteCount = movie.voteCount,
             genres = genres.map { it.mapToDomain() },
             spokenLanguages = spokenLanguages.map { it.toDomain() },
-            credits =
-                Credits(
-                    cast?.map { it.toDomain() } ?: emptyList(),
-                    crew?.map { it.toDomain() } ?: emptyList(),
-                ),
-            videos = videos?.map { it.toDomain() },
+            videos = videos,
+            credits = credits,
+            belongsToCollection = belongsToCollection?.toDomain(),
         )
 }

@@ -13,3 +13,5 @@ data class SpokenLanguageEntity(
 ) {
     fun toDomain(): SpokenLanguage = SpokenLanguage(englishName, iso6391, name)
 }
+
+fun SpokenLanguage.toEntity(): SpokenLanguageEntity = SpokenLanguageEntity(englishName, iso6391, name)

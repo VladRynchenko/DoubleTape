@@ -1,31 +1,30 @@
-package com.vroff.doubletape.storage.room.details.movie
+package com.vroff.doubletape.storage.room.details.movie.entity
 
 import androidx.room.Entity
 import com.vroff.domain.model.ProfileImage
-import com.vroff.domain.model.tmdb.common.Cast
+import com.vroff.domain.model.tmdb.movie.Crew
 import com.vroff.domain.model.tmdb.search.Gender
 
 @Entity(
-    tableName = "cast_members",
+    tableName = "crew",
     primaryKeys = ["id", "movieId"],
 )
-data class CastEntity(
+data class CrewEntity(
     val id: Int,
-    val movieId: Int,
     val adult: Boolean,
     val gender: Int,
+    val movieId: Int,
     val knownForDepartment: String,
     val name: String,
     val originalName: String,
     val popularity: Double,
-    val profileImage: String?,
-    val castId: Int,
-    val character: String,
     val creditId: String,
-    val order: Int,
+    val profileImage: String?,
+    val department: String,
+    val job: String,
 ) {
-    fun toDomain(): Cast =
-        Cast(
+    fun toDomain(): Crew =
+        Crew(
             adult = adult,
             gender = Gender.entries[gender],
             id = id,
@@ -34,26 +33,24 @@ data class CastEntity(
             originalName = originalName,
             popularity = popularity,
             profileImage = profileImage?.let { ProfileImage(it) },
-            castId = castId,
-            character = character,
             creditId = creditId,
-            order = order,
+            department = department,
+            job = job,
         )
 }
 
-fun Cast.toEntity(movieId: Int): CastEntity =
-    CastEntity(
+fun Crew.toEntity(movieId: Int): CrewEntity =
+    CrewEntity(
         id = id,
-        movieId = movieId,
         adult = adult,
         gender = gender.ordinal,
+        movieId = movieId,
         knownForDepartment = knownForDepartment,
         name = name,
         originalName = originalName,
         popularity = popularity,
-        profileImage = profileImage?.path,
-        castId = castId,
-        character = character,
         creditId = creditId,
-        order = order,
+        profileImage = profileImage?.path,
+        department = department,
+        job = job,
     )

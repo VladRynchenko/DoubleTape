@@ -41,8 +41,8 @@ data class SeriesDetail(
     override val type: String,
     override val voteAverage: Float,
     override val voteCount: Int,
-    val aggregateCredits: AggregateCredits,
-    override val videos: List<VideoData>,
+    val aggregateCredits: AggregateCredits?,
+    override val videos: List<VideoData>?,
 ) : BaseDetails(
         adult = adult,
         backdropImage = backdropImage,

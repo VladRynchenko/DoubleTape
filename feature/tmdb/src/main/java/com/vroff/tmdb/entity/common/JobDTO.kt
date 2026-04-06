@@ -8,7 +8,7 @@ data class JobDTO(
     val creditId: String,
     val job: String,
     @SerializedName("episode_count")
-    val episodeCount: Long,
+    val episodeCount: Int,
 ) {
     fun mapToDomain(): Job =
         Job(

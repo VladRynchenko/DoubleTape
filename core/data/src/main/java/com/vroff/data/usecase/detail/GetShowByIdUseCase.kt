@@ -1,7 +1,6 @@
 package com.vroff.data.usecase.detail
 
 import com.vroff.domain.model.tmdb.common.BaseDetails
-import com.vroff.domain.model.tmdb.common.buildAppendQuery
 import com.vroff.domain.model.tmdb.movie.MovieAppendedToResponse
 import com.vroff.domain.model.tmdb.movie.SeriesAppendedToResponse
 import com.vroff.domain.model.tmdb.search.MediaType
@@ -35,11 +34,9 @@ class GetShowByIdUseCase
                         id,
                         language = Locale.getDefault().language,
                         appendToResponse =
-                            buildAppendQuery(
-                                listOf(
-                                    SeriesAppendedToResponse.AGGREGATE_CREDITS,
-                                    SeriesAppendedToResponse.VIDEOS,
-                                ),
+                            listOf(
+                                SeriesAppendedToResponse.AGGREGATE_CREDITS,
+                                SeriesAppendedToResponse.VIDEOS,
                             ),
                     )
 

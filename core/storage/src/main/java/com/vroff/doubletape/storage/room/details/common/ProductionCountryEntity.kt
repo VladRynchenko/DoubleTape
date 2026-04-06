@@ -16,3 +16,9 @@ data class ProductionCountryEntity(
             name = name,
         )
 }
+
+fun ProductionCountry.toEntity(): ProductionCountryEntity =
+    ProductionCountryEntity(
+        iso31661 = iso31661,
+        name = name,
+    )

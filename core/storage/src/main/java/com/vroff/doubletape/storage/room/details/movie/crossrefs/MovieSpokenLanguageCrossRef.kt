@@ -1,4 +1,4 @@
-package com.vroff.doubletape.storage.room.details.movie
+package com.vroff.doubletape.storage.room.details.movie.crossrefs
 
 import androidx.room.Entity
 import androidx.room.Index

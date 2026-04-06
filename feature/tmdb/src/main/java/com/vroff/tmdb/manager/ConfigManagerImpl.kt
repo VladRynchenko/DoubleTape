@@ -3,7 +3,7 @@ package com.vroff.tmdb.manager
 import com.vroff.domain.model.tmdb.TMDBConfiguration
 import com.vroff.domain.repository.ConfigManager
 import com.vroff.domain.storage.DoubleTapeDataStore
-import com.vroff.domain.util.safeApiCall
+import com.vroff.domain.util.toResult
 import com.vroff.tmdb.api.TMDBApi
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
@@ -24,7 +24,7 @@ class ConfigManagerImpl
                     if (configuration == null || isConfigurationExpired(configuration)) {
                         api
                             .getConfiguration()
-                            .safeApiCall { it.mapToDomain() }
+                            .toResult { it.mapToDomain() }
                             .onSuccess {
                                 storage.save(DoubleTapeDataStore.Keys.Configuration, it)
                             }

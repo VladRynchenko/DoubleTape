@@ -12,6 +12,7 @@ import com.vroff.domain.model.tmdb.common.VideoData
 data class MovieDetail(
     override val adult: Boolean,
     override val backdrop: BackdropImage?,
+    override val belongsToCollection: BelongsToCollection?,
     override val budget: Long,
     override val genres: List<Genre>,
     override val homepage: String,
@@ -63,4 +64,5 @@ data class MovieDetail(
         revenue = revenue,
         runtime = runtime,
         videos = videos,
+        belongsToCollection = belongsToCollection,
     )

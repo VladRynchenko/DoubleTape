@@ -15,7 +15,7 @@ data class MovieDetailDTO(
     @SerializedName("backdrop_path")
     val backdropPath: String?,
     @SerializedName("belongs_to_collection")
-    val belongsToCollection: Any?,
+    val belongsToCollection: BelongsToCollectionDTO?,
     val budget: Long,
     val genres: List<GenreDTO>,
     val homepage: String,
@@ -56,6 +56,7 @@ data class MovieDetailDTO(
         MovieDetail(
             adult = adult,
             backdrop = backdropPath?.let { BackdropImage(it) },
+            belongsToCollection = belongsToCollection?.toDomain(),
             budget = budget,
             genres = genres.map { it.toDomain() },
             homepage = homepage,

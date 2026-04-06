@@ -66,7 +66,7 @@ data class SeriesDetailDTO(
     val aggregateCredits: AggregateCreditsDTO,
     val videos: VideoResponse,
 ) {
-    fun mapToDomain(): SeriesDetail =
+    fun toDomain(): SeriesDetail =
         SeriesDetail(
             adult = adult,
             backdropImage = backdropPath?.let { BackdropImage(it) },

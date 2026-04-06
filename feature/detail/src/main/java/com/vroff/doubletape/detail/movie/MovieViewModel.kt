@@ -5,7 +5,9 @@ import androidx.lifecycle.viewModelScope
 import com.vroff.data.usecase.detail.GetShowByIdUseCase
 import com.vroff.domain.model.tmdb.common.BaseCredits
 import com.vroff.domain.model.tmdb.common.VideoData
+import com.vroff.domain.model.tmdb.movie.MovieDetail
 import com.vroff.domain.model.tmdb.search.MediaType
+import com.vroff.domain.model.tmdb.series.SeriesDetail
 import com.vroff.ui.model.BaseScreenState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -44,8 +46,15 @@ class MovieViewModel
                 }.onEach { state ->
                     if (state is BaseScreenState.Success) {
                         val data = state.data
+                        val credit: BaseCredits =
+                            when (data) {
+                                is MovieDetail -> data.credits
+                                is SeriesDetail -> data.aggregateCredits
+                                else -> emptyList<BaseCredits>()
+                            } as BaseCredits
+
                         videoStateFlow.update { data.videos ?: emptyList() }
-                        creditsStateFlow.update { data.credits ?: BaseCredits(emptyList(), emptyList()) }
+                        creditsStateFlow.update { credit }
                     }
                 }.stateIn(
                     viewModelScope,

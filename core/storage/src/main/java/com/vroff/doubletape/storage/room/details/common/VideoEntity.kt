@@ -1,20 +1,15 @@
 package com.vroff.doubletape.storage.room.details.common
 
 import androidx.room.Entity
-import androidx.room.Index
+import androidx.room.PrimaryKey
 import com.vroff.domain.model.tmdb.common.VideoData
 
 @Entity(
     tableName = "videos",
-    primaryKeys = [
-        "id",
-        "movieId",
-    ],
-    indices = [Index(value = ["movieId"])],
 )
 data class VideoEntity(
+    @PrimaryKey
     val id: String,
-    val movieId: Int,
     val iso6391: String,
     val iso31661: String,
     val name: String,
@@ -39,3 +34,19 @@ data class VideoEntity(
             publishedAt = publishedAt,
         )
 }
+
+fun List<VideoData>.toEntity(): List<VideoEntity> =
+    map {
+        VideoEntity(
+            id = it.id,
+            iso6391 = it.iso6391,
+            iso31661 = it.iso31661,
+            name = it.name,
+            key = it.key,
+            site = it.site,
+            size = it.size,
+            type = it.type,
+            official = it.official,
+            publishedAt = it.publishedAt,
+        )
+    }

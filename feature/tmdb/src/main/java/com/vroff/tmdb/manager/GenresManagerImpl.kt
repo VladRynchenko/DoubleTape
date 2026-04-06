@@ -4,7 +4,7 @@ import com.vroff.domain.model.NetworkResult
 import com.vroff.domain.model.tmdb.common.Genre
 import com.vroff.domain.repository.GenresManager
 import com.vroff.domain.storage.DoubleTapeDataStore
-import com.vroff.domain.util.safeApiCall
+import com.vroff.domain.util.toResult
 import com.vroff.tmdb.api.TMDBApi
 import com.vroff.tmdb.entity.search.GenresDTO
 import kotlinx.coroutines.flow.first
@@ -46,7 +46,7 @@ class GenresManagerImpl
             updated =
                 apiCall
                     .invoke()
-                    .safeApiCall { genres ->
+                    .toResult { genres ->
                         genres.genres.map {
                             Genre(it.id, it.name)
                         }

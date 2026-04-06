@@ -6,14 +6,17 @@ import androidx.paging.PagingData
 import com.vroff.domain.model.tmdb.common.buildAppendQuery
 import com.vroff.domain.model.tmdb.movie.MovieAppendedToResponse
 import com.vroff.domain.model.tmdb.movie.MovieDetail
+import com.vroff.domain.model.tmdb.movie.SeriesAppendedToResponse
 import com.vroff.domain.model.tmdb.profile.ProfileDetail
 import com.vroff.domain.model.tmdb.search.TMDBMediaItem
 import com.vroff.domain.model.tmdb.series.SeriesDetail
 import com.vroff.domain.repository.CacheRepository
 import com.vroff.domain.repository.TMDBRepository
+import com.vroff.domain.util.coRunCatching
 import com.vroff.domain.util.onSuccessCatching
-import com.vroff.domain.util.safeApiCall
+import com.vroff.domain.util.toResult
 import com.vroff.network.paging.BasePagingSource
+import com.vroff.network.retry
 import com.vroff.tmdb.api.TMDBApi
 import com.vroff.tmdb.entity.common.GenreMapper
 import kotlinx.coroutines.flow.Flow
@@ -31,27 +34,44 @@ class TMDBRepositoryImpl
             language: String,
             appendToResponse: List<MovieAppendedToResponse>,
         ): Result<MovieDetail> {
-            val cachedMovie = cacheRepository.getMovie(movieId, language).getOrNull()
-            if (cachedMovie != null && isMovieComplete(cachedMovie, appendToResponse)) {
-                return Result.success(cachedMovie)
+            coRunCatching {
+                val cachedMovie = cacheRepository.getMovie(movieId, language, appendToResponse).getOrNull()
+                if (cachedMovie != null && isMovieComplete(cachedMovie, appendToResponse)) {
+                    return Result.success(cachedMovie)
+                }
             }
 
-            val api =
-                api
-                    .getMovieDetails(movieId, language, buildAppendQuery(appendToResponse))
-                    .onSuccessCatching { cacheRepository.saveMovieToCache(it.toDomain(), language) }
-                    .safeApiCall { it.toDomain() }
-            return api
+            val result =
+                retry {
+                    api.getMovieDetails(movieId, language, buildAppendQuery(appendToResponse))
+                }.onSuccessCatching {
+                    cacheRepository.saveMovieToCache(
+                        it.toDomain(),
+                        language,
+                        appendToResponse,
+                    )
+                }.toResult { it.toDomain() }
+            return result
         }
 
         override suspend fun getSeriesDetails(
             seriesId: Int,
             language: String,
-            appendToResponse: String?,
-        ): Result<SeriesDetail> =
-            api
-                .getSerialDetails(seriesId, language, appendToResponse)
-                .safeApiCall { it.mapToDomain() }
+            appendToResponse: List<SeriesAppendedToResponse>,
+        ): Result<SeriesDetail> {
+            val cachedMovie = cacheRepository.getSeries(seriesId, language, appendToResponse).getOrNull()
+            if (cachedMovie != null && isSeriesComplete(cachedMovie, appendToResponse)) {
+                return Result.success(cachedMovie)
+            }
+
+            val result =
+                retry {
+                    api.getSerialDetails(seriesId, language, buildAppendQuery(appendToResponse))
+                }.onSuccessCatching {
+                    cacheRepository.saveSeriesToCache(it.toDomain(), language, appendToResponse)
+                }.toResult { it.toDomain() }
+            return result
+        }
 
         override fun multiSearch(
             query: String,
@@ -63,7 +83,11 @@ class TMDBRepositoryImpl
                 config = PagingConfig(20),
                 pagingSourceFactory = {
                     BasePagingSource(
-                        request = { api.multiSearch(query, it, includeAdult, language, region) },
+                        request = { page ->
+                            retry { api.multiSearch(query, page, includeAdult, language, region) }
+                                .toResult { it }
+                                .getOrThrow()
+                        },
                         mapper = {
                             it.mapToDomain(genreMapper::map)
                         },
@@ -76,14 +100,16 @@ class TMDBRepositoryImpl
             language: String,
             appendToResponse: String?,
         ): Result<ProfileDetail> =
-            api
-                .getProfileDetail(
-                    profileId,
-                    language,
-                    appendToResponse,
-                ).safeApiCall {
-                    it.mapToDomain()
-                }
+            retry {
+                api
+                    .getProfileDetail(
+                        profileId,
+                        language,
+                        appendToResponse,
+                    )
+            }.toResult {
+                it.mapToDomain()
+            }
 
         private fun isMovieComplete(
             movie: MovieDetail,
@@ -93,6 +119,17 @@ class TMDBRepositoryImpl
                 when (type) {
                     MovieAppendedToResponse.CREDITS -> movie.credits != null
                     MovieAppendedToResponse.VIDEOS -> movie.videos != null
+                }
+            }
+
+        private fun isSeriesComplete(
+            series: SeriesDetail,
+            required: List<SeriesAppendedToResponse>,
+        ): Boolean =
+            required.all { type ->
+                when (type) {
+                    SeriesAppendedToResponse.AGGREGATE_CREDITS -> series.aggregateCredits != null
+                    SeriesAppendedToResponse.VIDEOS -> series.videos != null
                 }
             }
     }

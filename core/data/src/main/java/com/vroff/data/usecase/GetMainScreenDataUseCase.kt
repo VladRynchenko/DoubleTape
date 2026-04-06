@@ -2,7 +2,6 @@ package com.vroff.data.usecase
 
 import com.vroff.domain.model.home.MainScreenContent
 import com.vroff.domain.repository.TrendingRepository
-import com.vroff.domain.util.getOrNull
 import kotlinx.coroutines.async
 import kotlinx.coroutines.supervisorScope
 import java.util.Locale

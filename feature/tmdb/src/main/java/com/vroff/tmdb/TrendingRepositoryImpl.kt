@@ -5,9 +5,9 @@ import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import com.vroff.domain.model.tmdb.search.typed.MovieMediaItem
 import com.vroff.domain.repository.TrendingRepository
-import com.vroff.domain.util.getOrNull
-import com.vroff.domain.util.safeApiCall
+import com.vroff.domain.util.toResult
 import com.vroff.network.paging.TimedPagingSource
+import com.vroff.network.retry
 import com.vroff.tmdb.api.TrendingApi
 import com.vroff.tmdb.entity.common.GenreMapper
 import kotlinx.coroutines.flow.Flow
@@ -23,7 +23,7 @@ class TrendingRepositoryImpl
             language: String?,
             region: String?,
         ): Result<List<MovieMediaItem>> =
-            trendingApi.getNowPlayingMovie(1, language, region).safeApiCall { pagedData ->
+            trendingApi.getNowPlayingMovie(1, language, region).toResult { pagedData ->
                 pagedData.results.map {
                     it.mapToDomain(genreMapper::map).toMovie()
                 }
@@ -38,7 +38,7 @@ class TrendingRepositoryImpl
                 pagingSourceFactory = {
                     TimedPagingSource(
                         request = { page ->
-                            trendingApi.getNowPlayingMovie(page, language, region).safeApiCall { it }.getOrNull()
+                            retry { trendingApi.getNowPlayingMovie(page, language, region) }.toResult { it }.getOrNull()
                         },
                         mapper = {
                             it.mapToDomain(genreMapper::map).toMovie()
@@ -51,7 +51,7 @@ class TrendingRepositoryImpl
             language: String?,
             region: String?,
         ): Result<List<MovieMediaItem>> =
-            trendingApi.getUpcomingMovie(1, language, region).safeApiCall { pagedData ->
+            trendingApi.getUpcomingMovie(1, language, region).toResult { pagedData ->
                 pagedData.results.map { it.mapToDomain(genreMapper::map).toMovie() }
             }
 
@@ -59,7 +59,7 @@ class TrendingRepositoryImpl
             language: String?,
             region: String?,
         ): Result<List<MovieMediaItem>> =
-            trendingApi.getPopularMovie(1, language, region).safeApiCall { pagedData ->
+            trendingApi.getPopularMovie(1, language, region).toResult { pagedData ->
                 pagedData.results.map { it.mapToDomain(genreMapper::map).toMovie() }
             }
     }

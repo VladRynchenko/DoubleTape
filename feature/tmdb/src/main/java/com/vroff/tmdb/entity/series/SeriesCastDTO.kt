@@ -18,7 +18,7 @@ data class SeriesCastDTO(
     val popularity: Double,
     @SerializedName("profile_path")
     val profilePath: String?,
-    val roles: List<RoleDTO?>? = null,
+    val roles: List<RoleDTO>? = null,
     @SerializedName("total_episode_count")
     val totalEpisodeCount: Int,
     val order: Int,
@@ -33,7 +33,7 @@ data class SeriesCastDTO(
             originalName = originalName,
             popularity = popularity,
             profileImage = profilePath?.let { ProfileImage(it) },
-            roles = roles?.map { it?.mapToDomain() },
+            roles = roles?.map { it.mapToDomain() },
             totalEpisodeCount = totalEpisodeCount,
             order = order,
         )
