@@ -1,6 +1,7 @@
 package com.vroff.doubletape
 
 import android.os.Bundle
+import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
@@ -15,6 +16,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.navigation.NavDestination
 import androidx.navigation.NavDestination.Companion.hasRoute
@@ -30,9 +32,10 @@ import com.vroff.doubletape.detail.Details
 import com.vroff.doubletape.detail.Profile
 import com.vroff.doubletape.detail.movie.movieGraph
 import com.vroff.doubletape.detail.profile.ProfileScreen
-import com.vroff.doubletape.home.MainScreen
+import com.vroff.doubletape.home.HomeScreen
 import com.vroff.doubletape.presentation.screens.Graph
 import com.vroff.search.SearchScreen
+import com.vroff.ui.model.UiEvent
 import com.vroff.ui.theme.MovieDDTheme
 import com.vroff.ui.ui.LocalInnerPadding
 import com.vroff.ui.ui.ShowTopAppBar
@@ -50,6 +53,18 @@ class MainActivity : ComponentActivity() {
             val navController = rememberNavController()
             val navBackStackEntry by navController.currentBackStackEntryAsState()
             val destination = navBackStackEntry?.destination
+            val context = LocalContext.current
+
+            val events = mainViewModel.events
+            LaunchedEffect(events) {
+                events.collect { event ->
+                    when (event) {
+                        is UiEvent.ShowToast -> {
+                            Toast.makeText(context, event.message, Toast.LENGTH_LONG).show()
+                        }
+                    }
+                }
+            }
 
             val query by mainViewModel.query.collectAsState()
 
@@ -88,7 +103,7 @@ class MainActivity : ComponentActivity() {
                             startDestination = Graph.Main,
                         ) {
                             composable<Graph.Main> {
-                                MainScreen { id, type ->
+                                HomeScreen { id, type ->
                                     if (type.isShow) {
                                         navController.navigate(Details(id, type))
                                     }

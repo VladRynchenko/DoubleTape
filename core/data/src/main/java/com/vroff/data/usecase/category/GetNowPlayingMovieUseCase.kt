@@ -16,9 +16,4 @@ class GetNowPlayingMovieUseCase
             val local = Locale.getDefault()
             return repository.getNowPlayingMovie(local.language, local.country)
         }
-
-        suspend fun getPreview(): Result<List<MovieMediaItem>> {
-            val local = Locale.getDefault()
-            return repository.getNowPlayingMoviePreview(local.language, local.country)
-        }
     }

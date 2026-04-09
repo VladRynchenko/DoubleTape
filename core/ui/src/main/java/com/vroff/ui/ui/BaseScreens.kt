@@ -2,6 +2,8 @@ package com.vroff.ui.ui
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -21,7 +23,10 @@ fun ErrorScreen(
     colorText: Color = MaterialTheme.colorScheme.error,
 ) {
     Box(
-        modifier = modifier.fillMaxSize(),
+        modifier =
+            modifier
+                .fillMaxSize()
+                .verticalScroll(rememberScrollState()),
         contentAlignment = Alignment.Center,
     ) {
         Text(errorText, color = colorText)

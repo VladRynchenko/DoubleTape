@@ -5,23 +5,23 @@ import com.vroff.domain.model.tmdb.search.typed.MovieMediaItem
 import kotlinx.coroutines.flow.Flow
 
 interface TrendingRepository {
-    suspend fun getNowPlayingMoviePreview(
+    fun getNowPlayingMoviePreview(
         language: String?,
         region: String?,
-    ): Result<List<MovieMediaItem>>
+    ): Flow<Result<List<MovieMediaItem>>>
 
     fun getNowPlayingMovie(
         language: String?,
         region: String?,
     ): Flow<PagingData<MovieMediaItem>>
 
-    suspend fun getUpcomingMoviePreview(
+    fun getUpcomingMoviePreview(
         language: String?,
         region: String?,
-    ): Result<List<MovieMediaItem>>
+    ): Flow<Result<List<MovieMediaItem>>>
 
-    suspend fun getPopularMoviePreview(
+    fun getPopularMoviePreview(
         language: String?,
         region: String?,
-    ): Result<List<MovieMediaItem>>
+    ): Flow<Result<List<MovieMediaItem>>>
 }

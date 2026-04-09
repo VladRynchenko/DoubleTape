@@ -35,23 +35,13 @@ class TMDBRepositoryImpl
             appendToResponse: List<MovieAppendedToResponse>,
         ): Result<MovieDetail> {
             coRunCatching {
-                val cachedMovie = cacheRepository.getMovie(movieId, language, appendToResponse).getOrNull()
-                if (cachedMovie != null && isMovieComplete(cachedMovie, appendToResponse)) {
+                val cachedMovie = cacheRepository.getMovie(movieId, language, appendToResponse).getOrThrow()
+                if (isMovieComplete(cachedMovie, appendToResponse)) {
                     return Result.success(cachedMovie)
                 }
             }
 
-            val result =
-                retry {
-                    api.getMovieDetails(movieId, language, buildAppendQuery(appendToResponse))
-                }.onSuccessCatching {
-                    cacheRepository.saveMovieToCache(
-                        it.toDomain(),
-                        language,
-                        appendToResponse,
-                    )
-                }.toResult { it.toDomain() }
-            return result
+            return getMovieNetwork(movieId, language, appendToResponse)
         }
 
         override suspend fun getSeriesDetails(
@@ -64,13 +54,7 @@ class TMDBRepositoryImpl
                 return Result.success(cachedMovie)
             }
 
-            val result =
-                retry {
-                    api.getSerialDetails(seriesId, language, buildAppendQuery(appendToResponse))
-                }.onSuccessCatching {
-                    cacheRepository.saveSeriesToCache(it.toDomain(), language, appendToResponse)
-                }.toResult { it.toDomain() }
-            return result
+            return getSeriesNetwork(seriesId, language, appendToResponse)
         }
 
         override fun multiSearch(
@@ -110,6 +94,32 @@ class TMDBRepositoryImpl
             }.toResult {
                 it.mapToDomain()
             }
+
+        override suspend fun getMovieNetwork(
+            movieId: Int,
+            language: String,
+            appendToResponse: List<MovieAppendedToResponse>,
+        ): Result<MovieDetail> =
+            retry {
+                api.getMovieDetails(movieId, language, buildAppendQuery(appendToResponse))
+            }.onSuccessCatching {
+                cacheRepository.saveMovieToCache(
+                    it.toDomain(),
+                    language,
+                    appendToResponse,
+                )
+            }.toResult { it.toDomain() }
+
+        override suspend fun getSeriesNetwork(
+            seriesId: Int,
+            language: String,
+            appendToResponse: List<SeriesAppendedToResponse>,
+        ): Result<SeriesDetail> =
+            retry {
+                api.getSerialDetails(seriesId, language, buildAppendQuery(appendToResponse))
+            }.onSuccessCatching {
+                cacheRepository.saveSeriesToCache(it.toDomain(), language, appendToResponse)
+            }.toResult { it.toDomain() }
 
         private fun isMovieComplete(
             movie: MovieDetail,

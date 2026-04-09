@@ -11,6 +11,7 @@ import com.vroff.network.retry
 import com.vroff.tmdb.api.TrendingApi
 import com.vroff.tmdb.entity.common.GenreMapper
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flow
 import javax.inject.Inject
 
 class TrendingRepositoryImpl
@@ -19,14 +20,18 @@ class TrendingRepositoryImpl
         val trendingApi: TrendingApi,
         val genreMapper: GenreMapper,
     ) : TrendingRepository {
-        override suspend fun getNowPlayingMoviePreview(
+        override fun getNowPlayingMoviePreview(
             language: String?,
             region: String?,
-        ): Result<List<MovieMediaItem>> =
-            trendingApi.getNowPlayingMovie(1, language, region).toResult { pagedData ->
-                pagedData.results.map {
-                    it.mapToDomain(genreMapper::map).toMovie()
-                }
+        ): Flow<Result<List<MovieMediaItem>>> =
+            flow {
+                val result =
+                    trendingApi.getNowPlayingMovie(1, language, region).toResult { pagedData ->
+                        pagedData.results.map {
+                            it.mapToDomain(genreMapper::map).toMovie()
+                        }
+                    }
+                emit(result)
             }
 
         override fun getNowPlayingMovie(
@@ -47,19 +52,29 @@ class TrendingRepositoryImpl
                 },
             ).flow
 
-        override suspend fun getUpcomingMoviePreview(
+        override fun getUpcomingMoviePreview(
             language: String?,
             region: String?,
-        ): Result<List<MovieMediaItem>> =
-            trendingApi.getUpcomingMovie(1, language, region).toResult { pagedData ->
-                pagedData.results.map { it.mapToDomain(genreMapper::map).toMovie() }
+        ): Flow<Result<List<MovieMediaItem>>> =
+            flow {
+                val result =
+                    trendingApi.getUpcomingMovie(1, language, region).toResult { pagedData ->
+                        pagedData.results.map { it.mapToDomain(genreMapper::map).toMovie() }
+                    }
+                emit(result)
             }
 
-        override suspend fun getPopularMoviePreview(
+        override fun getPopularMoviePreview(
             language: String?,
             region: String?,
-        ): Result<List<MovieMediaItem>> =
-            trendingApi.getPopularMovie(1, language, region).toResult { pagedData ->
-                pagedData.results.map { it.mapToDomain(genreMapper::map).toMovie() }
+        ): Flow<Result<List<MovieMediaItem>>> =
+            flow {
+                val result =
+                    trendingApi
+                        .getPopularMovie(1, language, region)
+                        .toResult { pagedData ->
+                            pagedData.results.map { it.mapToDomain(genreMapper::map).toMovie() }
+                        }
+                emit(result)
             }
     }

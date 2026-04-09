@@ -15,7 +15,10 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
+import androidx.compose.material3.pulltorefresh.PullToRefreshBox
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
@@ -67,15 +70,26 @@ fun MovieScreen(
     onFullCreditsClick: () -> Unit,
 ) {
     val movieViewModel = hiltViewModel<MovieViewModel>()
-    movieViewModel.setTMDBId(tmdbId, type)
+    LaunchedEffect(tmdbId, type) {
+        movieViewModel.load(tmdbId, type)
+    }
     val state by movieViewModel.showState.collectAsStateWithLifecycle()
-    ShowDetailsContent(
-        state = state,
-        onCastItemClick = onCastItemClick,
-        onVideoClick = onVideoClick,
-        onFullCreditsClick = onFullCreditsClick,
-        modifier = Modifier.padding(horizontal = 12.dp),
-    )
+    val isRefreshing by movieViewModel.isRefreshingFlow.collectAsState()
+
+    PullToRefreshBox(
+        isRefreshing = isRefreshing,
+        onRefresh = {
+            movieViewModel.refresh(tmdbId, type)
+        },
+    ) {
+        ShowDetailsContent(
+            state = state,
+            onCastItemClick = onCastItemClick,
+            onVideoClick = onVideoClick,
+            onFullCreditsClick = onFullCreditsClick,
+            modifier = Modifier.padding(horizontal = 12.dp),
+        )
+    }
 }
 
 @Composable

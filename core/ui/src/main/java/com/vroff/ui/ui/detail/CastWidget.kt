@@ -18,13 +18,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.draw.drawBehind
-import androidx.compose.ui.geometry.CornerRadius
-import androidx.compose.ui.geometry.Offset
-import androidx.compose.ui.geometry.Size
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
@@ -97,28 +91,15 @@ fun CastBaseItem(
     episodesCount: Int? = null,
     onClick: () -> Unit,
 ) {
-    val surfaceColor = MaterialTheme.colorScheme.surface
-    val density = LocalDensity.current
-    val cornerRadius = with(density) { 12.dp.toPx() }
-    val imageHeight = 160.dp
-
     Card(
         onClick = onClick,
+        shape = RoundedCornerShape(14.dp),
         modifier =
             modifier
-                .width(120.dp)
-                .drawBehind {
-                    val imageHeightPx = (imageHeight / 2).toPx()
-                    drawRoundRect(
-                        color = surfaceColor,
-                        topLeft = Offset(0f, imageHeightPx),
-                        size = Size(size.width, size.height - imageHeightPx),
-                        cornerRadius = CornerRadius(cornerRadius, cornerRadius),
-                    )
-                },
+                .width(120.dp),
         colors =
             CardDefaults.cardColors().copy(
-                containerColor = Color.Transparent,
+                containerColor = MaterialTheme.colorScheme.surface,
             ),
     ) {
         val containerHeight = if (episodesCount != null) 68.dp else 48.dp

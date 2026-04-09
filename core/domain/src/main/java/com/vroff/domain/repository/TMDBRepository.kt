@@ -34,4 +34,16 @@ interface TMDBRepository {
         language: String,
         appendToResponse: String? = null,
     ): Result<ProfileDetail>
+
+    suspend fun getMovieNetwork(
+        movieId: Int,
+        language: String,
+        appendToResponse: List<MovieAppendedToResponse>,
+    ): Result<MovieDetail>
+
+    suspend fun getSeriesNetwork(
+        seriesId: Int,
+        language: String,
+        appendToResponse: List<SeriesAppendedToResponse>,
+    ): Result<SeriesDetail>
 }

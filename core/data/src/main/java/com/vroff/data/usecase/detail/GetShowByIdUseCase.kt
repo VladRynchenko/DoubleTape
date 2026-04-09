@@ -12,6 +12,7 @@ class GetShowByIdUseCase
     @Inject
     constructor(
         private val repository: TMDBRepository,
+        private val locale: Locale,
     ) {
         suspend fun execute(
             id: Int,
@@ -20,6 +21,36 @@ class GetShowByIdUseCase
             when (type) {
                 MediaType.MOVIE ->
                     repository.getMovieDetails(
+                        id,
+                        language = locale.language,
+                        appendToResponse =
+                            listOf(
+                                MovieAppendedToResponse.CREDITS,
+                                MovieAppendedToResponse.VIDEOS,
+                            ),
+                    )
+
+                MediaType.SERIES ->
+                    repository.getSeriesDetails(
+                        id,
+                        language = locale.language,
+                        appendToResponse =
+                            listOf(
+                                SeriesAppendedToResponse.AGGREGATE_CREDITS,
+                                SeriesAppendedToResponse.VIDEOS,
+                            ),
+                    )
+
+                else -> Result.failure(IllegalArgumentException("Unknown type"))
+            }
+
+        suspend fun executeRefresh(
+            id: Int,
+            type: MediaType,
+        ): Result<BaseDetails> =
+            when (type) {
+                MediaType.MOVIE ->
+                    repository.getMovieNetwork(
                         id,
                         language = Locale.getDefault().language,
                         appendToResponse =
@@ -30,7 +61,7 @@ class GetShowByIdUseCase
                     )
 
                 MediaType.SERIES ->
-                    repository.getSeriesDetails(
+                    repository.getSeriesNetwork(
                         id,
                         language = Locale.getDefault().language,
                         appendToResponse =

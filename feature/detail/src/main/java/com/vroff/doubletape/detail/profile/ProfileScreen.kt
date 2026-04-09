@@ -140,9 +140,13 @@ fun ProfileDetailsScreen(
                         val first = roles.first()
                         val mergedSubtitle =
                             if (selectedTab == CreditType.Cast) {
-                                roles.mapNotNull { it.character }.distinct().joinToString(", ")
+                                roles.mapNotNull { it.character }.distinct().joinToString(SymbolConstant.COMMA_SPACE)
                             } else {
-                                roles.map { "${it.department} • ${it.job}" }.distinct().joinToString("\n")
+                                roles
+                                    .map {
+                                        "${it.department} ${SymbolConstant.MIDDLE_POINT} ${it.job}"
+                                    }.distinct()
+                                    .joinToString(SymbolConstant.NEWLINE)
                             }
                         first to mergedSubtitle
                     }

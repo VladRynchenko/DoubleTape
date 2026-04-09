@@ -1,9 +1,10 @@
 package com.vroff.doubletape.detail.movie
 
-import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
@@ -45,7 +46,7 @@ fun NavGraphBuilder.movieGraph(navController: NavController) {
             val viewModel: MovieViewModel =
                 hiltViewModel(parentEntry)
 
-            val videos by viewModel.videoStateFlow.collectAsState()
+            val videos by viewModel.videoStateFlow.collectAsStateWithLifecycle()
 
             VideoScreen(videos)
         }
@@ -57,15 +58,22 @@ fun NavGraphBuilder.movieGraph(navController: NavController) {
                 }
             val viewModel: MovieViewModel =
                 hiltViewModel(parentEntry)
+            val credits by viewModel.creditsStateFlow.collectAsStateWithLifecycle()
 
-            val credits by viewModel.creditsStateFlow.collectAsState()
+            LaunchedEffect(credits) {
+                if (credits == null) {
+                    navController.popBackStack()
+                }
+            }
 
-            FullCreditsScreen(
-                credits,
-                onPersonItemClick = {
-                    navController.navigate(Profile(it))
-                },
-            )
+            credits?.let { safeCredits ->
+                FullCreditsScreen(
+                    credits = safeCredits,
+                    onPersonItemClick = { personId ->
+                        navController.navigate(Profile(personId))
+                    },
+                )
+            }
         }
     }
 }
