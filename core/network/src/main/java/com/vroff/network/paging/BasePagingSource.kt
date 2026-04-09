@@ -10,7 +10,8 @@ class BasePagingSource<Dto : Any, Domain : Any>(
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, Domain> {
         val page = params.key ?: 1
         return try {
-            val response = request(page)
+            val response = request(page) ?: return LoadResult.Error(Exception("Response is null"))
+
             LoadResult.Page(
                 data = response.results.map(mapper),
                 prevKey = if (page == 1) null else page - 1,

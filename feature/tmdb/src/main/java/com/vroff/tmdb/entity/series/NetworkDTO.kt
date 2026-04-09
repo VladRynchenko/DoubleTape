@@ -5,7 +5,7 @@ import com.vroff.domain.model.LogoImage
 import com.vroff.domain.model.tmdb.series.Network
 
 data class NetworkDTO(
-    val id: Long,
+    val id: Int,
     @SerializedName("logo_path")
     val logoPath: String?,
     val name: String,

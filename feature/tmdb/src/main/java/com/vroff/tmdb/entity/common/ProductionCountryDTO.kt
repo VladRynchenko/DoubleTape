@@ -8,7 +8,7 @@ data class ProductionCountryDTO(
     val iso31661: String,
     val name: String,
 ) {
-    fun mapToDomain(): ProductionCountry =
+    fun toDomain(): ProductionCountry =
         ProductionCountry(
             iso31661 = iso31661,
             name = name,

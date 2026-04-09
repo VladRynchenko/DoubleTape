@@ -1,58 +1,78 @@
 package com.vroff.doubletape.detail.movie
 
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.vroff.data.usecase.detail.GetShowByIdUseCase
-import com.vroff.domain.model.NetworkResult
 import com.vroff.domain.model.tmdb.common.BaseCredits
-import com.vroff.domain.model.tmdb.common.VideoData
+import com.vroff.domain.model.tmdb.common.BaseDetails
+import com.vroff.domain.model.tmdb.movie.MovieDetail
 import com.vroff.domain.model.tmdb.search.MediaType
+import com.vroff.domain.model.tmdb.series.SeriesDetail
 import com.vroff.ui.model.BaseScreenState
+import com.vroff.ui.model.BaseViewModel
+import com.vroff.ui.model.UiEvent
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
-import kotlinx.coroutines.flow.filter
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
-import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
+@OptIn(ExperimentalCoroutinesApi::class)
 @HiltViewModel
 class MovieViewModel
     @Inject
-    constructor() : ViewModel() {
+    constructor() : BaseViewModel() {
         @Inject
         lateinit var getShowByIdUseCase: GetShowByIdUseCase
 
-        private val tmdbIdStateFlow = MutableStateFlow(-1 to MediaType.UNKNOWN)
-        val showState =
-            tmdbIdStateFlow
-                .filter { it.first != -1 }
-                .map { (id, type) ->
-                    when (val result = getShowByIdUseCase.execute(id, type)) {
-                        is NetworkResult.Success -> {
-                            BaseScreenState.Success(data = result.data).also {
-                                videoStateFlow.update { result.data.videos ?: emptyList() }
-                                creditsStateFlow.update { result.data.credits ?: BaseCredits(emptyList(), emptyList()) }
-                            }
-                        }
+        private val _showState = MutableStateFlow<BaseScreenState<BaseDetails>>(BaseScreenState.Loading)
+        val showState = _showState.asStateFlow()
 
-                        is NetworkResult.Error -> BaseScreenState.Error(result.message)
-                        is NetworkResult.Exception -> BaseScreenState.Error("${type.type}/$id/ln${result.e.message}")
-                    }
-                }.stateIn(
-                    viewModelScope,
-                    SharingStarted.Lazily,
-                    BaseScreenState.Loading,
-                )
-
-        val videoStateFlow = MutableStateFlow<List<VideoData>>(emptyList())
-        val creditsStateFlow = MutableStateFlow(BaseCredits(emptyList(), emptyList()))
-
-        fun setTMDBId(
+        fun refresh(
             id: Int,
             type: MediaType,
         ) {
-            tmdbIdStateFlow.tryEmit(id to type)
+            refresh {
+                val result = getShowByIdUseCase.executeRefresh(id, type)
+                result.onSuccess {
+                    _showState.emit(BaseScreenState.Success(it))
+                }
+                result.onFailure {
+                    send(UiEvent.ShowToast(it.message ?: "Unknown error"))
+                }
+            }
         }
+
+        fun load(
+            id: Int,
+            type: MediaType,
+        ) {
+            viewModelScope.launch {
+                val result = getShowByIdUseCase.execute(id, type)
+                _showState.value =
+                    result.fold(
+                        onSuccess = { BaseScreenState.Success(it) },
+                        onFailure = { BaseScreenState.Error(it.message) },
+                    )
+            }
+        }
+
+        val videoStateFlow =
+            _showState
+                .map { state ->
+                    (state as BaseScreenState.Success).data.videos ?: emptyList()
+                }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), emptyList())
+
+        val creditsStateFlow =
+            _showState
+                .map { state ->
+                    when (val data = (state as BaseScreenState.Success).data) {
+                        is MovieDetail -> data.credits
+                        is SeriesDetail -> data.aggregateCredits
+                        else -> BaseCredits(emptyList(), emptyList())
+                    }
+                }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), BaseCredits(emptyList(), emptyList()))
     }

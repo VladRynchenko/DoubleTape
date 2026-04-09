@@ -6,7 +6,6 @@ import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.togetherWith
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -25,8 +24,10 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -51,13 +52,14 @@ fun SearchScreen(
 ) {
     val viewModel: SearchViewModel = hiltViewModel()
     val pagingFlow = viewModel.pagingFlow.collectAsLazyPagingItems()
+    val recentSearches by viewModel.recentSearches.collectAsState()
     LaunchedEffect(searchQuery.text) {
         viewModel.setSearchQuery(searchQuery.text.toString())
     }
     val screenState =
         when {
             searchQuery.text.length < 2 ->
-                SearchScreenState.Waiting(viewModel.recentSearches.collectAsState().value)
+                SearchScreenState.Waiting(recentSearches)
 
             pagingFlow.loadState.refresh is LoadState.Error ->
                 SearchScreenState.Error(
@@ -168,6 +170,12 @@ fun SearchContent(
 
             is SearchScreenState.Success -> {
                 val listState = rememberLazyListState()
+                val focusRequester = LocalFocusManager.current
+                LaunchedEffect(listState.isScrollInProgress) {
+                    if (listState.isScrollInProgress) {
+                        focusRequester.clearFocus()
+                    }
+                }
 
                 LazyColumn(
                     modifier =
@@ -194,9 +202,7 @@ fun SearchContent(
 
             is SearchScreenState.Error -> {
                 ErrorScreen(
-                    Modifier
-                        .background(color = MaterialTheme.colorScheme.secondary)
-                        .imePadding(),
+                    Modifier.imePadding(),
                     errorText = state.e,
                 )
             }

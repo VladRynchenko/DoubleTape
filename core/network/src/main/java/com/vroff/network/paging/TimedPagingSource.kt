@@ -12,10 +12,8 @@ class TimedPagingSource<Dto : Any, Domain : Any>(
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, Domain> {
         val page = params.key ?: 1
         return try {
-            val response = request(page)
-            timePeriodFromResponse = response?.dates
-
-            if (response == null) return LoadResult.Error(Exception("Response is null"))
+            val response = request(page) ?: return LoadResult.Error(Exception("Response is null"))
+            timePeriodFromResponse = response.dates
 
             LoadResult.Page(
                 data = response.results.map(mapper),

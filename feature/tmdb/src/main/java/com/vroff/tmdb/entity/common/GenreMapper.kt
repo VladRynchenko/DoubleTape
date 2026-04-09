@@ -11,7 +11,7 @@ class GenreMapper
         val genresManager: GenresManager,
     ) {
         fun map(
-            genreIds: List<Long>?,
+            genreIds: List<Int>?,
             mediaType: MediaType,
         ): List<Genre> {
             if (genreIds.isNullOrEmpty()) return emptyList()

@@ -1,7 +1,7 @@
-package com.vroff.doubletape.storage
+package com.vroff.doubletape.storage.room.search
 
 import com.vroff.domain.repository.RecentSearchRepository
-import com.vroff.doubletape.storage.room.SearchDao
+import com.vroff.doubletape.storage.room.details.dao.SearchDao
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject

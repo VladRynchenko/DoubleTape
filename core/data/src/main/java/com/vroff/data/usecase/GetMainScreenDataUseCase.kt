@@ -2,8 +2,9 @@ package com.vroff.data.usecase
 
 import com.vroff.domain.model.home.MainScreenContent
 import com.vroff.domain.repository.TrendingRepository
-import com.vroff.domain.util.getOrNull
-import kotlinx.coroutines.async
+import com.vroff.domain.util.coRunCatching
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.supervisorScope
 import java.util.Locale
 import javax.inject.Inject
@@ -14,33 +15,23 @@ class GetMainScreenDataUseCase
         private val trendingRepository: TrendingRepository,
         private val locale: Locale,
     ) {
-        suspend fun execute(): MainScreenContent =
+        suspend fun execute(): Flow<Result<MainScreenContent>> =
             supervisorScope {
                 val language = locale.language
                 val region = locale.country
 
-                val getUpcomingDeferred =
-                    async {
-                        trendingRepository.getUpcomingMoviePreview(language, region)
+                combine(
+                    trendingRepository.getUpcomingMoviePreview(language, region),
+                    trendingRepository.getPopularMoviePreview(language, region),
+                    trendingRepository.getNowPlayingMoviePreview(language, region),
+                ) { upcoming, popular, nowPlaying ->
+                    coRunCatching {
+                        MainScreenContent(
+                            nowPlayingMovie = nowPlaying.getOrThrow(),
+                            popularMovie = popular.getOrThrow(),
+                            upcomingMovie = upcoming.getOrThrow(),
+                        )
                     }
-
-                val popularDeferred =
-                    async {
-                        trendingRepository.getPopularMoviePreview(language, region)
-                    }
-
-                val nowPlayingDeferred =
-                    async {
-                        trendingRepository.getNowPlayingMoviePreview(language, region)
-                    }
-
-                val nowPlaying = nowPlayingDeferred.await().getOrNull()
-                val popular = popularDeferred.await().getOrNull()
-                val upcoming = getUpcomingDeferred.await().getOrNull()
-                MainScreenContent(
-                    nowPlayingMovie = nowPlaying,
-                    popularMovie = popular,
-                    upcomingMovie = upcoming,
-                )
+                }
             }
     }

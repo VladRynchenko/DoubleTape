@@ -44,7 +44,7 @@ interface TMDBApi {
         @Query("include_adult") includeAdult: Boolean,
         @Query("language") language: String,
         @Query("region") region: String,
-    ): PagerResponse<MediaItemDTO>
+    ): NetworkResult<PagerResponse<MediaItemDTO>>
 
     @GET(Endpoint.PROFILE_DETAILS)
     suspend fun getProfileDetail(

@@ -1,10 +1,10 @@
-package com.vroff.doubletape.storage.room
+package com.vroff.doubletape.storage.room.details.dao
 
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.Query
 import androidx.room.Transaction
-import com.vroff.doubletape.storage.entity.RecentSearchEntity
+import com.vroff.doubletape.storage.room.search.RecentSearchEntity
 import kotlinx.coroutines.flow.Flow
 
 @Dao

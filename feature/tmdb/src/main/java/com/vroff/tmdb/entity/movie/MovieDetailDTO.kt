@@ -3,8 +3,8 @@ package com.vroff.tmdb.entity.movie
 import com.google.gson.annotations.SerializedName
 import com.vroff.domain.model.BackdropImage
 import com.vroff.domain.model.PosterImage
-import com.vroff.domain.model.tmdb.common.Genre
 import com.vroff.domain.model.tmdb.movie.MovieDetail
+import com.vroff.tmdb.entity.common.GenreDTO
 import com.vroff.tmdb.entity.common.ProductionCompanyDTO
 import com.vroff.tmdb.entity.common.ProductionCountryDTO
 import com.vroff.tmdb.entity.common.SpokenLanguageDTO
@@ -15,9 +15,9 @@ data class MovieDetailDTO(
     @SerializedName("backdrop_path")
     val backdropPath: String?,
     @SerializedName("belongs_to_collection")
-    val belongsToCollection: Any?,
+    val belongsToCollection: BelongsToCollectionDTO?,
     val budget: Long,
-    val genres: List<Genre>,
+    val genres: List<GenreDTO>,
     val homepage: String,
     val id: Int,
     @SerializedName("imdb_id")
@@ -52,12 +52,13 @@ data class MovieDetailDTO(
     val credits: CreditsDTO?,
     val videos: VideoResponse?,
 ) {
-    fun mapToDomain(): MovieDetail =
+    fun toDomain(): MovieDetail =
         MovieDetail(
             adult = adult,
             backdrop = backdropPath?.let { BackdropImage(it) },
+            belongsToCollection = belongsToCollection?.toDomain(),
             budget = budget,
-            genres = genres,
+            genres = genres.map { it.toDomain() },
             homepage = homepage,
             id = id,
             imdbId = imdbId,
@@ -66,8 +67,8 @@ data class MovieDetailDTO(
             overview = overview,
             popularity = popularity,
             posterImage = posterPath?.let { PosterImage(it) },
-            productionCompanies = productionCompanies.map { it.mapToDomain() },
-            productionCountries = productionCountries.map { it.mapToDomain() },
+            productionCompanies = productionCompanies.map { it.toDomain() },
+            productionCountries = productionCountries.map { it.toDomain() },
             releaseDate = releaseDate,
             revenue = revenue,
             runtime = runtime,

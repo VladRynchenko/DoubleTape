@@ -1,4 +1,4 @@
-package com.vroff.doubletape.storage.entity
+package com.vroff.doubletape.storage.room.search
 
 import androidx.room.Entity
 import androidx.room.Index

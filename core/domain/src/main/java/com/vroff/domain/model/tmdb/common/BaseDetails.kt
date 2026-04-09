@@ -2,6 +2,7 @@ package com.vroff.domain.model.tmdb.common
 
 import com.vroff.domain.model.BackdropImage
 import com.vroff.domain.model.PosterImage
+import com.vroff.domain.model.tmdb.movie.BelongsToCollection
 import com.vroff.domain.model.tmdb.series.CreatedBy
 import com.vroff.domain.model.tmdb.series.LastEpisodeToAir
 import com.vroff.domain.model.tmdb.series.Network
@@ -23,6 +24,7 @@ open class BaseDetails(
     open val status: String,
     open val tagline: String,
     open val title: String,
+    open val belongsToCollection: BelongsToCollection? = null,
     open val video: Boolean? = null,
     open val credits: BaseCredits? = null,
     open val backdropImage: BackdropImage? = null,

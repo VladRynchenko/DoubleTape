@@ -24,6 +24,8 @@ import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.vroff.domain.model.constants.SymbolConstant
 import com.vroff.domain.model.tmdb.common.BaseCredits
+import com.vroff.domain.model.tmdb.common.Cast
+import com.vroff.domain.model.tmdb.movie.Crew
 import com.vroff.doubletape.detail.R
 import com.vroff.doubletape.detail.profile.CreditType
 import com.vroff.ui.ui.LocalInnerPadding
@@ -58,7 +60,15 @@ fun FullCreditsScreen(
                     SearchBaseCard(
                         image = it.profileImage,
                         title = it.name,
-                        subtitle = it.character,
+                        subtitle =
+                            if (it is Cast) {
+                                it.character
+                            } else {
+                                it.roles?.joinToString(SymbolConstant.MIDDLE_POINT) { role ->
+                                    role?.character
+                                        ?: SymbolConstant.EMPTY
+                                }
+                            },
                         onClick = { onPersonItemClick(it.id) },
                     )
                 }
@@ -68,10 +78,17 @@ fun FullCreditsScreen(
                 groupedCrew.forEach { (string, crews) ->
                     item { Text(string) }
                     items(crews) {
+                        val subtitle =
+                            if (it is Crew) {
+                                "${it.department} ${SymbolConstant.MIDDLE_POINT} ${it.job}"
+                            } else {
+                                val jobs = it.jobs?.joinToString(SymbolConstant.COMMA_SPACE) { job -> job.job }
+                                "${it.department} ${SymbolConstant.MIDDLE_POINT} $jobs"
+                            }
                         SearchBaseCard(
                             image = it.profileImage,
                             title = it.name,
-                            subtitle = "${it.department} ${SymbolConstant.MIDDLE_POINT} ${it.job}",
+                            subtitle = subtitle,
                             onClick = { onPersonItemClick(it.id) },
                         )
                     }

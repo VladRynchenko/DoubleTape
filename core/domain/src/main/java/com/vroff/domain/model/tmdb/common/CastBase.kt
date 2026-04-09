@@ -14,7 +14,7 @@ sealed class CastBase(
     open val popularity: Double,
     open val profileImage: ProfileImage?,
     open val order: Int? = null,
-    open val roles: List<Role?>? = null,
+    open val roles: List<Role>? = null,
     open val totalEpisodeCount: Int? = null,
     open val castId: Int? = null,
     open val character: String? = null,
@@ -57,7 +57,7 @@ data class SeriesCast(
     override val originalName: String,
     override val popularity: Double,
     override val profileImage: ProfileImage?,
-    override val roles: List<Role?>?,
+    override val roles: List<Role>?,
     override val totalEpisodeCount: Int,
     override val order: Int,
 ) : CastBase(

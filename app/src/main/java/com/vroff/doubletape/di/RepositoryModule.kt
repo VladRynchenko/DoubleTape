@@ -1,9 +1,11 @@
 package com.vroff.doubletape.di
 
+import com.vroff.domain.repository.CacheRepository
 import com.vroff.domain.repository.ShowRepository
 import com.vroff.domain.repository.TMDBRepository
 import com.vroff.domain.repository.TrendingRepository
 import com.vroff.doubletape.data.repository.ShowRepositoryImpl
+import com.vroff.doubletape.storage.room.details.CacheRepositoryImpl
 import com.vroff.tmdb.TMDBRepositoryImpl
 import com.vroff.tmdb.TrendingRepositoryImpl
 import dagger.Binds
@@ -22,4 +24,7 @@ interface RepositoryModule {
 
     @Binds
     fun bindTrendingRepository(trendingRepositoryImpl: TrendingRepositoryImpl): TrendingRepository
+
+    @Binds
+    fun bindCacheRepository(cacheRepositoryImpl: CacheRepositoryImpl): CacheRepository
 }

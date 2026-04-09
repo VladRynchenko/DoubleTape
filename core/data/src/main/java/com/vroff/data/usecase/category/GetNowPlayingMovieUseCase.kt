@@ -1,7 +1,6 @@
 package com.vroff.data.usecase.category
 
 import androidx.paging.PagingData
-import com.vroff.domain.model.NetworkResult
 import com.vroff.domain.model.tmdb.search.typed.MovieMediaItem
 import com.vroff.domain.repository.TrendingRepository
 import kotlinx.coroutines.flow.Flow
@@ -16,10 +15,5 @@ class GetNowPlayingMovieUseCase
         operator fun invoke(): Flow<PagingData<MovieMediaItem>> {
             val local = Locale.getDefault()
             return repository.getNowPlayingMovie(local.language, local.country)
-        }
-
-        suspend fun getPreview(): NetworkResult<List<MovieMediaItem>> {
-            val local = Locale.getDefault()
-            return repository.getNowPlayingMoviePreview(local.language, local.country)
         }
     }
